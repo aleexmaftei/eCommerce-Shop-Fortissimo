@@ -1,0 +1,46 @@
+﻿@model eCommerce.Models.CartVM.CartListVM
+@inject eCommerce.Entities.DTOs.CurrentUserDto CurrentUser
+
+<div class="container">
+    <div>
+        <strong>Cart</strong>
+    </div>
+
+    <div class="flex-column-reverse">
+        @for (int index = 0; index < Model.CartList.Count; index++)
+
+        {
+            <div class="card">
+                <div class="float-left">
+                    <img class="card-img" style="width:150px; height:150px" alt="" src="@Model.CartList[index].ProductImage" />
+                </div>
+
+                <div class="card-body">
+                    <div class="img-thumbnail">
+                        <p class="card-text">Name: @Model.CartList[index].ProductName </p>
+                        <p class="card-text">Price: @Model.CartList[index].ProductPrice</p>
+                        <p class="card-text">Buy Quantity: @Model.CartList[index].QuantityBuy</p>
+                    </div>
+                </div>
+
+                <div>
+                    <a asp-controller="Cart" asp-action="RemoveProductFromCart"
+                       asp-route-productId="@Model.CartList[index].ProductId"
+                       class="btn btn-primary float-lg-right">Remove from cart</a>
+                </div>
+            </div>
+        }
+
+    </div>
+
+    @if (!CurrentUser.IsAuthenticated)
+    {
+        <a asp-controller="UserAccount" asp-action="Login" class="btn btn-primary">Log in First!!</a>
+    }
+    else
+    {
+        <a asp-controller="Cart" asp-action="PlaceOrder" class="btn btn-primary">Place Order</a>
+    }
+
+</div>
+

@@ -1,0 +1,23 @@
+﻿@model eCommerce.Models.ProductVM.ProductCategoryVM
+
+    <div class="container">
+        <div>
+            <strong>@Model.TitleCategory</strong>
+        </div>
+
+        <div class="row">
+            @foreach (var productCategory in Model.ProductCategories)
+            {
+                <div class="col-sm-4 col-lg-4 col-md-4">
+                    <div class="img-thumbnail">
+                        <img src="@productCategory.ProductCategoryImage" alt="" class="img-fluid" />
+                        <div class="figure-caption">
+                            <h3 class="text-center">
+                                <a asp-action="Category" asp-route-id="@productCategory.ProductCategoryId">@productCategory.ProductCategoryName </a>
+                            </h3>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>

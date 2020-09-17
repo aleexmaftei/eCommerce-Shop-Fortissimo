@@ -1,0 +1,47 @@
+﻿@model eCommerce.Models.ProductVM.ProductsWithValues.AllProductsVM
+@inject eCommerce.Entities.DTOs.CurrentUserDto CurrentUser
+
+<div class="container">
+    <div>
+        <strong>Products</strong>
+    </div>
+
+    <div class="flex-column-reverse">
+        @foreach (var product in Model.Allproducts)
+        {
+            <div class="card">
+                <div class="float-left">
+                    <img class="card-img" style="width:150px; height:150px" alt="" src="https://cdn11.bigcommerce.com/s-n26aknlnlm/images/stencil/1280x1280/products/346/5620/23488050012.LEFT__95325.1576897646.jpg?c=2" />
+                </div>
+
+                <div class="card-body">
+                    <h4 class="card-title">@product.ProductName</h4>
+                    @foreach (var properties in product.AllPropertiesWithValues)
+                    {
+                        <div class="img-thumbnail">
+                            <p class="card-text">@properties.PropertyName : @properties.Value</p>
+                        </div>
+                    }
+                </div>
+
+                <div>
+                    <a asp-controller="Cart" asp-action="AddProductToCart"
+                       asp-route-productId="@product.ProductId"
+                       class="btn btn-primary">Add to cart</a>
+                    @if (CurrentUser.IsAdmin == true)
+                    {
+                        <a asp-controller="Admin" asp-action="UpdateProduct"
+                           asp-route-productId="@product.ProductId"
+                           class="btn btn-primary">Update</a>
+
+                        <a asp-controller="Admin" asp-action="SoftDeleteProduct" 
+                           asp-route-productId="@product.ProductId"
+                           class="btn btn-primary">Delete</a>
+                    }
+
+                </div>
+                
+            </div>
+        }
+    </div>
+</div>
