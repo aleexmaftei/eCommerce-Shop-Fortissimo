@@ -44,5 +44,9 @@ namespace eCommerce.Data
             Context.Set<TEntity>().Remove(entity);
         }
 
+        public void DeleteList(IEnumerable<TEntity> entities)
+        {
+            Context.Set<TEntity>().RemoveRange(entities);
+        }
     }
 }

@@ -95,21 +95,13 @@ namespace eCommerce.BusinessLogic.ProductServices
                     buyHistoryList.Add(userBuyHistory);
                 }
 
-                DeleteAllProductsFromCart(carts);
+                uow.Carts.DeleteList(carts);
 
                 uow.UserBuyHistories.InsertList(buyHistoryList);
                 uow.SaveChanges();
                 
                 return carts;
             });
-        }
-        
-        private void DeleteAllProductsFromCart(List<Cart> carts)
-        {
-            foreach(var cart in carts)
-            {
-                UnitOfWork.Carts.Delete(cart);
-            }
         }
 
         public void DeleteProductFromCart(Cart cart)

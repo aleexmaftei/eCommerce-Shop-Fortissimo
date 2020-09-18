@@ -13,8 +13,8 @@ namespace eCommerce.Controllers
         private readonly ProductService ProductService;
 
         private readonly IMapper Mapper;
-        public CartController(CartService cartService, 
-                              ProductService productService, 
+        public CartController(CartService cartService,
+                              ProductService productService,
                               IMapper mapper)
         {
             CartService = cartService;
@@ -25,9 +25,8 @@ namespace eCommerce.Controllers
         [HttpGet]
         public IActionResult Index()
         {
-            // de verificat sa fie userul logat
             var cartProducts = CartService.GetAllCartProductsNotDeletedNotOrderPlaced();
-            if(cartProducts == null)
+            if (cartProducts == null)
             {
                 return NotFound();
             }
@@ -44,7 +43,7 @@ namespace eCommerce.Controllers
         public IActionResult PlaceOrder()
         {
             var cartList = CartService.GetAllCartProductsNotDeletedNotOrderPlaced();
-            if(cartList == null)
+            if (cartList == null)
             {
                 return NotFound();
             }
@@ -58,7 +57,7 @@ namespace eCommerce.Controllers
         public IActionResult AddProductToCart(int productId)
         {
             var product = ProductService.GetProductById(productId);
-            if(product == null)
+            if (product == null)
             {
                 return NotFound();
             }
@@ -72,18 +71,33 @@ namespace eCommerce.Controllers
                 QuantityBuy = 1
             };
 
+            return View("AddProductToCart", model);
+        }
+
+        [HttpPost]
+        public IActionResult AddProductToCart(CartVM model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
             var modelMappedToEntity = Mapper.Map<Cart>(model);
 
             CartService.InsertToCart(modelMappedToEntity);
 
-            return RedirectToAction("Index", "Cart"); 
+            return RedirectToAction("Index", "Cart");
         }
 
         [HttpGet]
         public IActionResult RemoveProductFromCart(int productId)
         {
             var cartToDelete = CartService.GetCartByProductIdAndUser(productId);
-
+            if(cartToDelete == null)
+            {
+                return NotFound();
+            }
+            // trebuie sa o las aici altfel am eroare de prea multe redirects ( intra in bucla cumva)
             CartService.DeleteProductFromCart(cartToDelete);
 
             return RedirectToAction("Index", "Cart");
