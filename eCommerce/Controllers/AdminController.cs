@@ -95,7 +95,6 @@ namespace eCommerce.Controllers
         [HttpGet]
         public IActionResult AddProduct(int parentCategoryId, int categoryId)
         {
-            // parentCategoryId pentru ca sunt generale pentru toate chitarile, categoryId cand vreau individual
             var propertiesByProduct = PropertyService.GetPropertiesByCategory(parentCategoryId);
             if (propertiesByProduct == null)
             {
@@ -197,6 +196,12 @@ namespace eCommerce.Controllers
                 model.ProductPropertiesWithValues.Add(prop);
             }
 
+            return Json(new
+            {
+                flag = true,
+                modelToDisplay = model
+            }) ;
+
             return View("UpdateProduct", model);
         }
 
@@ -213,7 +218,9 @@ namespace eCommerce.Controllers
 
             AdminService.UpdateProduct(productMappedToEntity);
 
-            return RedirectToAction("Index", "Home");
+            return Json(new {
+                flag = true
+            });
 
         }
 
@@ -239,7 +246,9 @@ namespace eCommerce.Controllers
             var productToDelete = ProductService.GetProductById(model.ProductId);
             AdminService.SoftDeleteProduct(productToDelete);
 
-            return RedirectToAction("Index", "Home");
+            return Json(new { 
+                flag = true 
+            });
         }
 
         [HttpGet]

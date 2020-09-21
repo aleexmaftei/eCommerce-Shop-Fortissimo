@@ -6,6 +6,11 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - eCommerce</title>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/twitter-bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+
     <link rel="stylesheet" href="~/lib/twitter-bootstrap/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
 </head>
@@ -30,15 +35,18 @@
                         <li class="nav-item">
                             <a class="nav-link text-white" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
+
                         <li class="nav-item">
                             <a class="nav-link text-white" asp-area="" asp-controller="Cart" asp-action="Index">Cart</a>
                         </li>
+
                         <li class="nav-item">
                             @if (CurrentUser.IsAdmin)
                             {
                                 <a class="nav-link text-white" asp-area="" asp-controller="Admin" asp-action="AdminActionPick">Admin Actions</a>
                             }
                         </li>
+
                         <li class="nav-item">
                             <a class="nav-link text-white" asp-controller="UserAccount" asp-action="Logout">Log out</a>
                         </li>
@@ -103,9 +111,7 @@
         </div>
     </footer>
 
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/twitter-bootstrap/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
+   
     @RenderSection("Scripts", required: false)
 </body>
 </html>

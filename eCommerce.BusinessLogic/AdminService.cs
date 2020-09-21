@@ -79,7 +79,7 @@ namespace eCommerce.BusinessLogic
                 product.Quantity = 0;
                 product.IsDeleted = true;
                 uow.Products.Update(product);
-                uow.SaveChanges();
+                //uow.SaveChanges();
 
                 return product;
             }); 

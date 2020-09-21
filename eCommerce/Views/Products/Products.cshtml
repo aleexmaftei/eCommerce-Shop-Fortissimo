@@ -1,6 +1,12 @@
 ﻿@model eCommerce.Models.ProductVM.ProductsWithValues.AllProductsVM
 @inject eCommerce.Entities.DTOs.CurrentUserDto CurrentUser
 
+<script src="~/js/products.js"></script>
+
+<input type="hidden" id="deleteActionUrl" data-delete-action-url="@Url.Action("SoftDeleteProduct", "Admin")" />
+<input type="hidden" id="updateActionUrl" data-update-action-url="@Url.Action("UpdateProduct", "Admin")" />
+
+
 <div class="container">
     <div>
         <strong>Products</strong>
@@ -9,7 +15,7 @@
     <div class="flex-column-reverse">
         @foreach (var product in Model.Allproducts)
         {
-            <div class="card">
+            <div class="card productButtons">
                 <div class="float-left">
                     <img class="card-img" style="width:150px; height:150px" alt="" src="https://cdn11.bigcommerce.com/s-n26aknlnlm/images/stencil/1280x1280/products/346/5620/23488050012.LEFT__95325.1576897646.jpg?c=2" />
                 </div>
@@ -28,15 +34,14 @@
                     <a asp-controller="Cart" asp-action="AddProductToCart"
                        asp-route-productId="@product.ProductId"
                        class="btn btn-primary">Add to cart</a>
+
                     @if (CurrentUser.IsAdmin == true)
                     {
-                        <a asp-controller="Admin" asp-action="UpdateProduct"
-                           asp-route-productId="@product.ProductId"
-                           class="btn btn-primary">Update</a>
+                        <a data-product-id="@product.ProductId"
+                           class="updateBtn btn btn-primary">Update</a>
 
-                        <a asp-controller="Admin" asp-action="SoftDeleteProduct" 
-                           asp-route-productId="@product.ProductId"
-                           class="btn btn-primary">Delete</a>
+                        <a data-product-id="@product.ProductId"
+                           class="deleteBtn btn btn-primary">Delete</a>
                     }
 
                 </div>
