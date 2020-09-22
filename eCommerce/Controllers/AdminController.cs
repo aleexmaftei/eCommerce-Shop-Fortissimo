@@ -202,7 +202,7 @@ namespace eCommerce.Controllers
                 modelToDisplay = model
             }) ;
 
-            return View("UpdateProduct", model);
+            //return View("UpdateProduct", model);
         }
 
         [HttpPost]
@@ -210,7 +210,7 @@ namespace eCommerce.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return View(model);
+                return NotFound();
             }
 
             var productMappedToDto = Mapper.Map<UpdateDto>(model);

@@ -6,7 +6,6 @@
 <input type="hidden" id="deleteActionUrl" data-delete-action-url="@Url.Action("SoftDeleteProduct", "Admin")" />
 <input type="hidden" id="updateActionUrl" data-update-action-url="@Url.Action("UpdateProduct", "Admin")" />
 
-
 <div class="container">
     <div>
         <strong>Products</strong>
@@ -37,16 +36,56 @@
 
                     @if (CurrentUser.IsAdmin == true)
                     {
-                        <a data-product-id="@product.ProductId"
-                           class="updateBtn btn btn-primary">Update</a>
+                        <button type="button"  data-target="#modalBox" data-toggle="modal"
+                                data-product-id="@product.ProductId"
+                                class="updateBtn btn btn-primary">Update</button>
 
-                        <a data-product-id="@product.ProductId"
-                           class="deleteBtn btn btn-primary">Delete</a>
+                        <button type="button" data-product-id="@product.ProductId"
+                                class="deleteBtn btn btn-primary">Delete</button>
                     }
 
                 </div>
-                
             </div>
         }
+    </div>
+</div>
+
+
+<!--modal-->
+<div class="modal fade" id="modalBox" tabindex="-1" role="dialog" aria-labelledby="modalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h4 class="modal-title" id="modalLabel">Update selected product</h4>
+                <button type="button" class="close closeBtnModal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <label asp-for="AdminUpdateDetails.ProductName" class="control-label"></label>
+                        <input asp-for="AdminUpdateDetails.ProductName" id="productNameInput" class="form-control" />
+                        <span asp-validation-for="AdminUpdateDetails.ProductName" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group insertAfterThis">
+                        <label asp-for="AdminUpdateDetails.Quantity" class="control-label"></label>
+                        <input asp-for="AdminUpdateDetails.Quantity" id="quantityInput" class="form-control" />
+                        <span asp-validation-for="AdminUpdateDetails.Quantity" class="text-danger"></span>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary closeBtnModal">Close</button>
+
+                        <input type="submit" value="Update product"
+                               class="btn btn-primary updateBtnModal" />
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
 </div>
