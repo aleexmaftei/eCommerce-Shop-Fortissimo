@@ -40,6 +40,26 @@ namespace eCommerce.Controllers
         }
 
         [HttpGet]
+        public IActionResult JsCartModalView()
+        {
+            var cartProducts = CartService.GetAllCartProductsNotDeletedNotOrderPlaced();
+            if (cartProducts == null)
+            {
+                return NotFound();
+            }
+
+            var model = new CartListVM()
+            {
+                CartList = cartProducts.Select(c => Mapper.Map<Cart, CartVM>(c)).ToList()
+            };
+
+            return Json(new { 
+                cartModelList = model.CartList,
+                flag = true
+            });
+        }
+
+        [HttpGet]
         public IActionResult PlaceOrder()
         {
             var cartList = CartService.GetAllCartProductsNotDeletedNotOrderPlaced();
@@ -53,9 +73,10 @@ namespace eCommerce.Controllers
             return RedirectToAction("Index", "Home");
         }
 
-        [HttpGet]
+        [HttpPost]
         public IActionResult AddProductToCart(int productId)
         {
+            // de verificat daca nu e deja bagata
             var product = ProductService.GetProductById(productId);
             if (product == null)
             {
@@ -70,18 +91,6 @@ namespace eCommerce.Controllers
                 ProductImage = product.ProductImage,
                 QuantityBuy = 1
             };
-
-            return View("AddProductToCart", model);
-        }
-
-        [HttpPost]
-        public IActionResult AddProductToCart(CartVM model)
-        {
-            if (!ModelState.IsValid)
-            {
-                return View(model);
-            }
-
             var modelMappedToEntity = Mapper.Map<Cart>(model);
 
             CartService.InsertToCart(modelMappedToEntity);
@@ -89,8 +98,22 @@ namespace eCommerce.Controllers
             return RedirectToAction("Index", "Cart");
         }
 
-        [HttpGet]
+        [HttpPost]
         public IActionResult RemoveProductFromCart(int productId)
+        {
+            var cartToDelete = CartService.GetCartByProductIdAndUser(productId);
+            if(cartToDelete == null)
+            {
+                return NotFound();
+            }
+            
+            CartService.DeleteProductFromCart(cartToDelete);
+
+            return RedirectToAction("Index", "Home");
+        }
+
+        [HttpPost]
+        public IActionResult JsRemoveProductFromCart(int productId)
         {
             var cartToDelete = CartService.GetCartByProductIdAndUser(productId);
             if(cartToDelete == null)
@@ -100,7 +123,9 @@ namespace eCommerce.Controllers
             // trebuie sa o las aici altfel am eroare de prea multe redirects ( intra in bucla cumva)
             CartService.DeleteProductFromCart(cartToDelete);
 
-            return RedirectToAction("Index", "Cart");
+            return Json(new{
+                flag = true
+            });
         }
     }
 }

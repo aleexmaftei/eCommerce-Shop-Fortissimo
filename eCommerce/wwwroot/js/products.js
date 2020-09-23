@@ -43,30 +43,28 @@
         document.getElementById('productNameInput').value = productName;
         document.getElementById('quantityInput').value = quantity;
 
+        var isGenerated = document.getElementsByClassName('isGenerated').length;
+        if (!isGenerated) {
+            $.each(productPropertiesWithValues, function (index, value) {
 
-        $.each(productPropertiesWithValues, function (index, value) {
+                var htmlCode = $([
+                    "<div class='form-group isGenerated'>",
+                    "   <label class='control-label'>" + value.propertyName + "</label>",
+                    "   <input class='form-control' id='" + value.propertyName + "' value='" + value.detailValue + "'/>",
+                    "   <span class='text-danger'></span>",
+                    "</div>"
+                ].join("\n"));
 
-            var htmlCode = $([
-                "<div class='form-group toDeleteAfterComplete'>",
-                "   <label class='control-label'>" + value.propertyName + "</label>",
-                "   <input class='form-control' id='" + value.propertyName + "' value='" + value.detailValue + "'/>",
-                "   <span class='text-danger'></span>"
-            ].join("\n"));
-
-            $(".insertAfterThis").after(htmlCode);
-        });
+                $(".insertAfterThis").after(htmlCode);
+            });
+        }
 
         globalModelToDisplay = modelToDisplay;
-                
     };
 
     // close modal 
     function closeModal() {
         $('#modalBox').modal('hide');
-        
-        setTimeout(function () {
-            $(".toDeleteAfterComplete").remove();
-        }, 300);
     };
 
     // for update button from modal

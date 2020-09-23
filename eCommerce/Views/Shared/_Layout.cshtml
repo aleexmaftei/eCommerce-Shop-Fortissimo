@@ -9,55 +9,43 @@
 
         <script src="~/lib/jquery/dist/jquery.min.js"></script>
         <script src="~/lib/twitter-bootstrap/js/bootstrap.bundle.min.js"></script>
-        <script src="~/js/site.js" asp-append-version="true"></script>
-        <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.15/lodash.min.js"></script>
+        <script src="~/js/cart.js"></script>
+        
 
         <link rel="stylesheet" href="~/lib/twitter-bootstrap/css/bootstrap.min.css" />
         <link rel="stylesheet" href="~/css/site.css" />
     </head>
 
-    <body>
-        <header>
-            <nav class="navbar navbar-expand-lg navbar-dark fixed-top scrolling-navbar bg-dark">
-                <div class="container">
+    <body class="lr-everything-centered responsive">
+        <input type="hidden" id="cartUrl" data-cart-action-url="@Url.Action("JsCartModalView", "Cart")" />
+        <input type="hidden" id="removeProductCartUrl" data-remove-action-url="@Url.Action("JsRemoveProductFromCart", "Cart")" />
+        
+        <header class="eCommerce-page page-content-wrapper">
+            <nav class="fixed-top scrolling-navbar rs-header">
+                <div>
+                    <!-- butoane -->
+                    <ul class="navbar-nav mr-auto smooth-scroll">
+                        <li class="nav-item">
+                            <a class="nav-link text-white" asp-controller="Home" asp-action="Index">Home</a>
+                        </li>
 
-                    <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">eCommerce</a>
-                
-                    <!-- Collapse button -->
-                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#dropDownListToggle"
-                            aria-controls="basicExampleNav" aria-expanded="false" aria-label="Toggle navigation">
-                        <span class="navbar-toggler-icon"></span>
-                    </button>
+                        <li class="nav-item">
+                            <a class="nav-link text-white cartBtn" 
+                                data-toggle="modal" data-target="#modalCartRight">Cart</a>
+                        </li>
 
-                    <!-- Collapsible content -->
-                    <div class="collapse navbar-collapse" id="dropDownListToggle">
+                        <li class="nav-item">
+                            @if (CurrentUser.IsAdmin)
+                            {
+                                <a class="nav-link text-white" asp-controller="Admin" asp-action="AdminActionPick">Admin Actions</a>
+                            }
+                        </li>
 
-                        <!-- butoane -->
-                        <ul class="navbar-nav mr-auto smooth-scroll">
-                            <li class="nav-item">
-                                <a class="nav-link text-white" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                            </li>
-
-                            <li class="nav-item">
-                                <a class="nav-link text-white" asp-area="" asp-controller="Cart" asp-action="Index">Cart</a>
-                            </li>
-
-                            <li class="nav-item">
-                                @if (CurrentUser.IsAdmin)
-                                {
-                                    <a class="nav-link text-white" asp-area="" asp-controller="Admin" asp-action="AdminActionPick">Admin Actions</a>
-                                }
-                            </li>
-
-                            <li class="nav-item">
-                                <a class="nav-link text-white" asp-controller="UserAccount" asp-action="Logout">Log out</a>
-                            </li>
-                        </ul>
-                        <!-- butoane -->
-
-                    </div>
-                    <!-- Done Collapsible content -->
-
+                        <li class="nav-item">
+                            <a class="nav-link text-white" asp-controller="UserAccount" asp-action="Logout">Log out</a>
+                        </li>
+                    </ul>
+                    <!-- butoane -->
 
                     <!--buton dreapta-->
                 
@@ -73,7 +61,7 @@
                             <div class="dropdown-menu dropdown-menu-right">
                                 @if (CurrentUser.IsAdmin)
                                 {
-                                    <a class="dropdown-item" asp-area="" asp-controller="Admin" asp-action="AdminActionPick">Admin Actions</a>
+                                    <a class="dropdown-item" asp-controller="Admin" asp-action="AdminActionPick">Admin Actions</a>
                                 }
                                 <div class="dropdown-divider"></div>
                                 <a class="dropdown-item" asp-controller="UserAccount" asp-action="Logout">Log out</a>
@@ -94,19 +82,69 @@
                             </li>
                         </ul>
                     }
+                
 
+                    <!-- Selectie categorii -->
+                    <div class="categories">
+                        <div class="rs-spandex">
+                            <ul class="list">
+                                <div class="rail" style="transform: translate(0px, 0px);">
+                                    <li class="item">
+                                        <a>Chit/Bas</a>
+                                    </li>
+
+                                    <li class="item">
+                                        <a>Pian</a>
+                                    </li>
+
+                                    <li class="item">
+                                        <a>Tobe</a>
+                                    </li>
+
+                                </div>
+                            </ul>
+
+                        </div>
+
+                    </div>
                 </div>
             </nav>
         </header>
     
     
-        <div class="container">
+        <div class="eCommerce-page page-content-wrapper" >
             <main role="main" class="pb-3">
                 @RenderBody()
             </main>
         </div>
 
    
+        <!--Modal Cart-->
+        <div class="modal fade" id="modalCartRight" tabindex="-1" role="dialog" aria-labelledby="modalCart" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title w-100" id="modalCart">Your shopping list</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+
+                    <div class="modal-body insertModalBody">
+                        
+                    </div>
+
+                    <div class="modal-footer justify-content-center">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+
+                        <a asp-controller="Cart" asp-action="Index" 
+                                class="btn btn-primary">Finish order</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+
         @RenderSection("Scripts", required: false)
     </body>
 </html>

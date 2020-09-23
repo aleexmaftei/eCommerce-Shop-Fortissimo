@@ -201,8 +201,6 @@ namespace eCommerce.Controllers
                 flag = true,
                 modelToDisplay = model
             }) ;
-
-            //return View("UpdateProduct", model);
         }
 
         [HttpPost]

@@ -1,6 +1,7 @@
 ﻿/* Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
 for details on configuring this project to bundle and minify static web assets. */
 
+/* nav bar */
 .top-nav-collapse {
     background-color: #24355C;
 }
@@ -16,6 +17,115 @@ for details on configuring this project to bundle and minify static web assets. 
         background-color: #24355C;
     }
 }
+
+@media screen and (max-width: 1296px) {
+    .rs-header .categories {
+        padding: 0px 25px;
+    }
+}
+
+@media (max-width: 1297px) {
+    .rs-header .categories {
+        text-align: center;
+    }
+}
+
+
+.eCommerce-page {
+    background: rgb(255, 255, 255);
+    max-width: 1440px;
+    min-width: 700px;
+    margin: 0px auto
+}
+
+
+/* fix sub nav-bar */
+div {
+    display: block;
+}
+
+@media screen and (max-width: 958px) {
+    .rs-header .categories {
+        padding: 0px 20px;
+    }
+}
+
+.rs-header {
+    background-color: rgb(23, 23, 23);
+    font-family: "Open Sans", Verdana, Tahoma, Arial, Helvetica, sans-serif;
+    position: relative;
+    z-index: 100;
+}
+
+.rs-header .categories {
+    position: relative;
+    background-color: white;
+    color: rgb(92, 92, 92);
+    overflow: hidden;
+    width: 100%;
+    padding: 0px 30px;
+    font-size: 0.875rem;
+    border-bottom: 1px solid rgb(221, 221, 221);
+    line-height: 31px;
+    letter-spacing: -0.15px;
+    z-index: 0;
+}
+
+.rs-spandex {
+    display: flex;
+    align-items: center;
+    white-space: nowrap;
+    flex: 1 1 auto;
+}
+
+.rs-spandex > .list {
+    display: block;
+    max-width: 100%;
+    flex-shrink: 1;
+    width: 100%;
+    padding: 0px;
+    margin: 0px;
+    white-space: nowrap;
+    list-style: none;
+    overflow: hidden;
+}
+
+.rs-spandex > .list > .rail {
+    display: flex;
+    width: 100%;
+    flex: 0 1 auto;
+    flex-flow: row nowrap;
+    align-self: auto;
+    place-content: stretch space-between;
+    align-items: flex-start;
+    white-space: nowrap;
+}
+
+.rs-header .categories .rs-spandex > .list > .rail > .item {
+    padding: 0px 5px;
+    color: rgb(59, 59, 59);
+}
+
+ul {
+    display: block;
+    list-style-type: disc;
+    margin-block-start: 1em;
+    margin-block-end: 1em;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
+    padding-inline-start: 40px;
+}
+
+li {
+    display: list-item;
+    text-align: -webkit-match-parent;
+}
+
+body *, body ::before, body ::after {
+    box-sizing: border-box;
+}
+
+
 
 
 
@@ -79,13 +189,20 @@ html {
 }
 
 body {
-  /* Margin bottom by footer height */
-  margin-bottom: 60px;
+    margin: 0;
+    display: block; 
+    font-family: "Open Sans", Verdana, Tahoma, Arial, Helvetica, sans-serif;
+    font-variant-ligatures: no-common-ligatures;
 }
-.footer {
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-  white-space: nowrap;
-  line-height: 60px; /* Vertically center the text there */
+
+body.responsive {
+    background: #3b3b3b;
 }
+
+body.lr-everything-centered {
+    /*background: #343637;
+background: linear-gradient(to right, #343637 0, #242424 30%, #000000 70%, #000000 100%);
+filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#343637', endColorstr='#000000', GradientType=1);
+    */
+}
+
