@@ -1,21 +1,29 @@
 ﻿@model eCommerce.Models.ProductVM.ProductCategoryVM
+<div>
+    <strong>@Model.TitleCategory</strong>
+</div>
 
-    <div class="container">
-        <div>
-            <strong>@Model.TitleCategory</strong>
-        </div>
+    <div class="container d-flex justify-content-center">
         
         <div class="row">
             @foreach (var productCategory in Model.ProductCategories)
             {
-                <div class="col-sm-4 col-lg-4 col-md-4">
-                    <div class="img-thumbnail">
-                        <img src="@productCategory.ProductCategoryImage" alt="" class="img-fluid" />
-                        <div class="figure-caption">
-                            <h3 class="text-center">
-                                <a asp-controller="ProductDetails" asp-action="ListProductDetailsByCategory" asp-route-categoryId="@productCategory.ProductCategoryId">@productCategory.ProductCategoryName</a>
-                            </h3>
-                        </div>
+                <div class="col-md-4 mt-2">
+                    <div class="card">
+                        <a class="card-body"
+                           asp-controller="ProductDetails" asp-action="ListProductDetailsByCategory" asp-route-categoryId="@productCategory.ProductCategoryId">
+                            <div class="card-img-actions">
+                                <img src="@productCategory.ProductCategoryImage" class="card-img img-fluid" alt="" />
+                            </div>
+
+                            <div class="card-body text-center">
+                                <div class="mb-2">
+                                    <h4 class="font-weight-normal">
+                                        @productCategory.ProductCategoryName
+                                    </h4>
+                                </div>
+                            </div>
+                        </a>
                     </div>
                 </div>
             }

@@ -22,92 +22,117 @@
         
         <header class="eCommerce-page page-content-wrapper">
             <nav class="fixed-top scrolling-navbar rs-header">
-                <div>
-                    <!-- butoane -->
-                    <ul class="navbar-nav mr-auto smooth-scroll">
-                        <li class="nav-item">
-                            <a class="nav-link text-white" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
+                <div class="rs-navigation search-view">
 
-                        <li class="nav-item">
-                            <a class="nav-link text-white cartBtn" 
-                                data-toggle="modal" data-target="#modalCartRight">Cart</a>
-                        </li>
+                    <!-- search box-->
+                    <div class="rs-searchbox">
+                        <form method="get">
+                            <div class="input-wrapper focus empty">
+                                <svg class="rs-icon rs-icon-magnifier magnifier-icon">
+                                    <use xlink:href="/static/search_icon.png">
 
-                        <li class="nav-item">
-                            @if (CurrentUser.IsAdmin)
-                            {
-                                <a class="nav-link text-white" asp-controller="Admin" asp-action="AdminActionPick">Admin Actions</a>
-                            }
-                        </li>
-
-                        <li class="nav-item">
-                            <a class="nav-link text-white" asp-controller="UserAccount" asp-action="Logout">Log out</a>
-                        </li>
-                    </ul>
-                    <!-- butoane -->
-
-                    <!--buton dreapta-->
-                
-                    @if (CurrentUser.IsAuthenticated)
-                    {
-                        <div class="btn-group">
-                            <button type="button" class="btn btn-danger">@CurrentUser.Email</button>
-                            <button type="button" class="btn btn-danger dropdown-toggle px-3" data-toggle="dropdown" aria-haspopup="true"
-                                    aria-expanded="false">
-                                <span class="sr-only">Toggle Dropdown</span>
-                            </button>
-
-                            <div class="dropdown-menu dropdown-menu-right">
-                                @if (CurrentUser.IsAdmin)
-                                {
-                                    <a class="dropdown-item" asp-controller="Admin" asp-action="AdminActionPick">Admin Actions</a>
-                                }
-                                <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" asp-controller="UserAccount" asp-action="Logout">Log out</a>
+                                    </use>
+                                </svg>
+                                <input placeholder="Search" type="search" autocomplete="off" />
                             </div>
-                        </div>
-                    }
-                    else
-                    {
-                        <ul class="navbar-nav ml-auto">
-                            <li class="nav-item pl-2 mb-2 mb-md-0">
-                                <a asp-controller="UserAccount" asp-action="Login" type="button"
-                                   class="btn btn-outline-primary btn-md btn-rounded btn-navbar">Sign in</a>
+                        </form>
+                    </div>
+
+                    <!-- buttons -->
+                    <div class="rs-buttons">
+                        <ul class="buttons-list">
+                            <li class="item-nav">
+                                <a class="" asp-controller="Home" asp-action="Index">Home</a>
                             </li>
 
-                            <li class="nav-item pl-2 mb-2 mb-md-0">
-                                <a asp-controller="UserAccount" asp-action="Register" type="button"
-                                   class="btn btn-outline-info btn-md btn-rounded btn-navbar">Sign up</a>
+                            <li class="item-nav">
+                                <a class="cartBtn"
+                                   data-toggle="modal" data-target="#modalCartRight">Cart</a>
+                            </li>
+
+                            <li class="item-nav">
+                                <a class="" asp-controller="UserAccount" asp-action="Logout">Log out</a>
                             </li>
                         </ul>
-                    }
-                
+                    </div>
 
-                    <!-- Selectie categorii -->
-                    <div class="categories">
-                        <div class="rs-spandex">
-                            <ul class="list">
-                                <div class="rail" style="transform: translate(0px, 0px);">
-                                    <li class="item">
-                                        <a>Chit/Bas</a>
-                                    </li>
+                    <div class="rs-user-navigation">
+                        <div class="link-list">
+                            <!--buton dreapta-->
+                            <div class="list-entry">
+                                @if (CurrentUser.IsAuthenticated)
+                                {
+                                    <div class="btn-group float-right align-self-center">
+                                        <button type="button" class="btn btn-danger">@CurrentUser.Email</button>
+                                        <button type="button" class="btn btn-danger dropdown-toggle px-3" data-toggle="dropdown" aria-haspopup="true"
+                                                aria-expanded="false">
+                                            <span class="sr-only">Toggle Dropdown</span>
+                                        </button>
 
-                                    <li class="item">
-                                        <a>Pian</a>
-                                    </li>
+                                        <div class="dropdown-menu dropdown-menu-right">
+                                            @if (CurrentUser.IsAdmin)
+                                            {
+                                                <a class="dropdown-item" asp-controller="Admin" asp-action="AdminActionPick">Admin Actions</a>
+                                            }
+                                            <div class="dropdown-divider"></div>
+                                            <a class="dropdown-item" asp-controller="UserAccount" asp-action="Logout">Log out</a>
+                                        </div>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <ul class="btn-group">
+                                        <li class="pl-2 mb-2 mb-md-0">
+                                            <a asp-controller="UserAccount" asp-action="Login" type="button"
+                                               class="btn btn-outline-primary btn-md btn-rounded btn-navbar">Sign in</a>
+                                        </li>
 
-                                    <li class="item">
-                                        <a>Tobe</a>
-                                    </li>
-
-                                </div>
-                            </ul>
-
+                                        <li class="pl-2 mb-2 mb-md-0">
+                                            <a asp-controller="UserAccount" asp-action="Register" type="button"
+                                               class="btn btn-outline-info btn-md btn-rounded btn-navbar">Sign up</a>
+                                        </li>
+                                    </ul>
+                                }
+                            </div>
                         </div>
-
                     </div>
                 </div>
+
+                <!-- subcategories -->
+                <div class="categories">
+                    <div class="rs-spandex">
+                        <ul class="list">
+                            <div class="rail" style="transform: translate(0px, 0px);">
+                                <li class="item">
+                                    <a>Chit/Bas</a>
+                                </li>
+
+                                <li class="item">
+                                    <a>Tobe</a>
+                                </li>
+
+                                <li class="item">
+                                    <a>Clav</a>
+                                </li>
+
+                                <li class="item">
+                                    <a>Studio</a>
+                                </li>
+
+                                <li class="item">
+                                    <a>Alamuri</a>
+                                </li>
+
+                                <li class="item">
+                                    <a>PA</a>
+                                </li>
+
+                            </div>
+                        </ul>
+                    </div>
+
+                </div>
+                
             </nav>
         </header>
     
