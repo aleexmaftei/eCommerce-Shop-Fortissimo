@@ -2,37 +2,39 @@
 
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>@ViewData["Title"] - eCommerce</title>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - eCommerce</title>
 
-        <script src="~/lib/jquery/dist/jquery.min.js"></script>
-        <script src="~/lib/twitter-bootstrap/js/bootstrap.bundle.min.js"></script>
-        <script src="~/js/cart.js"></script>
-        
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/twitter-bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/cart.js"></script>
+    <script src="~/js/login.js"></script>
 
-        <link rel="stylesheet" href="~/lib/twitter-bootstrap/css/bootstrap.min.css" />
-        <link rel="stylesheet" href="~/css/site.css" />
-    </head>
+    <link rel="stylesheet" href="~/lib/font-awesome/css/all.min.css" />
+    <link rel="stylesheet" href="~/lib/twitter-bootstrap/css/bootstrap.min.css" />
+
+    <link rel="stylesheet" href="~/css/site.css" />
+
+</head>
 
     <body class="lr-everything-centered responsive">
         <input type="hidden" id="cartUrl" data-cart-action-url="@Url.Action("JsCartModalView", "Cart")" />
         <input type="hidden" id="removeProductCartUrl" data-remove-action-url="@Url.Action("JsRemoveProductFromCart", "Cart")" />
+        <input type="hidden" id="logintUrl" data-login-url="@Url.Action("Login", "UserAccount")" />
         
         <header class="eCommerce-page page-content-wrapper">
-            <nav class="fixed-top scrolling-navbar rs-header">
+            <nav class="rs-header">
                 <div class="rs-navigation search-view">
 
                     <!-- search box-->
                     <div class="rs-searchbox">
                         <form method="get">
                             <div class="input-wrapper focus empty">
-                                <svg class="rs-icon rs-icon-magnifier magnifier-icon">
-                                    <use xlink:href="/static/search_icon.png">
-
-                                    </use>
-                                </svg>
+                                <div class="rs-icon rs-icon-magnifier magnifier-icon">
+                                    <span class="fas fa-search"></span>
+                                </div>
                                 <input placeholder="Search" type="search" autocomplete="off" />
                             </div>
                         </form>
@@ -63,7 +65,10 @@
                                 @if (CurrentUser.IsAuthenticated)
                                 {
                                     <div class="btn-group float-right align-self-center">
-                                        <button type="button" class="btn btn-danger">@CurrentUser.Email</button>
+                                        <a asp-controller="MyProfile" asp-action="Index"
+                                                type="button" class="btn btn-danger">@CurrentUser.Email 
+                                            <span class="far fa-user"></span> 
+                                        </a>
                                         <button type="button" class="btn btn-danger dropdown-toggle px-3" data-toggle="dropdown" aria-haspopup="true"
                                                 aria-expanded="false">
                                             <span class="sr-only">Toggle Dropdown</span>
@@ -83,8 +88,9 @@
                                 {
                                     <ul class="btn-group">
                                         <li class="pl-2 mb-2 mb-md-0">
-                                            <a asp-controller="UserAccount" asp-action="Login" type="button"
-                                               class="btn btn-outline-primary btn-md btn-rounded btn-navbar">Sign in</a>
+                                            <!--asp-controller="UserAccount" asp-action="Login" type="button"-->
+                                            <button type="button" data-toggle="modal" data-target="#modalLogin"
+                                                    class="btn btn-outline-primary btn-md btn-rounded btn-navbar">Sign in</button>
                                         </li>
 
                                         <li class="pl-2 mb-2 mb-md-0">
@@ -98,47 +104,27 @@
                     </div>
                 </div>
 
-                <!-- subcategories -->
+                <!-- categories list navbar-->
                 <div class="categories">
                     <div class="rs-spandex">
                         <ul class="list">
                             <div class="rail" style="transform: translate(0px, 0px);">
-                                <li class="item">
-                                    <a>Chit/Bas</a>
-                                </li>
-
-                                <li class="item">
-                                    <a>Tobe</a>
-                                </li>
-
-                                <li class="item">
-                                    <a>Clav</a>
-                                </li>
-
-                                <li class="item">
-                                    <a>Studio</a>
-                                </li>
-
-                                <li class="item">
-                                    <a>Alamuri</a>
-                                </li>
-
-                                <li class="item">
-                                    <a>PA</a>
-                                </li>
-
+                                <li class="item"><a>Chit/Bas</a></li>
+                                <li class="item"><a>Tobe</a></li>
+                                <li class="item"<a>Clav</a></li>
+                                <li class="item"><a>Studio</a></li>
+                                <li class="item"><a>Alamuri</a></li>
+                                <li class="item"><a>PA</a></li>
                             </div>
                         </ul>
                     </div>
-
                 </div>
-                
             </nav>
         </header>
     
     
         <div class="eCommerce-page page-content-wrapper" >
-            <main role="main" class="pb-3">
+            <main role="main" class="full grid-container">
                 @RenderBody()
             </main>
         </div>
@@ -151,7 +137,7 @@
                     <div class="modal-header">
                         <h4 class="modal-title w-100" id="modalCart">Your shopping list</h4>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
+                            <span class="far fa-times-circle"></span>
                         </button>
                     </div>
 
@@ -169,6 +155,40 @@
             </div>
         </div>
         
+        <!--Modal Login-->
+        <div class="modal fade" id="modalLogin" tabindex="-1" role="dialog" aria-labelledby="modalLogin" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    
+                    <div class="modal-header modal-header-login" style="padding:20px 20px;">
+                        <h4 class="modal-title h4-login"><span class="fas fa-sign-in-alt fa-sm"></span>  Login </h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span class="far fa-times-circle"></span></button>
+                    </div>
+
+                    <div class="modal-body" style="padding:40px 50px;">
+                        <form role="form">
+                            <div class="form-group">
+                                <label for="username"><span class="fas fa-user fa-sm"></span> Username/Email</label>
+                                <input type="text" class="form-control" id="username" placeholder="Enter username/email">
+                            </div>
+                            <div class="form-group">
+                                <label for="password"><span class="fas fa-key fa-sm"></span> Password</label>
+                                <input type="password" class="form-control" id="password" placeholder="Enter password">
+                            </div>
+
+                            <button type="submit" class="btn btn-success btn-block loginBtn">
+                            <span class="fas fa-power-off fa-sm" aria-hidden="true"></span> Login</button>
+                        </form>
+                    </div>
+
+                    <div class="modal-footer d-flex justify-content-between">
+                        <button type="submit" class="btn btn-danger" data-dismiss="modal" > Cancel</button>
+                        <p>Not a member? <a asp-controller="UserAccount" asp-action="Register">Sign Up</a></p>
+                    </div>
+
+                </div>
+            </div>
+        </div>
 
         @RenderSection("Scripts", required: false)
     </body>

@@ -6,53 +6,77 @@
 <input type="hidden" id="deleteActionUrl" data-delete-action-url="@Url.Action("SoftDeleteProduct", "Admin")" />
 <input type="hidden" id="updateActionUrl" data-update-action-url="@Url.Action("UpdateProduct", "Admin")" />
 
-<div class="container">
+
     <div>
         <strong>Products</strong>
     </div>
 
-    <div class="flex-column-reverse">
-        @foreach (var product in Model.Allproducts)
-        {
-            <div class="card productButtons">
-                <div class="float-left">
-                    <img class="card-img" style="width:150px; height:150px" alt="" src="https://cdn11.bigcommerce.com/s-n26aknlnlm/images/stencil/1280x1280/products/346/5620/23488050012.LEFT__95325.1576897646.jpg?c=2" />
-                </div>
+    <div class="row">
+        <div class="col-md-12" >
+            @foreach (var product in Model.Allproducts)
+            {
+                <div class="bg-white p-3 rounded mt-2">
+                    <div class="row" >
+                        <div class="col-md-6" >
+                            <!-- Product Image-->
+                            <div class="d-flex flex-column justify-content-center align-items-center icon-container mb-2 float-left">
+                                <img style="width:150px; height:150px" alt="" src="https://cdn11.bigcommerce.com/s-n26aknlnlm/images/stencil/1280x1280/products/346/5620/23488050012.LEFT__95325.1576897646.jpg?c=2" />
+                            </div>
 
-                <div class="card-body">
-                    <h4 class="card-title">@product.ProductName</h4>
-                    @foreach (var properties in product.AllPropertiesWithValues)
-                    {
-                        <div class="img-thumbnail">
-                            <p class="card-text">@properties.PropertyName : @properties.Value</p>
+                            <div class=" float-left">
+                                <!-- Product Title -->
+                                <div class="listing-title">
+                                    <h5>@product.ProductName</h5>
+                                </div>
+
+                                <div class="d-flex flex-row">
+                                    <!-- Brand name -->
+                                    <div class="d-flex flex-row align-items-center ratings">
+                                        <h12 class="mr-1 rating-number">Brand name</h12>
+                                    </div>
+                                </div>
+
+                                <div class="" style="display:inline-block;">
+                                    @foreach (var properties in product.AllPropertiesWithValues)
+                                    {
+                                        <p style="position:relative;">@properties.PropertyName : @properties.Value</p>
+                                    }
+                                    
+                                </div>
+
+                                <!-- buttons -->
+                                <div>
+                                    <form method="post">
+                                        <button type="submit" asp-controller="Cart" asp-action="AddProductToCart"
+                                                asp-route-productId="@product.ProductId"
+                                                class="btn btn-primary float-right">
+                                            Add to cart
+                                        </button>
+                                    </form>
+
+                                    @if (CurrentUser.IsAdmin == true)
+                                    {
+                                        <button type="button" data-target="#modalBox" data-toggle="modal"
+                                                data-product-id="@product.ProductId"
+                                                class="updateBtn btn btn-primary">
+                                            Update
+                                        </button>
+
+                                        <button type="button" data-product-id="@product.ProductId"
+                                                class="deleteBtn btn btn-primary">
+                                            Delete
+                                        </button>
+                                    }
+
+                                </div>
+                            </div>
                         </div>
-                    }
+                    </div>
                 </div>
-
-                <div>
-                    <form method="post">
-                        <button type="submit" asp-controller="Cart" asp-action="AddProductToCart"
-                                asp-route-productId="@product.ProductId"
-                                class="btn btn-primary float-right">
-                            Add to cart
-                        </button>
-                    </form>
-                    
-                    @if (CurrentUser.IsAdmin == true)
-                    {
-                        <button type="button"  data-target="#modalBox" data-toggle="modal"
-                                data-product-id="@product.ProductId"
-                                class="updateBtn btn btn-primary">Update</button>
-
-                        <button type="button" data-product-id="@product.ProductId"
-                                class="deleteBtn btn btn-primary">Delete</button>
-                    }
-
-                </div>
-            </div>
-        }
+            }
+        </div>
     </div>
-</div>
+
 
 
 <!--modal-->

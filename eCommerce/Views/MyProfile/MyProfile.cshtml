@@ -1,0 +1,24 @@
+﻿@model eCommerce.Models.MyProfileVM.InvoicesListVM
+
+<div class="container">
+    <h1>
+        Invoices
+    </h1>
+
+    <div class="flex-column-reverse">
+
+        @foreach(var invoice in Model.UserInvoices)
+        {
+            <div class="card">
+                <div class="card-body">
+                    <div class="img-thumbnail">
+                        <p class="card-text">Invoice number: @invoice.UserBuyHistoryId</p>
+                        <p class="card-text">Buy date: @invoice.DateBuy</p>
+                        <p class="card-text">Product name: @invoice.ProductName</p>
+                        <p class="card-text">Quantity: @invoice.QuantityBuy</p>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>

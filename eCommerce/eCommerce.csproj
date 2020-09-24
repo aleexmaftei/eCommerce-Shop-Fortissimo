@@ -15,8 +15,4 @@
     <ProjectReference Include="..\eCommerce.DataAccess\eCommerce.DataAccess.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="wwwroot\static\" />
-  </ItemGroup>
-
 </Project>

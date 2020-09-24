@@ -10,8 +10,8 @@ namespace eCommerce.BusinessLogic
 {
     public class UserAccountService : BaseService
     {
-        public UserAccountService(UnitOfWork uof)
-            : base(uof)
+        public UserAccountService(UnitOfWork uow)
+            : base(uow)
         {
         }
 

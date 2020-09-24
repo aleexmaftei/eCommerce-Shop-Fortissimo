@@ -78,7 +78,9 @@ namespace eCommerce.Controllers
 
             await LogIn(user);
 
-            return RedirectToAction("Index", "Home");
+            return Json(new{
+                flag = true
+            }) ;
         }
 
         private async Task LogIn(UserT user)

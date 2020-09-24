@@ -19,7 +19,7 @@ namespace eCommerce.Code.ExtentionMethods
             services.AddScoped<PropertyService>();
             services.AddScoped<CartService>();
             services.AddScoped<UserService>();
-
+            services.AddScoped<MyProfileService>();
             return services;
         }
 

@@ -154,7 +154,7 @@ form {
 
 
 .rs-searchbox .input-wrapper input {
-    font-family: 'Open Sans',Verdana,Tahoma,Arial,Helvetica,sans-serif;
+    font-family: 'Open Sans', Verdana, Tahoma, Arial, Helvetica, sans-serif;
     box-sizing: border-box;
     font-size: 17px;
     width: calc(100% - 39px);
@@ -311,7 +311,7 @@ ul {
 
 li {
     display: list-item;
-    text-align: -webkit-match-parent;
+    text-align: match-parent;
 }
 
 body *, body ::before, body ::after {
@@ -333,10 +333,10 @@ body *, body ::before, body ::after {
 
 .rs-navigation > .rs-user-navigation {
     position: absolute;
-    right: -80px;
+    right: -38px;
     top: 15px;
     padding-left: 10px;
-    padding-right: 30px;
+    padding-right: 40px;
     width: 310px;
     min-width: 310px;
 }
@@ -352,6 +352,20 @@ body *, body ::before, body ::after {
         min-width: 275px;
     }
 }
+
+
+
+/* products list style 
+------------------------------------------*/
+.icon-container {
+    border-radius: 7px
+}
+.listing-title {
+    margin-bottom: -7px
+}
+
+
+
 
 
 
@@ -405,6 +419,21 @@ html {
 button.accept-policy {
   font-size: 1rem;
   line-height: inherit;
+}
+
+
+
+/* Login Modal Style
+-------------------------------------------------- */
+.modal-header-login, h4-login, .close {
+    background-color: #5cb85c;
+    color: white !important;
+    text-align: center;
+    font-size: 30px;
+}
+
+.modal-footer-login {
+    background-color: #f9f9f9;
 }
 
 /* Sticky footer styles
