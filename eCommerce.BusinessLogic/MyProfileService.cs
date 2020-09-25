@@ -21,13 +21,15 @@ namespace eCommerce.BusinessLogic
             CurrentUserDto = currentUserDto;
         }
 
-        public IEnumerable<UserBuyHistory> GetInvoices()
+        public IEnumerable<UserInvoice> GetInvoices()
         {
             var currentUserId = Int32.Parse(CurrentUserDto.Id);
 
-            return UnitOfWork.UserBuyHistories.Get()
+            return UnitOfWork.UserInvoices.Get()
                 .Include(prd => prd.Product)
-                .Where(cnd => cnd.UserId == currentUserId)
+                .Include(dl => dl.DeliveryLocation)
+                    .ThenInclude(user => user.User)
+                .Where(cnd => cnd.DeliveryLocation.User.UserId == currentUserId)
                 .ToList();
         }
     }

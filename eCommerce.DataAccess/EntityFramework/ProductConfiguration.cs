@@ -10,7 +10,7 @@ namespace eCommerce.DataAccess.EntityFramework
             modelBuilder.ToTable("Product");
 
             modelBuilder.HasIndex(e => e.ProductName)
-                    .HasName("UQ__Product__DD5A978A73017F06")
+                    .HasName("UQ__Product__DD5A978AFD9C91CB")
                     .IsUnique();
 
             modelBuilder.Property(e => e.ProductImage).IsRequired();

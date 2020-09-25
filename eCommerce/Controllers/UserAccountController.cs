@@ -45,8 +45,9 @@ namespace eCommerce.Controllers
             }
 
             var user = Mapper.Map<UserT>(model);
+            var deliveryLocation = Mapper.Map<DeliveryLocation>(model);
 
-            UserAccountService.RegisterNewUser(user);
+            UserAccountService.RegisterNewUser(user, deliveryLocation);
 
             return RedirectToAction("Index", "Home");
         }

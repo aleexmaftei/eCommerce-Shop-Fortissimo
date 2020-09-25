@@ -14,27 +14,31 @@ namespace eCommerce.Data
         private BaseRepository<ProductDetail> productDetails;
         private BaseRepository<Properties> properties;
         private BaseRepository<ProductCategory> productCategories;
+        private BaseRepository<ProductComment> productComments;
 
-        public BaseRepository<Product> Products => products ?? (products = new BaseRepository<Product>(Context));
-        public BaseRepository<ProductDetail> ProductDetails => productDetails ?? (productDetails = new BaseRepository<ProductDetail>(Context));
-        public BaseRepository<Properties> Properties => properties ?? (properties = new BaseRepository<Properties>(Context));
-        public BaseRepository<ProductCategory> ProductCategories => productCategories ?? (productCategories = new BaseRepository<ProductCategory>(Context));
+        public BaseRepository<Product> Products => products ??= new BaseRepository<Product>(Context);
+        public BaseRepository<ProductDetail> ProductDetails => productDetails ??= new BaseRepository<ProductDetail>(Context);
+        public BaseRepository<Properties> Properties => properties ??= new BaseRepository<Properties>(Context);
+        public BaseRepository<ProductCategory> ProductCategories => productCategories ??= new BaseRepository<ProductCategory>(Context);
+        public BaseRepository<ProductComment> ProductComments => productComments ??= new BaseRepository<ProductComment>(Context);
 
         
         private BaseRepository<UserT> users;
+        private BaseRepository<DeliveryLocation> deliveryLocations;
         private BaseRepository<Role> roles;
         private BaseRepository<UserRole> userRoles;
         
-        public BaseRepository<UserT> Users => users ?? (users = new BaseRepository<UserT>(Context));
-        public BaseRepository<Role> Roles => roles ?? (roles = new BaseRepository<Role>(Context));
-        public BaseRepository<UserRole> UserRoles => userRoles ?? (userRoles = new BaseRepository<UserRole>(Context));
+        public BaseRepository<UserT> Users => users ??= new BaseRepository<UserT>(Context);
+        public BaseRepository<DeliveryLocation> DeliveryLocations => deliveryLocations ??= new BaseRepository<DeliveryLocation>(Context);
+        public BaseRepository<Role> Roles => roles ??= new BaseRepository<Role>(Context);
+        public BaseRepository<UserRole> UserRoles => userRoles ??= new BaseRepository<UserRole>(Context);
 
 
         private BaseRepository<Cart> carts;
-        private BaseRepository<UserBuyHistory> userBuyHistories;
+        private BaseRepository<UserInvoice> userInvoices;
 
-        public BaseRepository<Cart> Carts => carts ?? (carts = new BaseRepository<Cart>(Context));
-        public BaseRepository<UserBuyHistory> UserBuyHistories => userBuyHistories ?? (userBuyHistories = new BaseRepository<UserBuyHistory>(Context));
+        public BaseRepository<Cart> Carts => carts ??= new BaseRepository<Cart>(Context);
+        public BaseRepository<UserInvoice> UserInvoices => userInvoices ??= new BaseRepository<UserInvoice>(Context);
 
         public void SaveChanges()
         {

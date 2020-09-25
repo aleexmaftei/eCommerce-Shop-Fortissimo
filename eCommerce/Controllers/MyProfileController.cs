@@ -37,7 +37,7 @@ namespace eCommerce.Controllers
 
                 var invoiceModel = new InvoiceVM()
                 {
-                    UserBuyHistoryId = invoice.UserBuyHistoryId,
+                    UserBuyHistoryId = invoice.UserInvoiceId,
                     DateBuy = invoice.DateBuy,
                     ProductName = currentProduct.ProductName,
                     QuantityBuy = invoice.QuantityBuy

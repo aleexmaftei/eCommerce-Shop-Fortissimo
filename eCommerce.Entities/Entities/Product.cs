@@ -8,8 +8,9 @@ namespace eCommerce.DataAccess
         public Product()
         {
             Cart = new HashSet<Cart>();
+            ProductComment = new HashSet<ProductComment>();
             ProductDetail = new HashSet<ProductDetail>();
-            UserBuyHistory = new HashSet<UserBuyHistory>();
+            UserInvoice = new HashSet<UserInvoice>();
         }
 
         public int ProductId { get; set; }
@@ -20,7 +21,8 @@ namespace eCommerce.DataAccess
         public int Quantity { get; set; }
 
         public virtual ICollection<Cart> Cart { get; set; }
+        public virtual ICollection<ProductComment> ProductComment { get; set; }
         public virtual ICollection<ProductDetail> ProductDetail { get; set; }
-        public virtual ICollection<UserBuyHistory> UserBuyHistory { get; set; }
+        public virtual ICollection<UserInvoice> UserInvoice { get; set; }
     }
 }

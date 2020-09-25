@@ -20,6 +20,8 @@ namespace eCommerce.Code.ExtentionMethods
             services.AddScoped<CartService>();
             services.AddScoped<UserService>();
             services.AddScoped<MyProfileService>();
+            services.AddScoped<DeliveryLocationService>();
+
             return services;
         }
 

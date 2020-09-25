@@ -10,9 +10,12 @@ namespace eCommerce.BusinessLogic
 {
     public class UserAccountService : BaseService
     {
-        public UserAccountService(UnitOfWork uow)
+        public readonly DeliveryLocationService DeliveryLocationService;
+        public UserAccountService(UnitOfWork uow,
+                                  DeliveryLocationService deliveryLocationService)
             : base(uow)
         {
+            DeliveryLocationService = deliveryLocationService;
         }
 
         public UserT Login(string email, string password)
@@ -26,7 +29,7 @@ namespace eCommerce.BusinessLogic
                 .FirstOrDefault(a => a.Email == email && a.PasswordHash == passwordHash);
         }
 
-        public UserT RegisterNewUser(UserT user)
+        public UserT RegisterNewUser(UserT user, DeliveryLocation deliveryLocation)
         {
             return ExecuteInTransaction(uow =>
             {
@@ -39,9 +42,11 @@ namespace eCommerce.BusinessLogic
                 };
 
                 uow.Users.Insert(user);
-                
                 uow.SaveChanges();
 
+                deliveryLocation.UserId = user.UserId;
+                DeliveryLocationService.InsertDeliveryLocation(deliveryLocation);
+               
                 return user;
             }); 
         }

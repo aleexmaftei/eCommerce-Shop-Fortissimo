@@ -10,8 +10,8 @@ namespace eCommerce.DataAccess.EntityFramework
             modelBuilder.ToTable("Role");
 
             modelBuilder.HasIndex(e => e.RoleName)
-                   .HasName("UQ__Role__8A2B61608562D8E5")
-                   .IsUnique();
+                    .HasName("UQ__Role__8A2B6160D5EB574B")
+                    .IsUnique();
 
             modelBuilder.Property(e => e.RoleName)
                 .IsRequired()

@@ -24,9 +24,13 @@
                 </div>
 
                 <div>
-                    <a asp-controller="Cart" asp-action="RemoveProductFromCart"
-                       asp-route-productId="@Model.CartList[index].ProductId"
-                       class="btn btn-primary float-right">Remove from cart</a>
+                    <form method="POST">
+                        <button type="submit" asp-controller="Cart" asp-action="RemoveProductFromCart"
+                                asp-route-productId="@Model.CartList[index].ProductId"
+                                class="btn btn-primary float-right">
+                            Remove from cart
+                        </button>
+                    </form>
                 </div>
             </div>
         }
@@ -39,7 +43,7 @@
     }
     else
     {
-        <a asp-controller="Cart" asp-action="PlaceOrder" class="btn btn-primary">Place Order</a>
+        <a asp-controller="Cart" asp-action="PlaceOrder" asp-route-deliveryLocationId="1" class="btn btn-primary">Place Order</a>
     }
 
 </div>

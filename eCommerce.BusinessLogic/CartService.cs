@@ -63,7 +63,7 @@ namespace eCommerce.BusinessLogic.ProductServices
             });
         }
 
-        public IEnumerable<Cart> PlaceOrder(List<Cart> carts)
+        public IEnumerable<Cart> PlaceOrder(List<Cart> carts, int deliveryLocationId)
         {
             var currentUserId = Int32.Parse(CurrentUserCartDto.Id);
 
@@ -75,7 +75,7 @@ namespace eCommerce.BusinessLogic.ProductServices
 
             return ExecuteInTransaction(uow =>
             {
-                var buyHistoryList = new List<UserBuyHistory>();
+                var userInvoicesList = new List<UserInvoice>();
 
                 foreach (var cart in carts)
                 {
@@ -85,19 +85,19 @@ namespace eCommerce.BusinessLogic.ProductServices
                         return carts;
                     }
 
-                    var userBuyHistory = new UserBuyHistory()
+                    var userInvoice = new UserInvoice()
                     {
-                        UserId = currentUser.UserId,
+                        DeliveryLocationId = deliveryLocationId,
                         QuantityBuy = cart.QuantityBuy,
                         ProductId = currentProduct.ProductId
                     };
 
-                    buyHistoryList.Add(userBuyHistory);
+                    userInvoicesList.Add(userInvoice);
                 }
 
                 uow.Carts.DeleteList(carts);
 
-                uow.UserBuyHistories.InsertList(buyHistoryList);
+                uow.UserInvoices.InsertList(userInvoicesList);
                 uow.SaveChanges();
                 
                 return carts;

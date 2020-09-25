@@ -10,21 +10,11 @@ namespace eCommerce.DataAccess.EntityFramework
             modelBuilder.ToTable("UserT");
 
             modelBuilder.HasKey(e => e.UserId)
-                    .HasName("PK__UserT__1788CC4C57C8650B");
+                     .HasName("PK__UserT__1788CC4C0B62B2EE");
 
             modelBuilder.HasIndex(e => e.Email)
-                .HasName("UQ__UserT__A9D1053475A33B86")
+                .HasName("UQ__UserT__A9D105349376AADF")
                 .IsUnique();
-
-            modelBuilder.Property(e => e.AddressDetail).IsRequired();
-
-            modelBuilder.Property(e => e.CityName)
-                .IsRequired()
-                .HasMaxLength(25);
-
-            modelBuilder.Property(e => e.CountryName)
-                .IsRequired()
-                .HasMaxLength(100);
 
             modelBuilder.Property(e => e.Email)
                 .IsRequired()
@@ -39,13 +29,6 @@ namespace eCommerce.DataAccess.EntityFramework
                 .HasMaxLength(35);
 
             modelBuilder.Property(e => e.PasswordHash).IsRequired();
-
-            modelBuilder.Property(e => e.RegionName)
-                .IsRequired()
-                .HasMaxLength(25);
-
-            modelBuilder.Property(e => e.PostalCode)
-                        .IsRequired();
         }
     }
 }

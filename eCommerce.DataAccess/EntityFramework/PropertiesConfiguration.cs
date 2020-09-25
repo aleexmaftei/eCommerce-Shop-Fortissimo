@@ -11,10 +11,10 @@ namespace eCommerce.Data.EntityFramework
             modelBuilder.ToTable("Properties");
 
             modelBuilder.HasKey(e => e.PropertyId)
-                    .HasName("PK__Properti__70C9A7352227DE00");
+                    .HasName("PK__Properti__70C9A735B48A10D3");
 
             modelBuilder.HasIndex(e => e.PropertyName)
-                .HasName("UQ__Properti__FDF7CF1BBC37D5C7")
+                .HasName("UQ__Properti__FDF7CF1B9E63A426")
                 .IsUnique();
 
             modelBuilder.Property(e => e.PropertyName)

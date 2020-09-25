@@ -8,7 +8,7 @@ namespace eCommerce.DataAccess
         public UserT()
         {
             Cart = new HashSet<Cart>();
-            UserBuyHistory = new HashSet<UserBuyHistory>();
+            DeliveryLocation = new HashSet<DeliveryLocation>();
             UserRole = new HashSet<UserRole>();
         }
 
@@ -17,14 +17,9 @@ namespace eCommerce.DataAccess
         public string PasswordHash { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
-        public string RegionName { get; set; }
-        public string CityName { get; set; }
-        public string CountryName { get; set; }
-        public string AddressDetail { get; set; }
-        public int PostalCode { get; set; }
 
         public virtual ICollection<Cart> Cart { get; set; }
-        public virtual ICollection<UserBuyHistory> UserBuyHistory { get; set; }
+        public virtual ICollection<DeliveryLocation> DeliveryLocation { get; set; }
         public virtual ICollection<UserRole> UserRole { get; set; }
     }
 }

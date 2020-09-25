@@ -10,17 +10,17 @@ namespace eCommerce.DataAccess.EntityFramework
             modelBuilder.ToTable("UserRole");
 
             modelBuilder.HasKey(e => new { e.UserId, e.RoleId })
-                    .HasName("PK__UserRole__AF2760AD7B81A9B4");
+                   .HasName("PK__UserRole__AF2760ADC859CF22");
 
             modelBuilder.HasOne(d => d.Role)
                 .WithMany(p => p.UserRole)
                 .HasForeignKey(d => d.RoleId)
-                .HasConstraintName("FK__UserRole__RoleId__0E8E2250");
+                .HasConstraintName("FK__UserRole__RoleId__71BCD978");
 
             modelBuilder.HasOne(d => d.User)
                 .WithMany(p => p.UserRole)
                 .HasForeignKey(d => d.UserId)
-                .HasConstraintName("FK__UserRole__UserId__0D99FE17");
+                .HasConstraintName("FK__UserRole__UserId__70C8B53F");
         }
     }
 }

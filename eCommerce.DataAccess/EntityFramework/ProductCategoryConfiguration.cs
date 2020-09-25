@@ -11,8 +11,8 @@ namespace eCommerce.Data.EntityFramework
             modelBuilder.ToTable("ProductCategory");
 
             modelBuilder.HasIndex(e => e.ProductCategoryName)
-                     .HasName("UQ__ProductC__CE9F88B552EA48E7")
-                     .IsUnique();
+                    .HasName("UQ__ProductC__CE9F88B51D4643FD")
+                    .IsUnique();
 
             modelBuilder.Property(e => e.ProductCategoryImage).IsRequired();
 
@@ -23,7 +23,7 @@ namespace eCommerce.Data.EntityFramework
             modelBuilder.HasOne(d => d.ParentProductCategory)
                 .WithMany(p => p.InverseParentProductCategory)
                 .HasForeignKey(d => d.ParentProductCategoryId)
-                .HasConstraintName("FK__ProductCa__Paren__7C6F7215");
+                .HasConstraintName("FK__ProductCa__Paren__5EAA0504");
         }
     }
 }

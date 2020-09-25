@@ -60,7 +60,7 @@ namespace eCommerce.Controllers
         }
 
         [HttpGet]
-        public IActionResult PlaceOrder()
+        public IActionResult PlaceOrder(int deliveryLocationId)
         {
             var cartList = CartService.GetAllCartProductsNotDeletedNotOrderPlaced();
             if (cartList == null)
@@ -68,7 +68,7 @@ namespace eCommerce.Controllers
                 return NotFound();
             }
 
-            CartService.PlaceOrder(cartList.ToList());
+            CartService.PlaceOrder(cartList.ToList(), deliveryLocationId);
 
             return RedirectToAction("Index", "Home");
         }

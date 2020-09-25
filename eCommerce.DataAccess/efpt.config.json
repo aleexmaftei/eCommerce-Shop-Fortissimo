@@ -1,5 +1,5 @@
 ﻿{
-   "ContextClassName": "EcommerceContext",
+   "ContextClassName": "EcommerceContext4",
    "ContextNamespace": null,
    "DefaultDacpacSchema": null,
    "FilterSchemas": false,
@@ -18,11 +18,19 @@
       },
       {
          "HasPrimaryKey": true,
+         "Name": "[dbo].[DeliveryLocation]"
+      },
+      {
+         "HasPrimaryKey": true,
          "Name": "[dbo].[Product]"
       },
       {
          "HasPrimaryKey": true,
          "Name": "[dbo].[ProductCategory]"
+      },
+      {
+         "HasPrimaryKey": true,
+         "Name": "[dbo].[ProductComment]"
       },
       {
          "HasPrimaryKey": true,
@@ -38,7 +46,7 @@
       },
       {
          "HasPrimaryKey": true,
-         "Name": "[dbo].[UserBuyHistory]"
+         "Name": "[dbo].[UserInvoice]"
       },
       {
          "HasPrimaryKey": true,
