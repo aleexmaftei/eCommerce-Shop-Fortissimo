@@ -7,7 +7,7 @@
 
 <input type="hidden" id="deleteActionUrl" data-delete-action-url="@Url.Action("SoftDeleteProduct", "Admin")" />
 <input type="hidden" id="updateActionUrl" data-update-action-url="@Url.Action("UpdateProduct", "Admin")" />
-
+<input type="hidden" id="addProductToCartUrl" data-add-product-to-cart-url="@Url.Action("AddProductToCart", "Cart")" />
 
 <div class="row">
     <div class="grid-container">
@@ -129,7 +129,7 @@
                                     <div class="top">
                                         <!-- Product Name + brand-->
                                         <div class="head">
-                                            <a href="" class="article-link link">
+                                            <a href="#" class="article-link link">
                                                 <div class="title-block link-group">
                                                     <span class="manufacturer">Ibanez</span>
                                                     <span class="model">@product.ProductName</span>
@@ -160,7 +160,7 @@
                                                 </div>
                                             </a>
                                         </div>
-                                        <!-- price -->
+                                        <!-- Price -->
                                         <div class="body">
                                             <div class="price-block">
                                                 <div class="primary">
@@ -189,7 +189,7 @@
                                                 </div>
                                             </div>
 
-                                            <!-- Admin buttons -->
+                                            <!-- Admin Buttons -->
                                             @if (CurrentUser.IsAdmin == true)
                                             {
                                                 <div id="admin-buttons" class="d-flex justify-content-center">
@@ -209,9 +209,8 @@
                                             <div class="controls-block">
                                                 <div class="item add-to-basket">
                                                     <form method="post">
-                                                        <button type="submit" asp-controller="Cart" asp-action="AddProductToCart"
-                                                                asp-route-productId="@product.ProductId"
-                                                                class="button as-plain btn float-right">
+                                                        <button type="submit" data-product-id="@product.ProductId"
+                                                                class="button as-plain btn float-right addToCart">
                                                             <span class="fas fa-shopping-cart pr-2"></span>Add to Cart
                                                         </button>
                                                     </form>

@@ -3,6 +3,8 @@
 
 <link rel="stylesheet" href="~/css/cart.css" />
 
+<input type="hidden" id="removeFromCartUrl" data-remove-from-cart-url="@Url.Action("JsRemoveProductFromCart", "Cart")" />
+
 <div class="container">
     <h1>Your basket</h1>
 
@@ -18,7 +20,7 @@
                     @for (int index = 0; index < Model.CartList.Count; index++)
                     {
                         <!-- Products -->
-                        <tr class="basket-article">
+                        <tr class="basket-article toDelete">
                             <!-- Product Image -->
                             <td class="image">
                                 <div class="stackimage-wrapper stackimage-noStack stackimage-singleImage stackimage-default">
@@ -44,9 +46,8 @@
                                 </div>
                                 <!-- Buttons -->
                                 <div class="sub-links">
-                                    <a asp-controller="Cart" asp-action="RemoveProductFromCart"
-                                       asp-route-productId="@Model.CartList[index].ProductId"
-                                       class="sub-link deleteFromBasket">
+                                    <a data-product-id="@Model.CartList[index].ProductId"
+                                       class="sub-link deleteFromCart">
                                         <!--sa fie js-->
                                         Remove from cart
                                     </a>

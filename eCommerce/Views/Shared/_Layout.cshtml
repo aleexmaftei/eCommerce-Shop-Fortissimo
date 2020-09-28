@@ -22,7 +22,7 @@
     <body class="lr-everything-centered responsive">
         <input type="hidden" id="cartUrl" data-cart-action-url="@Url.Action("JsCartModalView", "Cart")" />
         <input type="hidden" id="removeProductCartUrl" data-remove-action-url="@Url.Action("JsRemoveProductFromCart", "Cart")" />
-        <input type="hidden" id="logintUrl" data-login-url="@Url.Action("Login", "UserAccount")" />
+        <input type="hidden" id="loginUrl" data-login-url="@Url.Action("Login", "UserAccount")" />
         
         <header class="eCommerce-page page-content-wrapper">
             <nav class="rs-header">
@@ -90,7 +90,6 @@
                                 {
                                     <ul class="btn-group list-unstyled">
                                         <li class="pl-2 mb-2 mb-md-0">
-                                            <!--asp-controller="UserAccount" asp-action="Login" type="button"-->
                                             <button type="button" data-toggle="modal" data-target="#modalLogin"
                                                     class="btn btn-outline-primary btn-md btn-rounded btn-navbar">Sign in</button>
                                         </li>
@@ -169,8 +168,8 @@
                     <div class="modal-body" style="padding:40px 50px;">
                         <form role="form">
                             <div class="form-group">
-                                <label for="username"><span class="fas fa-user fa-sm"></span> Username/Email</label>
-                                <input type="text" class="form-control" id="username" placeholder="Enter username/email">
+                                <label for="username"><span class="fas fa-user fa-sm"></span> Email</label>
+                                <input type="text" class="form-control" id="username" placeholder="Enter email">
                             </div>
                             <div class="form-group">
                                 <label for="password"><span class="fas fa-key fa-sm"></span> Password</label>

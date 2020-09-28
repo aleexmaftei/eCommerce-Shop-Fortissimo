@@ -5,11 +5,10 @@
         var btn = event.target; 
         var productId = $(btn).data('product-id'); 
         var divToDelete = $(btn).closest(".divToDelete");
-        
+        var deleteUrl = $('#deleteActionUrl').data('delete-action-url');
+
         $(btn).removeAttr('enabled');
         $(btn).attr('disabled', 'disabled');
-
-        var deleteUrl = $('#deleteActionUrl').data('delete-action-url');
 
         $.ajax({
             type: 'POST',
@@ -21,7 +20,6 @@
                 if (response && response.flag) {
                     $(divToDelete).fadeOut(425, function () {
                         $(divToDelete).remove();
-                        debugger;
                         });
                 }
                 else {
@@ -127,11 +125,10 @@
         
         var btn = event.target;
         var productId = $(btn).data('product-id');
+        var updateUrl = $('#updateActionUrl').data('update-action-url');
 
         $(btn).removeAttr('enabled');
         $(btn).attr('disabled', 'disabled');
-
-        var updateUrl = $('#updateActionUrl').data('update-action-url');
 
         $.ajax({
             type: 'GET',
@@ -155,9 +152,42 @@
         });
     };
 
+
+    var addToCart = function (event) {
+        var btn = event.target;
+        var productId = $(btn).data('product-id');
+        var addToCartUrl = $('#addProductToCartUrl').data('add-product-to-cart-url');
+
+        $(btn).removeAttr('enabled');
+        $(btn).attr('disabled', 'disabled');
+
+        $.ajax({
+            type: 'POST',
+            url: addToCartUrl,
+            data: {
+                productId: productId
+            },
+            success: function (response) {
+                if (response && response.flag) {
+                    // cumva sa nu mai dai refresh la pagina
+                    //location.reload(true);
+                }
+                else {
+                    alert("Error");
+                }
+
+                $(btn).removeAttr('disabled');
+                $(btn).attr('enabled', 'enabled');
+            },
+            error: function (error) {
+            }
+        });    
+    }
+
     //main
     $('.deleteBtn').on('click', deleteFunction);
     $('.updateBtn').on('click', updateFunction);
     $('.updateBtnModal').on('click', updateDatabase);
     $('.closeBtnModal').on('click', closeModal);
+    $('.addToCart').on('click', addToCart);
 });

@@ -112,7 +112,9 @@ namespace eCommerce.Controllers
 
             CartService.InsertToCart(modelMappedToEntity);
 
-            return RedirectToAction("Index", "Cart");
+            return Json(new { 
+                flag = true
+            });
         }
 
         [HttpPost]

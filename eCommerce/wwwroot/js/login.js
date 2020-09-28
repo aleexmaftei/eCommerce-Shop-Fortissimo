@@ -7,7 +7,7 @@
         $(btn).removeAttr('enabled');
         $(btn).attr('disabled', 'disabled');
 
-        var loginUrl = $('#logintUrl').data('login-url');
+        var loginUrl = $('#loginUrl').data('login-url');
         var username = document.getElementById('username').value;
         var password = document.getElementById('password').value;
 
