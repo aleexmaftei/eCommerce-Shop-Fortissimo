@@ -4,8 +4,8 @@
     var deleteFunction = function (event) {
         var btn = event.target; 
         var productId = $(btn).data('product-id'); 
-        var divToDelete = $(btn).closest(".productButtons");
-
+        var divToDelete = $(btn).closest(".divToDelete");
+        
         $(btn).removeAttr('enabled');
         $(btn).attr('disabled', 'disabled');
 
@@ -19,7 +19,10 @@
             },
             success: function (response) {
                 if (response && response.flag) {
-                    $(divToDelete).remove();
+                    $(divToDelete).fadeOut(425, function () {
+                        $(divToDelete).remove();
+                        debugger;
+                        });
                 }
                 else {
                     alert("Error");

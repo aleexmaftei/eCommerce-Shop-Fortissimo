@@ -16,7 +16,7 @@
     <link rel="stylesheet" href="~/lib/twitter-bootstrap/css/bootstrap.min.css" />
 
     <link rel="stylesheet" href="~/css/site.css" />
-
+    
 </head>
 
     <body class="lr-everything-centered responsive">
@@ -42,7 +42,7 @@
 
                     <!-- buttons -->
                     <div class="rs-buttons">
-                        <ul class="buttons-list">
+                        <ul class="buttons-list list-unstyled">
                             <li class="item-nav">
                                 <a class="" asp-controller="Home" asp-action="Index">Home</a>
                             </li>
@@ -60,11 +60,11 @@
 
                     <div class="rs-user-navigation">
                         <div class="link-list">
-                            <!--buton dreapta-->
+                            <!-- right button -->
                             <div class="list-entry">
                                 @if (CurrentUser.IsAuthenticated)
                                 {
-                                    <div class="btn-group float-right align-self-center">
+                                    <div class="btn-group user-action-button">
                                         <a asp-controller="MyProfile" asp-action="Index"
                                                 type="button" class="btn btn-danger">@CurrentUser.Email 
                                             <span class="far fa-user"></span> 
@@ -75,6 +75,8 @@
                                         </button>
 
                                         <div class="dropdown-menu dropdown-menu-right">
+                                            <a class="dropdown-item" asp-controller="MyProfile" asp-action="Index">My profile
+                                            </a>
                                             @if (CurrentUser.IsAdmin)
                                             {
                                                 <a class="dropdown-item" asp-controller="Admin" asp-action="AdminActionPick">Admin Actions</a>
@@ -86,7 +88,7 @@
                                 }
                                 else
                                 {
-                                    <ul class="btn-group">
+                                    <ul class="btn-group list-unstyled">
                                         <li class="pl-2 mb-2 mb-md-0">
                                             <!--asp-controller="UserAccount" asp-action="Login" type="button"-->
                                             <button type="button" data-toggle="modal" data-target="#modalLogin"
@@ -104,11 +106,11 @@
                     </div>
                 </div>
 
-                <!-- categories list navbar-->
-                <div class="categories">
+                <!-- categories list navbar -->
+                <div class="categories" >
                     <div class="rs-spandex">
                         <ul class="list">
-                            <div class="rail" style="transform: translate(0px, 0px);">
+                            <div class="rail">
                                 <li class="item"><a>Chit/Bas</a></li>
                                 <li class="item"><a>Tobe</a></li>
                                 <li class="item"<a>Clav</a></li>
@@ -123,16 +125,15 @@
         </header>
     
     
-        <div class="eCommerce-page page-content-wrapper" >
+        <div class="eCommerce-page page-content-wrapper">
             <main role="main" class="full grid-container">
                 @RenderBody()
             </main>
         </div>
-
    
-        <!--Modal Cart-->
+        <!-- Modal Cart -->
         <div class="modal fade" id="modalCartRight" tabindex="-1" role="dialog" aria-labelledby="modalCart" aria-hidden="true">
-            <div class="modal-dialog" role="document">
+            <div class="modal-dialog modal-dialog-scrollable" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h4 class="modal-title w-100" id="modalCart">Your shopping list</h4>
@@ -155,7 +156,7 @@
             </div>
         </div>
         
-        <!--Modal Login-->
+        <!-- Modal Login -->
         <div class="modal fade" id="modalLogin" tabindex="-1" role="dialog" aria-labelledby="modalLogin" aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">

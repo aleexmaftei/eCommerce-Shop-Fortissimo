@@ -31,11 +31,20 @@ namespace eCommerce.Controllers
                 return NotFound();
             }
 
+            double totalSum = 0;
+            foreach (var cart in cartProducts)
+            {
+                totalSum += (cart.Product.ProductPrice * cart.QuantityBuy);
+            }
+
             var model = new CartListVM()
             {
+                TotalSum = totalSum,
                 CartList = cartProducts.Select(c => Mapper.Map<Cart, CartVM>(c)).ToList()
             };
 
+            
+            
             return View("../Cart/Cart", model);
         }
 
@@ -47,9 +56,17 @@ namespace eCommerce.Controllers
             {
                 return NotFound();
             }
+            
+            double totalSum = 0;
+            foreach (var cart in cartProducts)
+            {
+                
+                totalSum += (cart.Product.ProductPrice * cart.QuantityBuy);
+            }
 
             var model = new CartListVM()
             {
+                TotalSum = totalSum,
                 CartList = cartProducts.Select(c => Mapper.Map<Cart, CartVM>(c)).ToList()
             };
 

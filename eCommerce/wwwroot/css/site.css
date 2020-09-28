@@ -1,4 +1,14 @@
 ﻿
+*, *:before, *:after {
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+}
+
+.row {
+    margin: auto;
+}
+
 /* nav bar */
 .top-nav-collapse {
     background-color: #24355C;
@@ -34,9 +44,8 @@
     background: rgb(255, 255, 255);
     max-width: 1440px;
     min-width: 700px;
-    margin: 0px auto
+    margin: 0px auto;
 }
-
 
 /* fix sub nav-bar */
 div {
@@ -66,11 +75,10 @@ div {
 
 .rs-navigation {
     position: relative;
-    height: 40px;
+    height: 75px;
     line-height: 40px;
     background-color: #171717;
     box-sizing: content-box;
-    padding-bottom: 30px;
 }
 
 .rs-navigation * {
@@ -78,7 +86,6 @@ div {
 }
 
 .rs-searchbox {
-    
     position: absolute;
     text-align: left;
     width: 310px;
@@ -188,16 +195,6 @@ form {
     }
 }
 
-.rs-navigation * {
-    box-sizing: border-box;
-}
-
-.rs-navigation ul {
-    margin: 0;
-    padding: 0;
-    list-style-type: none;
-}
-
 .rs-header .rs-buttons {
     height: 40px;
     display: block;
@@ -218,18 +215,11 @@ form {
     display: inline-block;
 }
 
-.rs-navigation ul {
-    margin: 0;
-    padding: 0;
-    list-style-type: none;
-}
 
 
 .item-nav {
     padding-left:5px;
     padding-right:5px;
-    padding-top: -2px;
-    padding-bottom: -2px;
     margin-top: 16px;
     margin-bottom: 12px;
     margin-left: 10px;
@@ -333,12 +323,13 @@ body *, body ::before, body ::after {
 
 .rs-navigation > .rs-user-navigation {
     position: absolute;
-    right: -38px;
-    top: 15px;
-    padding-left: 10px;
-    padding-right: 40px;
-    width: 310px;
-    min-width: 310px;
+    right: 25px;
+    top: 0;
+}
+
+.user-action-button {
+    margin-top: 15px;
+    margin-right: 8px;
 }
 
 .rs-navigation > .rs-user-navigation > .link-list {
@@ -363,12 +354,6 @@ body *, body ::before, body ::after {
 .listing-title {
     margin-bottom: -7px
 }
-
-
-
-
-
-
 
 
 a.navbar-brand {
@@ -426,7 +411,7 @@ button.accept-policy {
 /* Login Modal Style
 -------------------------------------------------- */
 .modal-header-login, h4-login, .close {
-    background-color: #5cb85c;
+    background-color: darkcyan;
     color: white !important;
     text-align: center;
     font-size: 30px;
@@ -453,4 +438,3 @@ body {
 body.responsive {
     background: #3b3b3b;
 }
-

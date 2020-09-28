@@ -2,87 +2,237 @@
 @inject eCommerce.Entities.DTOs.CurrentUserDto CurrentUser
 
 <script src="~/js/products.js"></script>
+<link rel="stylesheet" href="~/css/products.css" />
+<link rel="stylesheet" href="~/css/filterProducts.css" />
 
 <input type="hidden" id="deleteActionUrl" data-delete-action-url="@Url.Action("SoftDeleteProduct", "Admin")" />
 <input type="hidden" id="updateActionUrl" data-update-action-url="@Url.Action("UpdateProduct", "Admin")" />
 
 
-    <div>
-        <strong>Products</strong>
-    </div>
+<div class="row">
+    <div class="grid-container">
+        <!-- Filter bar -->
+        <div class="thin grid-section">
+            <div class="rs-search-keyfeatures-filter">
+                <div class="rs-sidebar-box">
+                    <div class="filter-box tr-keyfeature-filter-box">
+                        <div class="headline">
+                            <strong>Filter</strong>
+                        </div>
 
-    <div class="row">
-        <div class="col-md-12" >
-            @foreach (var product in Model.Allproducts)
-            {
-                <div class="bg-white p-3 rounded mt-2">
-                    <div class="row" >
-                        <div class="col-md-6" >
-                            <!-- Product Image-->
-                            <div class="d-flex flex-column justify-content-center align-items-center icon-container mb-2 float-left">
-                                <img style="width:150px; height:150px" alt="" src="https://cdn11.bigcommerce.com/s-n26aknlnlm/images/stencil/1280x1280/products/346/5620/23488050012.LEFT__95325.1576897646.jpg?c=2" />
-                            </div>
+                        <div class="body">
+                            <form method="get">
+                                <input type="hidden" id="tr-keyfeatures-category" />
+                                <!-- un for aici -->
+                                <div class="feature-wrapper tr-keyfeatures-feature ">
+                                    <div class="feature-block manufacturer">
+                                        <label for="keyfeaturefilter-manufacturer-select">
+                                            Manufacturer
+                                        </label>
 
-                            <div class=" float-left">
-                                <!-- Product Title -->
-                                <div class="listing-title">
-                                    <h5>@product.ProductName</h5>
-                                </div>
 
-                                <div class="d-flex flex-row">
-                                    <!-- Brand name -->
-                                    <div class="d-flex flex-row align-items-center ratings">
-                                        <h12 class="mr-1 rating-number">Brand name</h12>
+                                        <div class="body tr-keyfeatures-feature-selector">
+                                            <select id="keyfeaturefilter-manufacturer-select" multiple="multiple" class="tr-custom-inputs" style="display:none;">
+                                                <!-- for cu brandurile curente -->
+                                                <option value="Ibanez" data-manufacturer-id="1">
+                                                    Ibanez
+                                                </option>
+                                                <option value="Fender" data-manufacturer-id="2">
+                                                    Fender
+                                                </option>
+                                            </select>
+
+                                            <div class="tr-custom-input-select">
+                                                <div class="tr-custom-input-select-selected" style="display:block;"></div>
+                                                <!-- visible labels -->
+                                                <div class="tr-custom-input-select-visible">
+                                                    <label>
+                                                        <input class="rs-input" type="checkbox" style="display:none;" />
+                                                        <div class="rs-input checkbox">
+                                                            <input class="checkbox" type="checkbox" />
+                                                            <span class="label">Ibanez</span><span class="affected-value tr-custom-input-select-affected">(nr1)</span>
+                                                        </div>
+
+                                                    </label>
+
+                                                    <label>
+                                                        <input class="rs-input" type="checkbox" style="display:none;" />
+                                                        <div class="rs-input checkbox">
+                                                            <input class="checkbox" type="checkbox" />
+                                                            <span class="label">Fender</span><span class="affected-value tr-custom-input-select-affected">(nr2)</span>
+                                                        </div>
+                                                    </label>
+                                                </div>
+
+                                                <!-- hidden labels -->
+                                                <div class="tr-custom-input-select-hidden">
+                                                    <!-- un for ceva aici -->
+                                                    <label>
+                                                        <input class="rs-input" type="checkbox" style="display:none;" />
+                                                        <div class="rs-input checkbox">
+                                                            <div class="checkbox"></div>
+                                                            <span class="label">PRS</span><span class="affected-value tr-custom-input-select-affected">(nr2)</span>
+                                                        </div>
+                                                    </label>
+                                                    <!-- gata for -->
+                                                </div>
+                                                <a href="#" class="tr-custom-input-select-collapse-link">
+                                                    More
+                                                </a>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
-
-                                <div class="" style="display:inline-block;">
-                                    @foreach (var properties in product.AllPropertiesWithValues)
-                                    {
-                                        <p style="position:relative;">@properties.PropertyName : @properties.Value</p>
-                                    }
-                                    
-                                </div>
-
-                                <!-- buttons -->
-                                <div>
-                                    <form method="post">
-                                        <button type="submit" asp-controller="Cart" asp-action="AddProductToCart"
-                                                asp-route-productId="@product.ProductId"
-                                                class="btn btn-primary float-right">
-                                            Add to cart
-                                        </button>
-                                    </form>
-
-                                    @if (CurrentUser.IsAdmin == true)
-                                    {
-                                        <button type="button" data-target="#modalBox" data-toggle="modal"
-                                                data-product-id="@product.ProductId"
-                                                class="updateBtn btn btn-primary">
-                                            Update
-                                        </button>
-
-                                        <button type="button" data-product-id="@product.ProductId"
-                                                class="deleteBtn btn btn-primary">
-                                            Delete
-                                        </button>
-                                    }
-
-                                </div>
-                            </div>
+                                <!-- gata for -->
+                            </form>
+                            <div class="tr-keyfeatures-feature-separator"></div>
+                            <a href="#" class="tr-keyfeatures-reset-all tr-display-block tr-text-center">Remove filters</a>
                         </div>
                     </div>
                 </div>
-            }
+            </div>
+        </div>
+        <!-- Product List -->
+        <div class="phat grid-section">
+            <!-- HEADER -->
+            <div class="rs-search-dir rs-search-header">
+                <h1>@Model.Allproducts[0].AllPropertiesWithValues[0].Value</h1>
+                <div class="subtitle">
+                    <span class="result-count">@Model.ProductsCount </span>
+                    results. Articles from
+                    <span id="search-entries-shown-from">1</span>
+                    -
+                    <span id="search-entries-shown-to">25</span>.
+                    <br />
+                </div>
+            </div>
+            <!-- Products -->
+            <div class="rs-search-dir rs-search-list">
+                <div class="rs-search-list-react"></div>
+                <div id="resultsContainer" class="results">
+                    <div id="defaultResultPage" class="response articles-list">
+                        <!--aici for-ul-->
+                        @foreach (var product in Model.Allproducts)
+                        {
+                            <div class="extensible-article list-view compare parent divToDelete">
+                                <!-- Product Image -->
+                                <div class="left">
+                                    <div class="product-image image-block">
+                                        <a href="#" class="article-link link">
+                                            <img class="image" src="https://thumbs.static-thomann.de/thumb/orig/pics/prod/449491.webp"
+                                                 style="height:190px;width:auto;" />
+                                        </a>
+                                    </div>
+                                </div>
+                                <!-- Product Details-->
+                                <div class="right">
+                                    <div class="top">
+                                        <!-- Product Name + brand-->
+                                        <div class="head">
+                                            <a href="" class="article-link link">
+                                                <div class="title-block link-group">
+                                                    <span class="manufacturer">Ibanez</span>
+                                                    <span class="model">@product.ProductName</span>
+                                                </div>
+
+                                                <div class="subline">
+                                                    <div class="subtitle-block">
+                                                        <div>@product.AllPropertiesWithValues[0].Value  <span class="fas fa-chevron-right fa-xs"></span>  @product.AllPropertiesWithValues[1].Value</div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="features-block">
+                                                    <ul class="prod-features">
+                                                        <li>
+                                                            <div><span class="fas fa-angle-double-right fa-1x" aria-hidden="true"></span>  @product.AllPropertiesWithValues[4].PropertyName: @product.AllPropertiesWithValues[4].Value</div>
+                                                        </li>
+
+                                                        <li>
+                                                            <div><span class="fas fa-angle-double-right fa-1x" aria-hidden="true"></span>  @product.AllPropertiesWithValues[6].PropertyName: @product.AllPropertiesWithValues[6].Value</div>
+                                                        </li>
+                                                        <li>
+                                                            <div><span class="fas fa-angle-double-right fa-1x" aria-hidden="true"></span>  @product.AllPropertiesWithValues[5].PropertyName: @product.AllPropertiesWithValues[5].Value</div>
+                                                        </li>
+                                                        <li>
+                                                            <div><span class="fas fa-angle-double-right fa-1x" aria-hidden="true"></span>  @product.AllPropertiesWithValues[12].PropertyName: @product.AllPropertiesWithValues[12].Value</div>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </a>
+                                        </div>
+                                        <!-- price -->
+                                        <div class="body">
+                                            <div class="price-block">
+                                                <div class="primary">
+                                                    <span class="article-basketlink">@product.ProductPrice $</span>
+                                                </div>
+                                            </div>
+
+                                            <div class="manufacturer-block">
+                                                <div class="rs-tooltip-trigger rs-tooltip-ready">
+                                                    <a class="link" title="">
+                                                        <img class="image" src="https://thumbs.static-thomann.de/thumb/ethumb105x40/pics/herstlogos/harley_benton.jpg" />
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="tail">
+                                            <div class="availability-block">
+                                                <div class="rs-layover-trigger tr-availability-layover rs-tooltip-ready">
+                                                    <a href="#">
+                                                        <div class="tr-prod-availability tr-prod-availability-in">
+                                                            <span class="fas fa-battery-full fa-1x"></span>  In stock
+
+                                                        </div>
+                                                    </a>
+                                                </div>
+                                            </div>
+
+                                            <!-- Admin buttons -->
+                                            @if (CurrentUser.IsAdmin == true)
+                                            {
+                                                <div id="admin-buttons" class="d-flex justify-content-center">
+                                                    <button type="button" data-target="#modalBox" data-toggle="modal"
+                                                            data-product-id="@product.ProductId"
+                                                            class="updateBtn button as-plain btn">
+                                                        Update
+                                                    </button>
+
+                                                    <button type="button" data-product-id="@product.ProductId"
+                                                            class="deleteBtn button as-plain btn">
+                                                        Delete
+                                                    </button>
+                                                </div>
+                                            }
+
+                                            <div class="controls-block">
+                                                <div class="item add-to-basket">
+                                                    <form method="post">
+                                                        <button type="submit" asp-controller="Cart" asp-action="AddProductToCart"
+                                                                asp-route-productId="@product.ProductId"
+                                                                class="button as-plain btn float-right">
+                                                            <span class="fas fa-shopping-cart pr-2"></span>Add to Cart
+                                                        </button>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
+</div>
 
-
-
-<!--modal-->
+<!--Modal Product Update-->
 <div class="modal fade" id="modalBox" tabindex="-1" role="dialog" aria-labelledby="modalLabel"
      aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
         <div class="modal-content">
 
             <div class="modal-header">
@@ -105,15 +255,16 @@
                         <input asp-for="AdminUpdateDetails.Quantity" id="quantityInput" class="form-control" />
                         <span asp-validation-for="AdminUpdateDetails.Quantity" class="text-danger"></span>
                     </div>
-
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary closeBtnModal">Close</button>
-
-                        <input type="submit" value="Update product"
-                               class="btn btn-primary updateBtnModal" />
-                    </div>
                 </form>
             </div>
+            <form>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary closeBtnModal">Close</button>
+
+                    <input type="submit" value="Update product"
+                           class="btn btn-primary updateBtnModal" />
+                </div>
+            </form>
         </div>
     </div>
 </div>

@@ -1,50 +1,99 @@
 ﻿@model eCommerce.Models.CartVM.CartListVM
 @inject eCommerce.Entities.DTOs.CurrentUserDto CurrentUser
 
+<link rel="stylesheet" href="~/css/cart.css" />
+
 <div class="container">
-    <div>
-        <strong>Cart</strong>
+    <h1>Your basket</h1>
+
+    <div id="basket-article-list">
+        <div class="basket">
+            <table border="0">
+                <tbody>
+                    <tr>
+                        <th colspan="2">Article</th>
+                        <th>Quantity</th>
+                        <th class="float-right">Price</th>
+                    </tr>
+                    @for (int index = 0; index < Model.CartList.Count; index++)
+                    {
+                        <!-- Products -->
+                        <tr class="basket-article">
+                            <!-- Product Image -->
+                            <td class="image">
+                                <div class="stackimage-wrapper stackimage-noStack stackimage-singleImage stackimage-default">
+                                    <div class="stackimage stackimage-noStack stackimage-singleImage stackimage-noStack-singleImage">
+                                        <!-- sa duca la produs -->
+                                        <a>
+                                            <div class="placeholders">
+                                                <div></div>
+                                                <div></div>
+                                                <div></div>
+                                                <div>  </div>
+                                            </div>
+                                            <img class="card-img" alt="" src="@Model.CartList[index].ProductImage" />
+                                        </a>
+                                    </div>
+                                    
+                                </div>
+                            </td>
+                            <!-- Product Description -->
+                            <td class="article-body rs-text">
+                                <div class="title">
+                                    <div><p>@Model.CartList[index].ProductName</p></div>
+                                </div>
+                                <!-- Buttons -->
+                                <div class="sub-links">
+                                    <a asp-controller="Cart" asp-action="RemoveProductFromCart"
+                                       asp-route-productId="@Model.CartList[index].ProductId"
+                                       class="sub-link deleteFromBasket">
+                                        <!--sa fie js-->
+                                        Remove from cart
+                                    </a>
+                                </div>
+                            </td>
+                            <!-- Quantity -->
+                            <td class="amount">
+                                <p>@Model.CartList[index].QuantityBuy</p>
+                            </td>
+                            <!-- Price -->
+                            <td class="price">
+                                <div class="primary">@Model.CartList[index].ProductPrice</div>
+                            </td>
+                        </tr>
+                        <tr class="basket-article-components">
+                            <td></td>
+                            <td colspan="3" class="components rs-text"></td>
+                        </tr>
+                    }
+                    <tr>
+                        <td colspan="4" class="basket-article import-informations"></td>
+                    </tr>
+                    <tr colspan="4" class="components">
+
+                    </tr>
+                </tbody>
+                <!-- Total price area-->
+                <tfoot>
+                    <tr>
+                        <td colspan="4">
+                            <div class="sum">
+                                <div class="primary">
+                                    <span class="title d-flex justify-content-end">total: @Model.TotalSum</span>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
     </div>
 
-    <div class="flex-column-reverse">
-        @for (int index = 0; index < Model.CartList.Count; index++)
-
-        {
-            <div class="card">
-                <div class="float-left">
-                    <img class="card-img" style="width:150px; height:150px" alt="" src="@Model.CartList[index].ProductImage" />
-                </div>
-
-                <div class="card-body">
-                    <div class="img-thumbnail">
-                        <p class="card-text">Name: @Model.CartList[index].ProductName </p>
-                        <p class="card-text">Price: @Model.CartList[index].ProductPrice</p>
-                        <p class="card-text">Buy Quantity: @Model.CartList[index].QuantityBuy</p>
-                    </div>
-                </div>
-
-                <div>
-                    <form method="POST">
-                        <button type="submit" asp-controller="Cart" asp-action="RemoveProductFromCart"
-                                asp-route-productId="@Model.CartList[index].ProductId"
-                                class="btn btn-primary float-right">
-                            Remove from cart
-                        </button>
-                    </form>
-                </div>
-            </div>
-        }
-
+    <div id="basket-submit" class="rs-checkout-additionals d-flex justify-content-center">
+        <a asp-controller="Cart" asp-action="PlaceOrder" asp-route-deliveryLocationId="1"
+           id="checkoutButton" class="btn btn-primary btn-outline-info">
+            Checkout
+        </a>
     </div>
-
-    @if (!CurrentUser.IsAuthenticated)
-    {
-        <a asp-controller="UserAccount" asp-action="Login" class="btn btn-primary">Log in First!!</a>
-    }
-    else
-    {
-        <a asp-controller="Cart" asp-action="PlaceOrder" asp-route-deliveryLocationId="1" class="btn btn-primary">Place Order</a>
-    }
-
 </div>
 

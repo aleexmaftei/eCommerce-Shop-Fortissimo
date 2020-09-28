@@ -1,32 +1,39 @@
 ﻿@model eCommerce.Models.ProductVM.ProductCategoryVM
 
-    <div>
-        <strong>@Model.TitleCategory</strong>
+<link rel="stylesheet" href="~/css/index.css" />
+
+<!-- products category -->
+<div>
+    <div class="pt-4">
+        <h4>Categories</h4>
+        <hr />
     </div>
 
     <div class="container d-flex justify-content-center">
-       
         <div class="row">
             @foreach (var productCategory in Model.ProductCategories)
             {
-                <div class="col-md-4 mt-2">
-                    <div class="card">
-                        <a class="card-body" 
-                           asp-action="Category" asp-route-id="@productCategory.ProductCategoryId">
-                            <div class="card-img-actions">
-                                <img src="@productCategory.ProductCategoryImage" class="card-img img-fluid" alt="" />
+                <div class="col-6 col-sm-6 col-md-4 col-lg-3 col-xl-3 d-flex justify-content-center mb-4 mt-2">
+                    <a class="category w-100" 
+                       asp-action="Category" asp-route-id="@productCategory.ProductCategoryId">
+                        <div class="d-flex justify-content-center img-thumbnail">
+                            <div class="w-50">
+                                <img style="height:100px;width:auto;" class="img-fluid" alt="" src="@productCategory.ProductCategoryImage" />
                             </div>
-
-                            <div class="card-body text-center">
-                                <div class="mb-2">
-                                    <h4 class="font-weight-normal">
-                                        @productCategory.ProductCategoryName 
-                                    </h4>
+                            <div class="align-self-center w-50">
+                                <div class="font-weight-normal">
+                                    @productCategory.ProductCategoryName
                                 </div>
                             </div>
-                        </a>
-                    </div>
+                        </div>
+                    </a>
                 </div>
             }
         </div>
     </div>
+
+    <div class="pt-4">
+        <h4>Manufacturers</h4>
+        <hr />
+    </div>
+</div>

@@ -6,6 +6,7 @@ namespace eCommerce.Models.ProductVM.ProductsWithValues
     public class AllProductsVM
     {
         public AdminUpdateVM AdminUpdateDetails { get; set; }
+        public int ProductsCount { get; set; }
         public List<ProductVM> Allproducts { get; set; }
         public AllProductsVM()
         {

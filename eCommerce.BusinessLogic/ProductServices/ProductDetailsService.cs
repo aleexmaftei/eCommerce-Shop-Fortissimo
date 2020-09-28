@@ -29,6 +29,7 @@ namespace eCommerce.BusinessLogic.ProductServices
                    .Include(pt => pt.ProductCategory)
                    .Include(pr => pr.Property)
                    .Where(a => a.ProductId == productId && a.ProductCategoryId == categoryId && a.Product.IsDeleted == false)
+                   .OrderBy(cnd => cnd.PropertyId)
                    .ToList();
         }
 

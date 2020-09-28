@@ -1,6 +1,7 @@
 ﻿using eCommerce.BusinessLogic.ProductServices;
 using eCommerce.Models.ProductVM.ProductsWithValues;
 using Microsoft.AspNetCore.Mvc;
+using System.Linq;
 
 namespace eCommerce.Controllers
 {
@@ -31,14 +32,18 @@ namespace eCommerce.Controllers
                 return NotFound();
             }
 
-            var allProducts = new AllProductsVM();
+            var allProducts = new AllProductsVM()
+            {
+                ProductsCount = products.Count()
+            };
 
             foreach (var product in products)
             {
                 var propertiesList = new ProductVM()
                 {
                     ProductId = product.ProductId,
-                    ProductName = product.ProductName
+                    ProductName = product.ProductName,
+                    ProductPrice = product.ProductPrice
                 };
 
                 var productsByProductId = ProductDetailsService.GetAllProductsNotDeletedByProductIdAndCategoryId(product.ProductId, categoryId);
