@@ -10,7 +10,7 @@ namespace eCommerce.Controllers
         private readonly ProductDetailsService ProductDetailsService;
         private readonly ProductService ProductService;
 
-        public ProductDetailsController(ProductDetailsService productDetailsService, 
+        public ProductDetailsController(ProductDetailsService productDetailsService,
                                         ProductService productService)
         {
             ProductDetailsService = productDetailsService;

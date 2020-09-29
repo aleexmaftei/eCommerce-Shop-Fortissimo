@@ -11,11 +11,15 @@ namespace eCommerce.BusinessLogic
     public class UserAccountService : BaseService
     {
         public readonly DeliveryLocationService DeliveryLocationService;
+        public readonly UserService UserService;
+
         public UserAccountService(UnitOfWork uow,
-                                  DeliveryLocationService deliveryLocationService)
+                                  DeliveryLocationService deliveryLocationService,
+                                  UserService userService)
             : base(uow)
         {
             DeliveryLocationService = deliveryLocationService;
+            UserService = userService;
         }
 
         public UserT Login(string email, string password)
@@ -49,6 +53,33 @@ namespace eCommerce.BusinessLogic
                
                 return user;
             }); 
+        }
+
+        public UserT DeleteUser()
+        {
+            return ExecuteInTransaction(uow => {
+                var userToDelete = UserService.GetCurrentUser();
+                uow.Users.Delete(userToDelete);
+                uow.SaveChanges();
+
+                return userToDelete;
+            });
+        }
+
+        public UserT UpdateUserPassword(UserT user)
+        {
+            if(user == null)
+            {
+                return user;
+            }
+
+            return ExecuteInTransaction(uow => {
+                
+                uow.Users.Update(user);
+                uow.SaveChanges();
+
+                return user;
+            });
         }
     }
 }

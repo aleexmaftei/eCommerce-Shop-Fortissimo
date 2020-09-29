@@ -1,0 +1,41 @@
+﻿
+#changePassword, modifyDelivery, #addDelivery, #deleteAccount {
+    display:none;
+}
+
+.filter-window, .filter {
+    margin-bottom: 50px;
+    min-height: 100%;
+    max-height: 100%;
+    border-radius:5px;
+}
+
+.title {
+    background-color: lightgray;
+    border-radius: 5px;
+    margin-tops
+}
+
+.modifyDelivery {
+    display: block;
+    background-color: antiquewhite;
+}
+
+
+.modifyDelivery > form > div {
+    max-width: 75%;
+    margin-top: 30px;
+    margin-bottom: 20px;
+}
+
+@media screen and (max-width: 990px) {
+    .modifyDelivery > form > div{
+        max-width: 100%
+    }
+}
+
+.side-by-side {
+    padding-left: 0px;
+    padding-right: 0px;
+}
+

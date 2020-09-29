@@ -1,15 +1,15 @@
 ﻿body {
-    background-color:#f7f7f7 ;
+    background-color: #f7f7f7;
 }
 
 .logo {
-    margin-top: 50px;
+    margin-top: 30px;
     margin-bottom: -10px;
 }
 
 .title {
-    margin-top: 5px;
-    margin-bottom: 12px;
+    margin-top: 3px;
+    margin-bottom: 10px;
 }
 
 .info-text {
@@ -17,7 +17,7 @@
 }
 
 .input-wrapper {
-    width:75%;
+    width: 75%;
 }
 
 form {
@@ -30,22 +30,38 @@ form {
 }
 
 input {
-    background: #fff;
-    border: 1px solid #d5dee6;
-}
-
-
-.side-by-side {
-    padding-left: 0px;
-    padding-right: 0px;
+    margin-top:-4px;
 }
 
 .form-group {
     margin-bottom: 0.5rem;
 }
 
+.form-control {
+    background: #fff;
+    border-radius: 1.45rem;
+}
+
+.side-by-side {
+    padding-left: 0px;
+    padding-right: 0px;
+}
+
+
 label {
     margin-bottom: 0.2rem;
-    font-size:15px;
+    font-size: 15px;
+    color: #495057;
+    margin-left: 0.5rem;
+    font-size: 16px;
+    
+}
+
+.subheader-text {
+    font-size: 11px;
+    margin-left: 15px;
+    margin-bottom: -15px;
+    margin-top: 20px;
+    color: dimgray;
 }
 

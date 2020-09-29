@@ -3,11 +3,9 @@ using eCommerce.Data;
 using eCommerce.DataAccess;
 using eCommerce.Entities.DTOs;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Diagnostics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace eCommerce.BusinessLogic
 {
@@ -30,8 +28,20 @@ namespace eCommerce.BusinessLogic
                 .ToList();
         }
 
+        public DeliveryLocation GetDeliveryLocationById(int deliveryLocation)
+        {
+            return UnitOfWork.DeliveryLocations.Get()
+                .Include(user => user.User)
+                .FirstOrDefault(cnd => cnd.DeliveryLocationId == deliveryLocation && cnd.UserId == Int32.Parse(CurrentUserDto.Id));
+        }
+
         public DeliveryLocation InsertDeliveryLocation(DeliveryLocation deliveryLocation)
         {
+            if(deliveryLocation == null)
+            {
+                return deliveryLocation;
+            }
+
             return ExecuteInTransaction(uow => 
             {
                 uow.DeliveryLocations.Insert(deliveryLocation);
@@ -39,6 +49,39 @@ namespace eCommerce.BusinessLogic
 
                 return deliveryLocation;
             });
+        }
+
+        public DeliveryLocation UpdateDeliveryLocation(DeliveryLocation deliveryLocation)
+        {
+            if(deliveryLocation == null)
+            {
+                return deliveryLocation;
+            }
+
+            return ExecuteInTransaction(uow => {
+
+                uow.DeliveryLocations.Update(deliveryLocation);
+                uow.SaveChanges();
+
+                return deliveryLocation;
+            });
+        }
+
+        public DeliveryLocation DeleteDeliveryLocation(DeliveryLocation deliveryLocation)
+        {
+            if(deliveryLocation == null)
+            {
+                return deliveryLocation;
+            }
+
+            return ExecuteInTransaction(uow => {
+                
+                uow.DeliveryLocations.Delete(deliveryLocation);
+                uow.SaveChanges();
+                
+                return deliveryLocation;
+            });
+            
         }
     }
 }

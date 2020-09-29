@@ -11,12 +11,11 @@ namespace eCommerce.BusinessLogic
     public class AdminService : BaseService
     {
         private readonly ProductService ProductService;
-        private readonly ProductDetailsService ProductDetailsService;
-        public AdminService(UnitOfWork uow, ProductService productService, ProductDetailsService productDetailsService)
+        
+        public AdminService(UnitOfWork uow, ProductService productService)
             :base(uow)
         {
             ProductService = productService;
-            ProductDetailsService = productDetailsService;
         }
 
         public UserT RegisterNewAdmin(UserT admin)

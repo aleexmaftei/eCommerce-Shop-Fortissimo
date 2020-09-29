@@ -7,6 +7,7 @@ using eCommerce.BusinessLogic;
 using eCommerce.DataAccess;
 using eCommerce.Models.UserAccountVM;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace eCommerce.Controllers
@@ -14,12 +15,15 @@ namespace eCommerce.Controllers
     public class UserAccountController : Controller
     {
         private readonly UserAccountService UserAccountService;
+        private readonly UserService UserService;
         private readonly IMapper Mapper;
 
         public UserAccountController(UserAccountService userAccountService, 
-                                     IMapper mapper)
+                                     IMapper mapper,
+                                     UserService userService)
         { 
             UserAccountService = userAccountService;
+            UserService = userService;
             Mapper = mapper;
         }
 
@@ -116,6 +120,35 @@ namespace eCommerce.Controllers
         private async Task LogOut()
         {
             await HttpContext.SignOutAsync(scheme: "eCommerceCookies");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> DeleteMyAccount()
+        {
+            await LogOut();
+            UserAccountService.DeleteUser();
+            return RedirectToAction("Index", "Home");
+        }
+
+        [HttpPost]
+        public IActionResult ChangePassword(string password)
+        {
+            var userToUpdate = UserService.GetCurrentUser();
+            if(userToUpdate == null)
+            {
+                return Json(new{
+                    flag = false
+                });
+            }
+
+            // hash the password
+            var passwordHash = password;
+            userToUpdate.PasswordHash = passwordHash;
+
+            UserAccountService.UpdateUserPassword(userToUpdate);
+            return Json(new {
+                flag = true
+            });
         }
     }
 }
