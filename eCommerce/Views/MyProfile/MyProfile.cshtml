@@ -96,52 +96,57 @@
 
                 <form>
                     <div class="row">
-                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                        <div class="col-12">
-                            <div class="form-group">
-                                <label asp-for="CountryName" class="control-label"></label>
-                                <input asp-for="CountryName" class="form-control" />
-                                <span asp-validation-for="CountryName" class="text-danger" />
-                            </div>
-                        </div>
-
-                        <div class="col-12">
-                            <div class="form-group">
-                                <label asp-for="RegionName" class="control-label"></label>
-                                <input asp-for="RegionName" class="form-control" />
-                                <span asp-validation-for="RegionName" class="text-danger" />
-                            </div>
-                        </div>
-
-                        <div class="col-12">
-                            <div class="form-group">
-                                <label asp-for="AddressDetail" class="control-label"></label>
-                                <input asp-for="AddressDetail" class="form-control" />
-                                <span asp-validation-for="AddressDetail" class="text-danger" />
-                            </div>
-                        </div>
-
-                        <div class="col-12">
-                            <div class="row">
-                                <div class="col-8 side-by-side form-group" style="padding-right:15px;">
+                        @foreach(var deliveryLocation in Model.DeliveryLocations)
+                        {
+                            <div class="col-12">
+                                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                                <div class="col-12">
                                     <div class="form-group">
-                                        <label asp-for="CityName" class="control-label"></label>
-                                        <input asp-for="CityName" class="form-control" />
-                                        <span asp-validation-for="CityName" class="text-danger" />
+                                        <label asp-for="@deliveryLocation.CountryName" class="control-label"></label>
+                                        <input asp-for="@deliveryLocation.CountryName" class="form-control" />
+                                        <span asp-validation-for="@deliveryLocation.CountryName" class="text-danger" />
                                     </div>
                                 </div>
 
-                                <div class="col-4 side-by-side form-group">
-                                    <label asp-for="PostalCode" class="control-label"></label>
-                                    <input asp-for="PostalCode" class="form-control" />
-                                    <span asp-validation-for="PostalCode" class="text-danger" />
+                                <div class="col-12">
+                                    <div class="form-group">
+                                        <label asp-for="@deliveryLocation.RegionName" class="control-label"></label>
+                                        <input asp-for="@deliveryLocation.RegionName" class="form-control" />
+                                        <span asp-validation-for="@deliveryLocation.RegionName" class="text-danger" />
+                                    </div>
+                                </div>
+
+                                <div class="col-12">
+                                    <div class="form-group">
+                                        <label asp-for="@deliveryLocation.AddressDetail" class="control-label"></label>
+                                        <input asp-for="@deliveryLocation.AddressDetail" class="form-control" />
+                                        <span asp-validation-for="@deliveryLocation.AddressDetail" class="text-danger" />
+                                    </div>
+                                </div>
+
+                                <div class="col-12">
+                                    <div class="row">
+                                        <div class="col-8 side-by-side form-group" style="padding-right:15px;">
+                                            <div class="form-group">
+                                                <label asp-for="@deliveryLocation.CityName" class="control-label"></label>
+                                                <input asp-for="@deliveryLocation.CityName" class="form-control" />
+                                                <span asp-validation-for="@deliveryLocation.CityName" class="text-danger" />
+                                            </div>
+                                        </div>
+
+                                        <div class="col-4 side-by-side form-group">
+                                            <label asp-for="@deliveryLocation.PostalCode" class="control-label"></label>
+                                            <input asp-for="@deliveryLocation.PostalCode" class="form-control" />
+                                            <span asp-validation-for="@deliveryLocation.PostalCode" class="text-danger" />
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-12 d-flex justify-content-center">
+                                    <input type="submit" value="Save" class="btn btn-primary" id="saveBtnModityDelivery" />
                                 </div>
                             </div>
-                        </div>
-
-                        <div class="form-group col-12 d-flex justify-content-center">
-                            <input type="submit" value="Save" class="btn btn-primary" id="saveBtnModityDelivery" />
-                        </div>
+                        }
                     </div>
                 </form>
             </div>
