@@ -4,6 +4,7 @@ using eCommerce.Data;
 using eCommerce.DataAccess;
 using eCommerce.Entities.Entities.ProductAdmin;
 using eCommerce.Entities.Enums;
+using System;
 using System.Collections.Generic;
 
 namespace eCommerce.BusinessLogic
@@ -11,17 +12,29 @@ namespace eCommerce.BusinessLogic
     public class AdminService : BaseService
     {
         private readonly ProductService ProductService;
-        
-        public AdminService(UnitOfWork uow, ProductService productService)
+        private readonly DeliveryLocationService DeliveryLocationService;
+        private readonly PasswordManagerService PasswordManagerService;
+
+        public AdminService(UnitOfWork uow, 
+                            ProductService productService,
+                            DeliveryLocationService deliveryLocationService,
+                            PasswordManagerService passwordManagerService)
             :base(uow)
         {
             ProductService = productService;
+            DeliveryLocationService = deliveryLocationService;
+            PasswordManagerService = passwordManagerService;
         }
 
-        public UserT RegisterNewAdmin(UserT admin)
+        public UserT RegisterNewAdmin(UserT admin, DeliveryLocation deliveryLocation)
         {
             return ExecuteInTransaction(uow =>
             {
+                string result = string.Empty;
+                var salt = PasswordManagerService.HashPassword(admin.PasswordHash, ref result);
+
+                admin.PasswordHash = result;
+
                 admin.UserRole = new List<UserRole>
                 {
                     new UserRole
@@ -31,9 +44,19 @@ namespace eCommerce.BusinessLogic
                 };
 
                 uow.Users.Insert(admin);
+                
+                var userSalt = new Salt()
+                {
+                    User = admin,
+                    SaltPass = Convert.ToBase64String(salt)
+                };
+
+                uow.Salts.Insert(userSalt);
+
+                deliveryLocation.User = admin;
+                uow.DeliveryLocations.Insert(deliveryLocation);
 
                 uow.SaveChanges();
-
                 return admin;
             });
         }

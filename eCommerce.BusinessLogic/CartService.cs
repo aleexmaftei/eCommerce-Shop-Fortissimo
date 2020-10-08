@@ -14,17 +14,19 @@ namespace eCommerce.BusinessLogic.ProductServices
         private readonly CurrentUserDto CurrentUserCartDto;
         private readonly UserService UserService;
         private readonly ProductService ProductService;
-
+        private readonly UserInvoiceService UserInvoiceService;
 
         public CartService(UnitOfWork uow, 
                            CurrentUserDto currentUserCartDto, 
                            UserService userService,
-                           ProductService productService)
+                           ProductService productService,
+                           UserInvoiceService userInvoiceService)
             :base(uow)
         {
             CurrentUserCartDto = currentUserCartDto;
             UserService = userService;
             ProductService = productService;
+            UserInvoiceService = userInvoiceService;
         }
 
         public IEnumerable<Cart> GetAllCartProductsNotDeletedNotOrderPlaced()
@@ -39,7 +41,8 @@ namespace eCommerce.BusinessLogic.ProductServices
         public Cart GetCartByProductIdAndUser(int productId)
         {
             return UnitOfWork.Carts.Get()
-                .FirstOrDefault(cnd => cnd.UserId == Int32.Parse(CurrentUserCartDto.Id) && cnd.ProductId == productId);
+                .FirstOrDefault(cnd => cnd.UserId == Int32.Parse(CurrentUserCartDto.Id) && 
+                                       cnd.ProductId == productId);
         }
 
         public Cart InsertToCart(Cart cart)
@@ -63,6 +66,23 @@ namespace eCommerce.BusinessLogic.ProductServices
             });
         }
 
+        public bool UpdateQuantityToBuy(Cart cart)
+        {
+            if(CurrentUserCartDto == null)
+            {
+                return false;
+            }
+
+            return ExecuteInTransaction(uow => {
+
+                uow.Carts.Update(cart);
+                uow.SaveChanges();
+
+                return true;
+            });
+            
+        }
+
         public IEnumerable<Cart> PlaceOrder(List<Cart> carts, int deliveryLocationId)
         {
             var currentUserId = Int32.Parse(CurrentUserCartDto.Id);
@@ -77,6 +97,7 @@ namespace eCommerce.BusinessLogic.ProductServices
             {
                 var userInvoicesList = new List<UserInvoice>();
 
+                var currentInvoiceNumber = UserInvoiceService.GetNumberOfInvoices() + 1;
                 foreach (var cart in carts)
                 {
                     var currentProduct = ProductService.GetProductById(cart.ProductId);
@@ -87,6 +108,7 @@ namespace eCommerce.BusinessLogic.ProductServices
 
                     var userInvoice = new UserInvoice()
                     {
+                        UserInvoiceId = currentInvoiceNumber,
                         DeliveryLocationId = deliveryLocationId,
                         QuantityBuy = cart.QuantityBuy,
                         ProductId = currentProduct.ProductId

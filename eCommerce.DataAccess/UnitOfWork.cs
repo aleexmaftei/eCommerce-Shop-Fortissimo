@@ -24,11 +24,13 @@ namespace eCommerce.Data
 
         
         private BaseRepository<UserT> users;
+        private BaseRepository<Salt> salts;
         private BaseRepository<DeliveryLocation> deliveryLocations;
         private BaseRepository<Role> roles;
         private BaseRepository<UserRole> userRoles;
         
         public BaseRepository<UserT> Users => users ??= new BaseRepository<UserT>(Context);
+        public BaseRepository<Salt> Salts => salts ??= new BaseRepository<Salt>(Context);
         public BaseRepository<DeliveryLocation> DeliveryLocations => deliveryLocations ??= new BaseRepository<DeliveryLocation>(Context);
         public BaseRepository<Role> Roles => roles ??= new BaseRepository<Role>(Context);
         public BaseRepository<UserRole> UserRoles => userRoles ??= new BaseRepository<UserRole>(Context);
@@ -39,6 +41,9 @@ namespace eCommerce.Data
 
         public BaseRepository<Cart> Carts => carts ??= new BaseRepository<Cart>(Context);
         public BaseRepository<UserInvoice> UserInvoices => userInvoices ??= new BaseRepository<UserInvoice>(Context);
+
+        private BaseRepository<Manufacturer> manufacturers;
+        public BaseRepository<Manufacturer> Manufacturers => manufacturers ??= new BaseRepository<Manufacturer>(Context);
 
         public void SaveChanges()
         {

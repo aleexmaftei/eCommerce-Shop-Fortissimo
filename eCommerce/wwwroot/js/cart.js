@@ -40,17 +40,25 @@
             $.each(cartModelList, function (index, value) {
 
                 var htmlCode = $([
-                    "<div class='card generated'>",
-                    "   <div class='card-body'>",
-                    "       <img class='card-img'/>",
-                    "           <div class='img-thumbnail'",
-                    "               <p class='card-text'>Name: " + value.productName + "</p>",
-                    "               <p class='card-text'>Price: " + value.productPrice + "</p>",
-                    "           </div>",
-                    "   </div>",
-                    "   <button type='button' data-product-id='" + value.productId + "' class='removeProductBtn btn btn-primary'>Remove Product</button>",
+                    "<div class='generated mb-4 border border-secondary rounded'>",
+                    "   <div class='row'>",
+                    "       <div class='col-3 mt-3'>",
+                    "           <img src=" + value.productImage + " class='card-img' style='height:120px;width:auto;'/>",
+                    "       </div>",
+                    "       <div class='col-8 mt-4'",
+                    "           <p class='card-text mb-1'>Name: " + value.productName + "</p>",
+                    "           <p class='card-text mb-1'>Price: " + value.productPrice + "</p>",
+                    "           <p class='card-text'>Quantity: " + value.quantityBuy + "</p>",
+                    "       </div>",
+                    "  </div>",
+                    "  <div class='row'>",
+                    "       <div class='col-12 mt-0 mb-2 d-flex justify-content-center'>",
+                    "           <button type='button' data-product-id='" + value.productId + "' class='removeProductBtn btn btn-primary'>Remove Product</button>",
+                    "       </div>",
+                    "  </div>",
                     "</div>"
                 ].join("\n"));
+                
 
                 $(".insertModalBody").append(htmlCode);
             });
@@ -133,7 +141,73 @@
         });
     };
 
+    var timer, delay = 400;
+    var changeQuantityToBuy = function (event) {
+        var inputBtn = event.target;
+
+        clearTimeout(timer);
+        timer = setTimeout(function () {
+            var quantityToBuy = inputBtn.value;
+            var productId = $(inputBtn).data('product-id');
+
+            var removeFromCartUrl = $('#updateQuantityToBuy').data('update-quantity-to-buy-url');
+            $.ajax({
+                type: 'POST',
+                url: removeFromCartUrl,
+                data: {
+                    productId: productId,
+                    quantityToBuy : quantityToBuy
+                },
+                success: function (response) {
+                    if (response && response.flag) {
+                        location.reload(true);
+                    }
+                    else {
+                        alert("Error");
+                    }
+                },
+                error: function (error) {
+                }
+            });
+        }, delay);
+
+    };
+
+    var checkout = function (event) {
+        var btn = event.target;
+        var checkoutUrl = $('#checkout').data('checkout-url');
+
+        $(btn).removeAttr('enabled');
+        $(btn).attr('disabled', 'disabled');
+
+        var deliveryLocationId = $('#deliveryLocationIdInput').val();
+
+        $.ajax({
+            type: 'POST',
+            url: checkoutUrl,
+            data: {
+                deliveryLocationId: deliveryLocationId
+            },
+            success: function (response) {
+                if (response && response.flag) {
+                    window.location.href = $('#finishCheckout').data('finish-checkout-url');
+                }
+                else {
+                    alert("Error at checkout");
+                }
+
+                $(event.target).removeAttr('disabled');
+                $(event.target).attr('enabled', 'enabled');
+            },
+            error: function (error) {
+            }
+        });
+
+    };
+
     //main
     $('.cartBtn').on('click', openCartModal);
     $('.deleteFromCart').on('click', removeFromCart);
+    $('#quantityToBuy').on('blur', changeQuantityToBuy);
+    $('#checkoutButton').on('click', checkout);
 });

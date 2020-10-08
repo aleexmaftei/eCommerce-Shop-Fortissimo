@@ -1,56 +1,99 @@
 ﻿using eCommerce.BusinessLogic.Base;
 using eCommerce.Data;
 using eCommerce.DataAccess;
+using eCommerce.Entities.DTOs;
 using eCommerce.Entities.Enums;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 
 namespace eCommerce.BusinessLogic
 {
     public class UserAccountService : BaseService
     {
-        public readonly DeliveryLocationService DeliveryLocationService;
-        public readonly UserService UserService;
+        private readonly DeliveryLocationService DeliveryLocationService;
+        private readonly UserService UserService;
+        private readonly PasswordManagerService PasswordManagerService;
+        private readonly CurrentUserDto CurrentUserDto;
 
         public UserAccountService(UnitOfWork uow,
                                   DeliveryLocationService deliveryLocationService,
-                                  UserService userService)
+                                  UserService userService,
+                                  PasswordManagerService passwordManagerService,
+                                  CurrentUserDto currentUserDto)
             : base(uow)
         {
             DeliveryLocationService = deliveryLocationService;
             UserService = userService;
+            PasswordManagerService = passwordManagerService;
+            CurrentUserDto = currentUserDto;
         }
 
         public UserT Login(string email, string password)
         {
-            // TODO: hash the password
-            var passwordHash = password;
-            
-            return UnitOfWork.Users.Get()
-                .Include(u => u.UserRole)
-                    .ThenInclude(ur => ur.Role)
-                .FirstOrDefault(a => a.Email == email && a.PasswordHash == passwordHash);
+            var userCheckLogin = UnitOfWork.Users.Get()
+                        .Include(u => u.UserRole)
+                            .ThenInclude(ur => ur.Role)
+                        .FirstOrDefault(a => a.Email == email);
+
+            if(userCheckLogin == null)
+            {
+                return null;
+            }
+
+            var saltString = UnitOfWork.Salts.Get()
+                        .FirstOrDefault(salt => salt.UserId == userCheckLogin.UserId).SaltPass;
+            var actualSalt = Convert.FromBase64String(saltString.Trim());
+
+            if(PasswordManagerService.Match(password, userCheckLogin.PasswordHash, actualSalt))
+            {
+                return userCheckLogin;
+            }
+
+            return null;
         }
 
         public UserT RegisterNewUser(UserT user, DeliveryLocation deliveryLocation)
         {
+            
             return ExecuteInTransaction(uow =>
             {
+                string result = string.Empty;
+                var salt = PasswordManagerService.HashPassword(user.PasswordHash, ref result);
+
+                user.PasswordHash = result;
+
+                var roleId = (int)RoleTypes.User;
+                if (CurrentUserDto?.IsAdmin == true && CurrentUserDto != null)
+                {
+                    roleId = (int)RoleTypes.Admin;
+                }
+
                 user.UserRole = new List<UserRole>
                 {
                     new UserRole
                     {
-                        RoleId = (int)RoleTypes.User
+                        RoleId = roleId
                     }
-                };
+                };   
 
                 uow.Users.Insert(user);
-                uow.SaveChanges();
 
-                deliveryLocation.UserId = user.UserId;
-                DeliveryLocationService.InsertDeliveryLocation(deliveryLocation);
-               
+                var userSalt = new Salt()
+                {
+                    User = user,
+                    SaltPass = Convert.ToBase64String(salt)
+                };
+
+                uow.Salts.Insert(userSalt);
+
+                deliveryLocation.User = user;
+                uow.DeliveryLocations.Insert(deliveryLocation);
+
+                uow.SaveChanges();
                 return user;
             }); 
         }
@@ -59,6 +102,11 @@ namespace eCommerce.BusinessLogic
         {
             return ExecuteInTransaction(uow => {
                 var userToDelete = UserService.GetCurrentUser();
+                if(userToDelete == null)
+                {
+                    return userToDelete;
+                }
+
                 uow.Users.Delete(userToDelete);
                 uow.SaveChanges();
 
@@ -66,19 +114,40 @@ namespace eCommerce.BusinessLogic
             });
         }
 
-        public UserT UpdateUserPassword(UserT user)
+        public bool UpdateUserPassword(string newPassword, string oldPassword)
         {
-            if(user == null)
+            if(newPassword == null || oldPassword == null)
             {
-                return user;
+                return false;
             }
 
             return ExecuteInTransaction(uow => {
+                var userToUpdate = UserService.GetCurrentUser();
                 
-                uow.Users.Update(user);
-                uow.SaveChanges();
+                if(userToUpdate == null)
+                {
+                    return false;
+                }
 
-                return user;
+                var saltString = UnitOfWork.Salts.Get()
+                                .FirstOrDefault(salt => salt.UserId == userToUpdate.UserId).SaltPass;
+
+                var oldPassActualSalt = Convert.FromBase64String(saltString.Trim());
+
+                if (PasswordManagerService.Match(oldPassword, userToUpdate.PasswordHash, oldPassActualSalt))
+                {
+                    string newPasswordHash = string.Empty;
+                    var newSalt = PasswordManagerService.UpdatePasswordHash(newPassword, oldPassActualSalt, ref newPasswordHash);
+                   
+                    
+                    userToUpdate.PasswordHash = newPasswordHash;
+                    uow.Users.Update(userToUpdate);
+                    uow.SaveChanges();
+
+                    return true;
+                }
+
+                return false;
             });
         }
     }

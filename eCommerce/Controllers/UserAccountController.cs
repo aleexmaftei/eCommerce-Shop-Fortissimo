@@ -5,6 +5,8 @@ using System.Threading.Tasks;
 using AutoMapper;
 using eCommerce.BusinessLogic;
 using eCommerce.DataAccess;
+using eCommerce.Entities.DTOs;
+using eCommerce.Models.MyProfileVM.ChangePassword;
 using eCommerce.Models.UserAccountVM;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
@@ -15,15 +17,12 @@ namespace eCommerce.Controllers
     public class UserAccountController : Controller
     {
         private readonly UserAccountService UserAccountService;
-        private readonly UserService UserService;
         private readonly IMapper Mapper;
 
         public UserAccountController(UserAccountService userAccountService, 
-                                     IMapper mapper,
-                                     UserService userService)
+                                     IMapper mapper)
         { 
             UserAccountService = userAccountService;
-            UserService = userService;
             Mapper = mapper;
         }
 
@@ -93,8 +92,9 @@ namespace eCommerce.Controllers
             var claims = new List<Claim>
             {
                 new Claim("Id", user.UserId.ToString()),
-                new Claim(ClaimTypes.Name, $"{user.FirstName} {user.LastName}"),
-                new Claim(ClaimTypes.Email, user.Email),
+                new Claim("Email", user.Email.ToString()),
+                new Claim("FirstName", user.FirstName.ToString()),
+                new Claim("LastName", user.LastName.ToString()),
             };
 
             user.UserRole
@@ -130,25 +130,34 @@ namespace eCommerce.Controllers
             return RedirectToAction("Index", "Home");
         }
 
-        [HttpPost]
-        public IActionResult ChangePassword(string password)
+        [HttpGet]
+        public IActionResult ChangePassword()
         {
-            var userToUpdate = UserService.GetCurrentUser();
-            if(userToUpdate == null)
+            var model = new ChangePasswordVm();
+            return View("../MyProfile/ChangePassword", model);
+        }
+
+        [HttpPost]
+        public IActionResult ChangePassword(ChangePasswordVm model)
+        {
+            if (!ModelState.IsValid)
             {
-                return Json(new{
-                    flag = false
-                });
+                return View("../MyProfile/ChangePassword", model);
+            }
+            
+            if(model.ConfirmNewPassword != model.NewPassword)
+            {
+                return View("../MyProfile/ChangePassword", model);
             }
 
-            // hash the password
-            var passwordHash = password;
-            userToUpdate.PasswordHash = passwordHash;
-
-            UserAccountService.UpdateUserPassword(userToUpdate);
-            return Json(new {
-                flag = true
-            });
+            bool isChanged = UserAccountService.UpdateUserPassword(model.NewPassword, model.OldPassword);
+            if(isChanged == false)
+            {
+                return View("../MyProfile/ChangePassword", model);
+            } 
+            
+            return View("../MyProfile/MyProfile", model);
         }
+
     }
 }

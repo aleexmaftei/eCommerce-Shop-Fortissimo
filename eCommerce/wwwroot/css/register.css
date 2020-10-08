@@ -3,27 +3,24 @@
 }
 
 .logo {
-    margin-top: 30px;
-    margin-bottom: -10px;
+    margin-top: 8px;
+    margin-bottom: -15px;
 }
 
 .title {
-    margin-top: 3px;
-    margin-bottom: 10px;
+    margin-top: 0;
+    margin-bottom: 0;
 }
 
-.info-text {
-    margin-bottom: 10px;
-}
 
 .input-wrapper {
     width: 75%;
 }
 
 form {
-    margin-top: 20px;
+    margin-top: 15px;
     padding-top: 15px;
-    padding-bottom: 10px;
+    padding-bottom: 5px;
     background-color: #fff;
     border-radius: 8px;
     box-shadow: 1px 2px 5px #ccc;

@@ -15,7 +15,7 @@ namespace eCommerce.BusinessLogic.ProductServices
         }
 
 
-        public ProductDetail GetProductByProductId(int productId)
+        public ProductDetail GetProductDetailsByProductId(int productId)
         {
             return UnitOfWork.ProductDetails.Get()
                    .Include(pt => pt.ProductCategory)
@@ -23,17 +23,19 @@ namespace eCommerce.BusinessLogic.ProductServices
                    .FirstOrDefault(a => a.ProductId == productId);
         }
 
-        public IEnumerable<ProductDetail> GetAllProductsNotDeletedByProductIdAndCategoryId(int productId, int categoryId)
+        public IEnumerable<ProductDetail> GetAllProductDetailsNotDeleted(int productId, int categoryId)
         {
             return UnitOfWork.ProductDetails.Get()
                    .Include(pt => pt.ProductCategory)
                    .Include(pr => pr.Property)
-                   .Where(a => a.ProductId == productId && a.ProductCategoryId == categoryId && a.Product.IsDeleted == false)
+                   .Where(a => a.ProductId == productId && 
+                               a.ProductCategoryId == categoryId && 
+                               a.Product.IsDeleted == false)
                    .OrderBy(cnd => cnd.PropertyId)
                    .ToList();
         }
 
-        public IEnumerable<ProductDetail> GetAllProductsByProductId(int productId)
+        public IEnumerable<ProductDetail> GetAllProductDetailsByProductId(int productId)
         {
             return UnitOfWork.ProductDetails.Get()
                    .Include(pt => pt.ProductCategory)

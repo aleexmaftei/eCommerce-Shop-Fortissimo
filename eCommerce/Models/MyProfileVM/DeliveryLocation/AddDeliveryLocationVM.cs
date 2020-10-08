@@ -1,11 +1,11 @@
 ﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
-namespace eCommerce.Models.MyProfileVM
+namespace eCommerce.Models.MyProfileVM.DeliveryLocation
 {
-    public class DeliveryLocationVm
+    public class AddDeliveryLocationVM
     {
-        [Required(ErrorMessage = "Nume obligatoriu")]
+        [Required(ErrorMessage = "Country obligatoriu")]
         [DisplayName("Country")]
         public string CountryName { get; set; }
 

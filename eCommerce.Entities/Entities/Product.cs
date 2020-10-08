@@ -11,9 +11,11 @@ namespace eCommerce.DataAccess
             ProductComment = new HashSet<ProductComment>();
             ProductDetail = new HashSet<ProductDetail>();
             UserInvoice = new HashSet<UserInvoice>();
+
         }
 
         public int ProductId { get; set; }
+        public int ManufacturerId { get; set; }
         public string ProductName { get; set; }
         public string ProductImage { get; set; }
         public double ProductPrice { get; set; }
@@ -24,5 +26,6 @@ namespace eCommerce.DataAccess
         public virtual ICollection<ProductComment> ProductComment { get; set; }
         public virtual ICollection<ProductDetail> ProductDetail { get; set; }
         public virtual ICollection<UserInvoice> UserInvoice { get; set; }
+        public virtual Manufacturer Manufacturer { get; set; }
     }
 }

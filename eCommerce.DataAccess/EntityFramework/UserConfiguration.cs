@@ -10,10 +10,10 @@ namespace eCommerce.DataAccess.EntityFramework
             modelBuilder.ToTable("UserT");
 
             modelBuilder.HasKey(e => e.UserId)
-                     .HasName("PK__UserT__1788CC4C0B62B2EE");
+                     .HasName("PK__UserT__1788CC4CDC63001A");
 
             modelBuilder.HasIndex(e => e.Email)
-                .HasName("UQ__UserT__A9D105349376AADF")
+                .HasName("UQ__UserT__A9D10534CE896A46")
                 .IsUnique();
 
             modelBuilder.Property(e => e.Email)

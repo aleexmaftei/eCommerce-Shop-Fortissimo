@@ -1,7 +1,7 @@
 ﻿@model eCommerce.Models.ProductVM.ProductsWithValues.AllProductsVM
 @inject eCommerce.Entities.DTOs.CurrentUserDto CurrentUser
 
-<script src="~/js/products.js"></script>
+<script src="~/js/products/products.js"></script>
 <link rel="stylesheet" href="~/css/products.css" />
 <link rel="stylesheet" href="~/css/filterProducts.css" />
 
@@ -11,216 +11,232 @@
 
 <div class="row">
     <div class="grid-container">
-        <!-- Filter bar -->
-        <div class="thin grid-section">
-            <div class="rs-search-keyfeatures-filter">
+        <div class="row">
+            <!-- Filter bar -->
+            <div class="col-3 thin grid-section">
                 <div class="rs-sidebar-box">
-                    <div class="filter-box tr-keyfeature-filter-box">
-                        <div class="headline">
-                            <strong>Filter</strong>
+                    <section class="filters">
+                        <h5 class="mb-3 d-flex justify-content-center">Filters</h5>
+                        
+                        <!-- Manufacturers -->
+                        <section filter="manufacturers">
+                            <h6 class="font-weight-bold mb-3 mt-2">
+                                Manufacturers
+                            </h6>
+
+                            <div class="form-check pl-0 mb-1">
+                                <input type="checkbox" class="form-check-input filter-option filled-in" manufacturer="ibanez" id="ibanez" />
+                                <label class="form-check-label small text-uppercase card-link-secondary d-flex justify-content-start" for="ibanez">Ibanez</label>
+                            </div>
+
+                            <div class="form-check pl-0 mb-1">
+                                <input type="checkbox" class="filter-option form-check-input filled-in" manufacturer="model2" id="model2" />
+                                <label class="form-check-label small text-uppercase card-link-secondary d-flex justify-content-start" for="model2">Model2</label>
+                            </div>
+
+
+                            <div class="collapse" id="collapse">
+                                <div class="form-check pl-0 mb-1">
+                                    <input type="checkbox" class="filter-option form-check-input filled-in" manufacturer="model3" id="model3" />
+                                    <label class="form-check-label small text-uppercase card-link-secondary d-flex justify-content-start" for="model2">Model3</label>
+                                </div>
+                            </div>
+                            <hr class="mb-0" />
+                            <a class="p-0 btn btn-link text-muted d-flex justify-content-center" data-toggle="collapse" href="#collapse" aria-expanded="false" aria-controls="collapse">
+                                More
+                            </a>
+                        </section>
+
+                        <!-- Design -->
+                        <section filter="rating">
+                            <h6 class="font-weight-bold mb-2 pt-3">
+                                Design
+                            </h6>
+
+                            <div class="collapse" id="collapseDesign">
+                                <div class="form-check pl-0 mb-1">
+                                    <input type="checkbox" class="filter-option form-check-input filled-in" design="design3" id="design3" />
+                                    <label class="form-check-label small text-uppercase card-link-secondary d-flex justify-content-start" for="design3">design3</label>
+                                </div>
+                            </div>
+
+                            <hr class="mb-0" />
+                            <a class="p-0 btn btn-link text-muted d-flex justify-content-center" data-toggle="collapse" href="#collapseDesign" aria-expanded="false" aria-controls="collapseDesign">
+                                More
+                            </a>
+                        </section>
+
+                        <!-- Price -->
+                        <section filter="price">
+                            <h6 class="font-weight-bold mb-2 pt-3">
+                                Price
+                            </h6>
+                            <div class="pl-1">
+                                <div class="form-check mb-2">
+                                    <input price="50-199" type="radio" class="filter-option form-check-input" id="50199" name="price" />
+                                    <label class="form-check-label small card-link-secondary"
+                                           for="50199">$50 to $199</label>
+                                </div>
+
+                                <div class="form-check mb-2">
+                                    <input price="200-399" type="radio" class="filter-option form-check-input" id="200399" name="price" />
+                                    <label class="form-check-label small card-link-secondary"
+                                           for="200399">$200 to $399</label>
+                                </div>
+
+                                <div class="form-check mb-2">
+                                    <input price="400-599" type="radio" class="filter-option form-check-input" id="400599" name="price" />
+                                    <label class="form-check-label small card-link-secondary"
+                                           for="400599">$400 to $599</label>
+                                </div>
+
+                                <div class="form-check mb-2">
+                                    <input price="600" type="radio" class="filter-option form-check-input" id="600" name="price" />
+                                    <label class="form-check-label small card-link-secondary"
+                                           for="600">$600+</label>
+                                </div>
+                            </div>
+                        </section>
+                    </section>
+
+                </div>
+            </div>
+            
+
+            <div class="col-9">
+                <!-- Product List -->
+                <div class="phat grid-section">
+                    <!-- HEADER -->
+                    <div class="rs-search-dir rs-search-header">
+                        <h1>@Model.Allproducts[0].AllPropertiesWithValues[0].Value</h1>
+                        <div class="subtitle">
+                            <span class="result-count">@Model.ProductsCount </span>
+                            results. Articles from
+                            <span id="search-entries-shown-from">1</span>
+                            -
+                            <span id="search-entries-shown-to">25</span>.
+                            <br />
                         </div>
-
-                        <div class="body">
-                            <form method="get">
-                                <input type="hidden" id="tr-keyfeatures-category" />
-                                <!-- un for aici -->
-                                <div class="feature-wrapper tr-keyfeatures-feature ">
-                                    <div class="feature-block manufacturer">
-                                        <label for="keyfeaturefilter-manufacturer-select">
-                                            Manufacturer
-                                        </label>
-
-
-                                        <div class="body tr-keyfeatures-feature-selector">
-                                            <select id="keyfeaturefilter-manufacturer-select" multiple="multiple" class="tr-custom-inputs" style="display:none;">
-                                                <!-- for cu brandurile curente -->
-                                                <option value="Ibanez" data-manufacturer-id="1">
-                                                    Ibanez
-                                                </option>
-                                                <option value="Fender" data-manufacturer-id="2">
-                                                    Fender
-                                                </option>
-                                            </select>
-
-                                            <div class="tr-custom-input-select">
-                                                <div class="tr-custom-input-select-selected" style="display:block;"></div>
-                                                <!-- visible labels -->
-                                                <div class="tr-custom-input-select-visible">
-                                                    <label>
-                                                        <input class="rs-input" type="checkbox" style="display:none;" />
-                                                        <div class="rs-input checkbox">
-                                                            <input class="checkbox" type="checkbox" />
-                                                            <span class="label">Ibanez</span><span class="affected-value tr-custom-input-select-affected">(nr1)</span>
-                                                        </div>
-
-                                                    </label>
-
-                                                    <label>
-                                                        <input class="rs-input" type="checkbox" style="display:none;" />
-                                                        <div class="rs-input checkbox">
-                                                            <input class="checkbox" type="checkbox" />
-                                                            <span class="label">Fender</span><span class="affected-value tr-custom-input-select-affected">(nr2)</span>
-                                                        </div>
-                                                    </label>
-                                                </div>
-
-                                                <!-- hidden labels -->
-                                                <div class="tr-custom-input-select-hidden">
-                                                    <!-- un for ceva aici -->
-                                                    <label>
-                                                        <input class="rs-input" type="checkbox" style="display:none;" />
-                                                        <div class="rs-input checkbox">
-                                                            <div class="checkbox"></div>
-                                                            <span class="label">PRS</span><span class="affected-value tr-custom-input-select-affected">(nr2)</span>
-                                                        </div>
-                                                    </label>
-                                                    <!-- gata for -->
-                                                </div>
-                                                <a href="#" class="tr-custom-input-select-collapse-link">
-                                                    More
+                    </div>
+                    <!-- Products -->
+                    <div class="rs-search-dir rs-search-list">
+                        <div class="rs-search-list-react"></div>
+                        <div id="resultsContainer" class="results">
+                            <div id="defaultResultPage" class="pr-4 response articles-list">
+                                @foreach (var product in Model.Allproducts)
+                                {
+                                    <div class="extensible-article list-view compare parent divToDelete">
+                                        <!-- Product Image -->
+                                        <div class="left">
+                                            <div class="product-image image-block">
+                                                <a href="#" class="article-link link">
+                                                    <img class="image" src="https://thumbs.static-thomann.de/thumb/orig/pics/prod/449491.webp"
+                                                         style="height:190px;width:auto;" />
                                                 </a>
                                             </div>
                                         </div>
-                                    </div>
-                                </div>
-                                <!-- gata for -->
-                            </form>
-                            <div class="tr-keyfeatures-feature-separator"></div>
-                            <a href="#" class="tr-keyfeatures-reset-all tr-display-block tr-text-center">Remove filters</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- Product List -->
-        <div class="phat grid-section">
-            <!-- HEADER -->
-            <div class="rs-search-dir rs-search-header">
-                <h1>@Model.Allproducts[0].AllPropertiesWithValues[0].Value</h1>
-                <div class="subtitle">
-                    <span class="result-count">@Model.ProductsCount </span>
-                    results. Articles from
-                    <span id="search-entries-shown-from">1</span>
-                    -
-                    <span id="search-entries-shown-to">25</span>.
-                    <br />
-                </div>
-            </div>
-            <!-- Products -->
-            <div class="rs-search-dir rs-search-list">
-                <div class="rs-search-list-react"></div>
-                <div id="resultsContainer" class="results">
-                    <div id="defaultResultPage" class="response articles-list">
-                        <!--aici for-ul-->
-                        @foreach (var product in Model.Allproducts)
-                        {
-                            <div class="extensible-article list-view compare parent divToDelete">
-                                <!-- Product Image -->
-                                <div class="left">
-                                    <div class="product-image image-block">
-                                        <a href="#" class="article-link link">
-                                            <img class="image" src="https://thumbs.static-thomann.de/thumb/orig/pics/prod/449491.webp"
-                                                 style="height:190px;width:auto;" />
-                                        </a>
-                                    </div>
-                                </div>
-                                <!-- Product Details-->
-                                <div class="right">
-                                    <div class="top">
-                                        <!-- Product Name + brand-->
-                                        <div class="head">
-                                            <a href="#" class="article-link link">
-                                                <div class="title-block link-group">
-                                                    <span class="manufacturer">Ibanez</span>
-                                                    <span class="model">@product.ProductName</span>
-                                                </div>
+                                        <!-- Product Details-->
+                                        <div class="right">
+                                            <div class="top">
+                                                <!-- Product Name + brand-->
+                                                <div class="head">
+                                                    <a class="article-link link"
+                                                       asp-controller="ProductDetails" asp-action="ViewFullSpecsProduct"
+                                                       asp-route-productId="@product.ProductId">
 
-                                                <div class="subline">
-                                                    <div class="subtitle-block">
-                                                        <div>@product.AllPropertiesWithValues[0].Value  <span class="fas fa-chevron-right fa-xs"></span>  @product.AllPropertiesWithValues[1].Value</div>
-                                                    </div>
-                                                </div>
+                                                        <div class="title-block link-group">
+                                                            <span class="manufacturer">@product.ManufacturerName</span>
+                                                            <span class="model">@product.ProductName</span>
+                                                        </div>
 
-                                                <div class="features-block">
-                                                    <ul class="prod-features">
-                                                        <li>
-                                                            <div><span class="fas fa-angle-double-right fa-1x" aria-hidden="true"></span>  @product.AllPropertiesWithValues[4].PropertyName: @product.AllPropertiesWithValues[4].Value</div>
-                                                        </li>
+                                                        <div class="subline">
+                                                            <div class="subtitle-block">
+                                                                <div>@product.AllPropertiesWithValues[0].Value  <span class="fas fa-chevron-right fa-xs"></span>  @product.AllPropertiesWithValues[1].Value</div>
+                                                            </div>
+                                                        </div>
 
-                                                        <li>
-                                                            <div><span class="fas fa-angle-double-right fa-1x" aria-hidden="true"></span>  @product.AllPropertiesWithValues[6].PropertyName: @product.AllPropertiesWithValues[6].Value</div>
-                                                        </li>
-                                                        <li>
-                                                            <div><span class="fas fa-angle-double-right fa-1x" aria-hidden="true"></span>  @product.AllPropertiesWithValues[5].PropertyName: @product.AllPropertiesWithValues[5].Value</div>
-                                                        </li>
-                                                        <li>
-                                                            <div><span class="fas fa-angle-double-right fa-1x" aria-hidden="true"></span>  @product.AllPropertiesWithValues[12].PropertyName: @product.AllPropertiesWithValues[12].Value</div>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </a>
-                                        </div>
-                                        <!-- Price -->
-                                        <div class="body">
-                                            <div class="price-block">
-                                                <div class="primary">
-                                                    <span class="article-basketlink">@product.ProductPrice $</span>
-                                                </div>
-                                            </div>
+                                                        <div class="features-block">
+                                                            <ul class="prod-features">
+                                                                <li>
+                                                                    <div><span class="fas fa-angle-double-right fa-1x" aria-hidden="true"></span>  @product.AllPropertiesWithValues[4].PropertyName: @product.AllPropertiesWithValues[4].Value</div>
+                                                                </li>
 
-                                            <div class="manufacturer-block">
-                                                <div class="rs-tooltip-trigger rs-tooltip-ready">
-                                                    <a class="link" title="">
-                                                        <img class="image" src="https://thumbs.static-thomann.de/thumb/ethumb105x40/pics/herstlogos/harley_benton.jpg" />
-                                                    </a>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="tail">
-                                            <div class="availability-block">
-                                                <div class="rs-layover-trigger tr-availability-layover rs-tooltip-ready">
-                                                    <a href="#">
-                                                        <div class="tr-prod-availability tr-prod-availability-in">
-                                                            <span class="fas fa-battery-full fa-1x"></span>  In stock
-
+                                                                <li>
+                                                                    <div><span class="fas fa-angle-double-right fa-1x" aria-hidden="true"></span>  @product.AllPropertiesWithValues[6].PropertyName: @product.AllPropertiesWithValues[6].Value</div>
+                                                                </li>
+                                                                <li>
+                                                                    <div><span class="fas fa-angle-double-right fa-1x" aria-hidden="true"></span>  @product.AllPropertiesWithValues[5].PropertyName: @product.AllPropertiesWithValues[5].Value</div>
+                                                                </li>
+                                                                <li>
+                                                                    <div><span class="fas fa-angle-double-right fa-1x" aria-hidden="true"></span>  @product.AllPropertiesWithValues[12].PropertyName: @product.AllPropertiesWithValues[12].Value</div>
+                                                                </li>
+                                                            </ul>
                                                         </div>
                                                     </a>
                                                 </div>
-                                            </div>
+                                                <!-- Price -->
+                                                <div class="body">
+                                                    <div class="price-block">
+                                                        <div class="primary">
+                                                            <span class="article-basketlink">@product.ProductPrice $</span>
+                                                        </div>
+                                                    </div>
 
-                                            <!-- Admin Buttons -->
-                                            @if (CurrentUser.IsAdmin == true)
-                                            {
-                                                <div id="admin-buttons" class="d-flex justify-content-center">
-                                                    <button type="button" data-target="#modalBox" data-toggle="modal"
-                                                            data-product-id="@product.ProductId"
-                                                            class="updateBtn button as-plain btn">
-                                                        Update
-                                                    </button>
-
-                                                    <button type="button" data-product-id="@product.ProductId"
-                                                            class="deleteBtn button as-plain btn">
-                                                        Delete
-                                                    </button>
+                                                    <div class="manufacturer-block">
+                                                        <div class="rs-tooltip-trigger rs-tooltip-ready">
+                                                            <a class="link" title="">
+                                                                <img class="image" src="@product.ManufacturerLogo" />
+                                                            </a>
+                                                        </div>
+                                                    </div>
                                                 </div>
-                                            }
 
-                                            <div class="controls-block">
-                                                <div class="item add-to-basket">
-                                                    <form method="post">
-                                                        <button type="submit" data-product-id="@product.ProductId"
-                                                                class="button as-plain btn float-right addToCart">
-                                                            <span class="fas fa-shopping-cart pr-2"></span>Add to Cart
-                                                        </button>
-                                                    </form>
+                                                <div class="tail">
+                                                    <div class="availability-block">
+                                                        <div class="rs-layover-trigger tr-availability-layover rs-tooltip-ready">
+                                                            <a style="cursor:default;">
+                                                                <div class="tr-prod-availability tr-prod-availability-in">
+                                                                    <span class="fas fa-battery-full fa-1x"></span>  In stock
+
+                                                                </div>
+                                                            </a>
+                                                        </div>
+                                                    </div>
+
+                                                    <!-- Admin Buttons -->
+                                                    @if (CurrentUser.IsAdmin == true)
+                                                    {
+                                                        <div id="admin-buttons" class="d-flex justify-content-center">
+                                                            <button type="button" data-target="#modalBox" data-toggle="modal"
+                                                                    data-product-id="@product.ProductId"
+                                                                    class="updateBtn button as-plain btn">
+                                                                Update
+                                                            </button>
+
+                                                            <button type="button" data-product-id="@product.ProductId"
+                                                                    class="deleteBtn button as-plain btn">
+                                                                Delete
+                                                            </button>
+                                                        </div>
+                                                    }
+
+                                                    <div class="controls-block">
+                                                        <div class="item add-to-basket">
+                                                            <form method="post">
+                                                                <button type="submit" data-product-id="@product.ProductId" data-quantity-to-buy="1"
+                                                                        class="button as-plain btn float-right addToCart">
+                                                                    <span class="fas fa-shopping-cart pr-2"></span>Add to Cart
+                                                                </button>
+                                                            </form>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
+                                }
                             </div>
-                        }
+                        </div>
                     </div>
                 </div>
             </div>

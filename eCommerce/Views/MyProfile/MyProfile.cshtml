@@ -4,161 +4,218 @@
 
 <link rel="stylesheet" href="~/css/myProfile.css" />
 <script src="~/js/myProfile/deliveryLocation.js"></script>
-<div class="container">
-    <h1 class="d-flex justify-content-center pb-4 pt-3">
+
+<input type="hidden" id="deleteDeliveryLocationUrl" data-delete-delivery-location-url="@Url.Action("DeleteDeliveryAdress", "MyProfile")" />
+
+<!-- Side Bar -->
+<div class="container pb-5">
+    <h2 class="d-flex justify-content-center pt-4">
         My profile
-    </h1>
-    <div class="row">
-        <!-- Filter -->
-        <div class="filter col col-md-auto bg-secondary pt-4 pr-5">
-            <h5>
-                User actions
-            </h5>
-            <hr style="border-color:white;" />
+    </h2>
 
-            <ul class="list-unstyled">
-                <li class="mb-2"><a href="#" class="text-white">View Invoices</a></li>
-                <li class="mb-2"><a href="#" class="text-white">Change password?</a></li>
-                <li class="mb-2"><a href="#" class="text-white" id="modifyDeliveryBtn">Modify delivery adress</a></li>
-                <li class="mb-2"><a href="#" class="text-white">Add new delivery adress</a></li>
-                <li class="mt-3">
-                    <form method="post">
-                        <button type="submit" style="color:orangered;"
-                                asp-controller="UserAccount" asp-action="DeleteMyAccount">Delete my account</button>
-                    </form>
-                </li>
-            </ul>
+    <div class="row pt-4">
+        <div class="col-3 menu-container">
+            <div class="user-account-sidebar pad-hrz-sm pad-sep-xs">
+                <ul class="user-account-menu list-unstyled m-0 p-0">
+                    
+                    @if (CurrentUser.IsAdmin == true)
+                    {
+                        <li class="is-active">
+                            <a asp-controller="MyProfile" asp-action="Index">My user profile</a>
+                        </li>
 
-            @if (CurrentUser.IsAdmin)
-            {
-               
-                <h5 class="pt-1">
-                    Admin actions
-                </h5>
-                <hr style="border-color:white;" />
+                        <li>
+                            <a asp-controller="Admin" asp-action="AdminProfile">My admin profile</a>
+                        </li>
+                    }
+                    else
+                    {
+                        <li class="is-active">
+                            <a asp-controller="MyProfile" asp-action="Index">My profile</a>
+                        </li>
+                    }
 
-                <ul class="list-unstyled">
-                    <li class="mb-2"><a href="#" class="text-white">Delete a product</a></li>
-                    <li class="mb-2"><a href="#" class="text-white">Update a product</a></li>
-                    <li class="mb-2"><a href="#" class="text-white">Add an administrator</a></li>
+                    <li>
+                        <a asp-controller="MyProfile" asp-action="Invoices">
+                            View Invoices
+                        </a>
+                    </li>
+
+                    <li>
+                        <a asp-controller="UserAccount" asp-action="ChangePassword">
+                            Change password
+                        </a>
+                    </li>
+
+                    <li>
+                        <a asp-controller="MyProfile" asp-action="ViewDeliveryLocations">
+                            Update delivery locations
+                        </a>
+                    </li>
+
+                    <li>
+                        <a asp-controller="MyProfile" asp-action="InsertDeliveryLocation">
+                            Add new delivery adress
+                        </a>
+                    </li>
+
+                    <li>
+                        <form method="post">
+                            <a type="submit" style="color:orangered;"
+                               asp-controller="UserAccount" asp-action="DeleteMyAccount">
+                                Delete my account
+                            </a>
+                        </form>
+                    </li>
+
                 </ul>
-            }
-
+            </div>
         </div>
 
-        <!-- Filter Window -->
-        <div class="filter-window col" style="background-color: antiquewhite;">
-            <div id="viewInvoices" style="display:none;">
-                @if (Model.UserInvoices != null)
-                {
-                    @foreach (var invoice in Model.UserInvoices)
-                    {
-                        <hr />
-                        <p class="card-text">Invoice number: @invoice.UserBuyHistoryId</p>
-                        <p class="card-text">Buy date: @invoice.DateBuy</p>
-                        <p class="card-text">Product name: @invoice.ProductName</p>
-                        <p class="card-text">Quantity: @invoice.QuantityBuy</p>
-                        <hr />
-                    }
-                }
-            </div>
 
-            <div id="changePassword">
-                <form>
-                    <div class="form-group">
-                        <label class="control-label">Old Password</label>
-                        <input class="form-control oldPassword" />
-                        <span class="text-danger"></span>
-                    </div>
+        <div class="col-9">
+            <div class="row">
+                <!-- Personal data panel -->
+                <div class="col-6">
+                    <div class="user-dashboard-slot">
+                        <div class="panel panel-default user-account-panel min-height-panel">
+                            <div class="panel-body">
 
-                    <div class="form-group">
-                        <label class="control-label">New Password</label>
-                        <input class="form-control newPassword" />
-                        <span class="text-danger"></span>
-                    </div>
+                                <p class="widget-title mb-3">Account details</p>
 
-                    <div class="form-group">
-                        <label class="control-label">Confirm New Password</label>
-                        <input class="form-control confNewPassword" />
-                        <span class="text-danger"></span>
-                    </div>
+                                <div class="row">
+                                    <div class="col-sm-4 col-md-8 col-lg-12 user-data-col">
+                                        <div>
+                                            <p>
+                                                <span class="field-name">Name:</span>
+                                                <span class="field-value">@CurrentUser.FirstName @CurrentUser.LastName</span>
+                                            </p>
+                                            <p>
+                                                <span class="field-name">Email: </span>
+                                                <span class="field-value">@CurrentUser.Email</span>
+                                            </p>
 
-                    <div class="form-group col-12  d-flex justify-content-center">
-                        <input type="submit" value="Register" class="btn btn-primary" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="panel-footer">
+                                <a class="text-dashboard-primary text-decoration-none"
+                                   asp-controller="UserAccount" asp-action="ChangePassword">
+                                    Change Password
+                                </a>
+                            </div>
+                        </div>
                     </div>
-                </form>
-            </div>
-            
-            <div id="modifyDelivery">
-                <div class="title">
-                    <h4 class="d-flex justify-content-center p-3">Modify delivery adress</h4>
                 </div>
 
-                <form>
-                    <div class="row">
-                        @foreach(var deliveryLocation in Model.DeliveryLocations)
+                <!-- Invoices panel -->
+                <div class="col-6 user-dashboard-slot">
+                    <div class="panel panel-default user-account-panel min-height-panel">
+                        <div class="panel-body">
+                            <p class="widget-title">
+                                My last order
+                            </p>
+                            @if (Model.LastInvoice != null)
+                            {
+                                <div class="img-wrapper mrg-btm-sm">
+                                    <img class="img-holder" />
+                                </div>
+
+                                <p class="widget-text text-center">
+                                    Date Buy: @Model.LastInvoice.DateBuy
+                                </p>
+
+                                <p class="mb-1 widget-text text-center">
+                                    Order delivered to adress: @Model.LastInvoice.AdressDetail
+                                </p>
+
+                            }
+                            else
+                            {
+                                <p class="mt-4 widget-text text-center">
+                                    No previous invoices to show
+                                </p>
+                            }
+                        </div>
+
+                        @if (Model.LastInvoice != null)
                         {
-                            <div class="col-12">
-                                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                                <div class="col-12">
-                                    <div class="form-group">
-                                        <label asp-for="@deliveryLocation.CountryName" class="control-label"></label>
-                                        <input asp-for="@deliveryLocation.CountryName" class="form-control" />
-                                        <span asp-validation-for="@deliveryLocation.CountryName" class="text-danger" />
-                                    </div>
-                                </div>
-
-                                <div class="col-12">
-                                    <div class="form-group">
-                                        <label asp-for="@deliveryLocation.RegionName" class="control-label"></label>
-                                        <input asp-for="@deliveryLocation.RegionName" class="form-control" />
-                                        <span asp-validation-for="@deliveryLocation.RegionName" class="text-danger" />
-                                    </div>
-                                </div>
-
-                                <div class="col-12">
-                                    <div class="form-group">
-                                        <label asp-for="@deliveryLocation.AddressDetail" class="control-label"></label>
-                                        <input asp-for="@deliveryLocation.AddressDetail" class="form-control" />
-                                        <span asp-validation-for="@deliveryLocation.AddressDetail" class="text-danger" />
-                                    </div>
-                                </div>
-
-                                <div class="col-12">
-                                    <div class="row">
-                                        <div class="col-8 side-by-side form-group" style="padding-right:15px;">
-                                            <div class="form-group">
-                                                <label asp-for="@deliveryLocation.CityName" class="control-label"></label>
-                                                <input asp-for="@deliveryLocation.CityName" class="form-control" />
-                                                <span asp-validation-for="@deliveryLocation.CityName" class="text-danger" />
-                                            </div>
-                                        </div>
-
-                                        <div class="col-4 side-by-side form-group">
-                                            <label asp-for="@deliveryLocation.PostalCode" class="control-label"></label>
-                                            <input asp-for="@deliveryLocation.PostalCode" class="form-control" />
-                                            <span asp-validation-for="@deliveryLocation.PostalCode" class="text-danger" />
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="form-group col-12 d-flex justify-content-center">
-                                    <input type="submit" value="Save" class="btn btn-primary" id="saveBtnModityDelivery" />
-                                </div>
+                            <div class="panel-footer">
+                                <a class="text-dashboard-primary text-decoration-none"
+                                   asp-controller="MyProfile" asp-action="Invoices">
+                                    Click to see details about your invoices
+                                </a>
                             </div>
                         }
                     </div>
-                </form>
-            </div>
+                </div>
 
-            <div id="addDelivery">
+                <!-- Delivery Location panel -->
+                <div class="col-12 mt-4">
+                    <div class="user-dashboard-slot">
+                        <div class="panel panel-default user-account-panel min-height-panel">
+                            <div class="panel-body">
+                                <p class="widget-title mb-3">Delivery Locations</p>
+                                @for (int index = 0; index < Model.DeliveryLocations.Count; index++)
+                                {
+                                    <div class="row">
+                                        <div class="col-6 user-data-col">
+                                            <p><span class="field-value">Country Name: @Model.DeliveryLocations[index].CountryName</span></p>
 
-            </div>
+                                            <p><span class="field-value">Region Name: @Model.DeliveryLocations[index].RegionName</span></p>
 
-            <div id="deleteAccount">
+                                            <p><span class="field-value">City Name: @Model.DeliveryLocations[index].CityName</span></p>
+                                        </div>
 
+
+                                        <div class="col-6 user-data-col">
+                                            <p><span class="field-value">Address: @Model.DeliveryLocations[index].AddressDetail</span></p>
+
+                                            <p><span class="field-value">Postal Code: @Model.DeliveryLocations[index].PostalCode</span></p>
+
+                                            <div class="row">
+                                                <div class="col-6 col-xl-4 col-md-6 col-sm-7 pl-0">
+                                                    <form method="get">
+                                                        <a class="btn btn-primary"
+                                                           asp-controller="MyProfile" asp-action="ModifyOneDeliveryLocation"
+                                                           asp-route-deliveryLocationId="@Model.DeliveryLocations[index].DeliveryLocationId">
+                                                            Update
+                                                        </a>
+                                                    </form>
+                                                </div>
+
+                                                <div class="col-3">
+                                                    <button class="btn btn-danger deleteDeliveryLocationBtn"
+                                                            data-delivery-location-id="@Model.DeliveryLocations[index].DeliveryLocationId">
+                                                        Delete
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    if (index != Model.DeliveryLocations.Count - 1)
+                                    {
+                                        <hr />
+                                    }
+                                }
+                            </div>
+
+                            <div class="panel-footer">
+                                <a class="text-dashboard-primary text-decoration-none"
+                                   asp-controller="MyProfile" asp-action="InsertDeliveryLocation">
+                                    Add a new delivery location
+                                </a>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
 
+
+    </div>
 </div>

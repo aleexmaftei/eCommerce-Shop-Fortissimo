@@ -156,6 +156,8 @@
     var addToCart = function (event) {
         var btn = event.target;
         var productId = $(btn).data('product-id');
+        var quantityToBuy = $(btn).data('quantity-to-buy');
+
         var addToCartUrl = $('#addProductToCartUrl').data('add-product-to-cart-url');
 
         $(btn).removeAttr('enabled');
@@ -165,12 +167,12 @@
             type: 'POST',
             url: addToCartUrl,
             data: {
-                productId: productId
+                productId: productId,
+                quantityToBuy: quantityToBuy
             },
             success: function (response) {
                 if (response && response.flag) {
-                    // cumva sa nu mai dai refresh la pagina
-                    //location.reload(true);
+                    
                 }
                 else {
                     alert("Error");
@@ -181,7 +183,7 @@
             },
             error: function (error) {
             }
-        });    
+        });
     }
 
     //main

@@ -5,7 +5,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - eCommerce</title>
+    <title>Fortissimo</title>
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/twitter-bootstrap/js/bootstrap.bundle.min.js"></script>
@@ -15,8 +15,9 @@
     <link rel="stylesheet" href="~/lib/font-awesome/css/all.min.css" />
     <link rel="stylesheet" href="~/lib/twitter-bootstrap/css/bootstrap.min.css" />
 
+    <link rel="stylesheet" href="~/css/cart.css" />
     <link rel="stylesheet" href="~/css/site.css" />
-    
+
 </head>
 
     <body class="lr-everything-centered responsive">
@@ -66,7 +67,7 @@
                                 {
                                     <div class="btn-group user-action-button">
                                         <a asp-controller="MyProfile" asp-action="Index"
-                                                type="button" class="btn btn-danger">@CurrentUser.Email 
+                                                type="button" class="btn btn-danger">@CurrentUser.FirstName @CurrentUser.LastName
                                             <span class="far fa-user"></span> 
                                         </a>
                                         <button type="button" class="btn btn-danger dropdown-toggle px-3" data-toggle="dropdown" aria-haspopup="true"
@@ -79,7 +80,7 @@
                                             </a>
                                             @if (CurrentUser.IsAdmin)
                                             {
-                                                <a class="dropdown-item" asp-controller="Admin" asp-action="AdminActionPick">Admin Actions</a>
+                                                <a class="dropdown-item" asp-controller="Admin" asp-action="AdminProfile">Admin Actions</a>
                                             }
                                             <div class="dropdown-divider"></div>
                                             <a class="dropdown-item" asp-controller="UserAccount" asp-action="Logout">Log out</a>

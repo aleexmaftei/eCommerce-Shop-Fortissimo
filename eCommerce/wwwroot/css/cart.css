@@ -209,5 +209,75 @@ tfoot {
 
 /* remove from cart button from checkout */
 .deleteFromCart {
-    cursor:pointer;
+    cursor: pointer;
+}
+
+
+/* quantity input */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+#quantityToBuy {
+    background-color: floralwhite;
+    border-radius: 3px;
+    border-width: 1px;
+    border-color: lightgray;
+    max-width: 25px;
+    text-align: center;
+    color: black;
+}
+
+/* Delivery Location + Checkout */
+.order-adresses-wrapper {
+    margin-top: 1rem;
+}
+
+.adresses-text {
+    margin: 0;
+    padding: 0;
+    text-align: left;
+    font-size: 1rem;
+    line-height: 1.4;
+    color: #555;
+    font-weight: normal;
+    margin-bottom: 0.5rem;
+}
+
+.order-existing-addresses {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: block;
+    width: 100%;
+}
+
+.group {
+    zoom: 1;
+}
+
+.order-existing-addresses li {
+    padding: 1rem 1.5rem;
+    background: #e6f3f3;
+    margin-top: 4px;
+    color: #555;
+    font-size: 1rem;
+    line-height: 1.5;
+    font-weight: normal;
+    text-align: left;
+    cursor: pointer;
+    -webkit-transition: all 0.4s ease;
+    -moz-transition: all 0.4s ease;
+    -o-transition: all 0.4s ease;
+    transition: all 0.4s ease;
+}
+
+.order-existing-addresses li.active {
+    border-left: 10px solid #008B8B;
+}
+
+.order-existing-addresses li:first-child {
+    margin-top: 0;
 }

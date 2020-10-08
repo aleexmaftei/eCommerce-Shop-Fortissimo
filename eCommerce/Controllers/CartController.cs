@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
+using eCommerce.BusinessLogic;
 using eCommerce.BusinessLogic.ProductServices;
 using eCommerce.DataAccess;
 using eCommerce.Models.CartVM;
+using eCommerce.Models.MyProfileVM.DeliveryLocation;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 
@@ -11,14 +13,17 @@ namespace eCommerce.Controllers
     {
         private readonly CartService CartService;
         private readonly ProductService ProductService;
+        private readonly DeliveryLocationService DeliveryLocationService;
 
         private readonly IMapper Mapper;
         public CartController(CartService cartService,
                               ProductService productService,
+                              DeliveryLocationService deliveryLocationService,
                               IMapper mapper)
         {
             CartService = cartService;
             ProductService = productService;
+            DeliveryLocationService = deliveryLocationService;
             Mapper = mapper;
         }
 
@@ -37,10 +42,12 @@ namespace eCommerce.Controllers
                 totalSum += (cart.Product.ProductPrice * cart.QuantityBuy);
             }
 
+            var deliveryLocations = DeliveryLocationService.GetDeliveryLocationsCurrentUser();
             var model = new CartListVM()
             {
                 TotalSum = totalSum,
-                CartList = cartProducts.Select(c => Mapper.Map<Cart, CartVM>(c)).ToList()
+                CartList = cartProducts.Select(c => Mapper.Map<Cart, CartVM>(c)).ToList(),
+                DeliveryLocations = deliveryLocations.Select(c => Mapper.Map<DeliveryLocation, DeliveryLocationVm>(c)).ToList()
             };
 
             
@@ -76,41 +83,92 @@ namespace eCommerce.Controllers
             });
         }
 
-        [HttpGet]
+        [HttpPost]
         public IActionResult PlaceOrder(int deliveryLocationId)
         {
             var cartList = CartService.GetAllCartProductsNotDeletedNotOrderPlaced();
             if (cartList == null)
             {
-                return NotFound();
+                return Json(new {
+                    flag = false
+                });
             }
 
             CartService.PlaceOrder(cartList.ToList(), deliveryLocationId);
 
-            return RedirectToAction("Index", "Home");
+            return Json(new {
+                flag = true
+            });
         }
 
         [HttpPost]
-        public IActionResult AddProductToCart(int productId)
+        public IActionResult AddProductToCart(int productId, int quantityToBuy)
         {
-            // de verificat daca nu e deja bagata
-            var product = ProductService.GetProductById(productId);
-            if (product == null)
+            var isAlreadyInCart = false;
+
+            var productFromCart = CartService.GetCartByProductIdAndUser(productId);
+            if (productFromCart != null)
             {
-                return NotFound();
+                isAlreadyInCart = true;
+                productFromCart.QuantityBuy += quantityToBuy;
+                
+                var isUpdated = CartService.UpdateQuantityToBuy(productFromCart);
+                if(isUpdated == false)
+                {
+                    return Json(new { 
+                        flag = false
+                    });
+                }
             }
 
-            var model = new CartVM()
+            if(isAlreadyInCart == false)
             {
-                ProductId = productId,
-                ProductPrice = product.ProductPrice,
-                ProductName = product.ProductName,
-                ProductImage = product.ProductImage,
-                QuantityBuy = 1
-            };
-            var modelMappedToEntity = Mapper.Map<Cart>(model);
+                var product = ProductService.GetProductById(productId);
+                if (product == null)
+                {
+                    return NotFound();
+                }
 
-            CartService.InsertToCart(modelMappedToEntity);
+                var model = new CartVM()
+                {
+                    ProductId = productId,
+                    ProductPrice = product.ProductPrice,
+                    ProductName = product.ProductName,
+                    ProductImage = product.ProductImage,
+                    QuantityBuy = quantityToBuy
+                };
+                var modelMappedToEntity = Mapper.Map<Cart>(model);
+
+                CartService.InsertToCart(modelMappedToEntity);
+            }
+            
+
+            return Json(new { 
+                flag = true
+            });
+        }
+
+        [HttpPost]
+        public IActionResult UpdateQuantityToBuy(int productId, int quantityToBuy)
+        {
+            var productFromCart = CartService.GetCartByProductIdAndUser(productId);
+            if(productFromCart == null)
+            {
+                return Json(new{
+                    flag = false
+                });
+            }
+
+            productFromCart.QuantityBuy = quantityToBuy;
+            
+            var isUpdated = CartService.UpdateQuantityToBuy(productFromCart);
+            if (isUpdated == false)
+            {
+                return Json(new
+                {
+                    flag = false
+                });
+            }
 
             return Json(new { 
                 flag = true

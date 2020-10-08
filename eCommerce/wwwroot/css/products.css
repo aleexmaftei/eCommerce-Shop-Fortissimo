@@ -669,10 +669,7 @@
     padding-left: 27px;
 }
 
-/* colors for in stock or out of stock */
-.tr-availability-layover > a .tr-prod-availability-wvfampel_gelb {
-    color: #cb9b06;
-}
+
 
 .tr-availability-layover > a .tr-prod-availability {
     padding: 1px 0 0 20px;
@@ -687,9 +684,11 @@
     }
 }
 
+/* colors for in stock or out of stock */
 .tr-availability-layover > a .tr-prod-availability-out {
     color: #cb9b06;
 }
+
 .tr-availability-layover > a .tr-prod-availability-in {
     color: #479612;
 }

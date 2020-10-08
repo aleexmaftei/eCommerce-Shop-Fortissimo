@@ -5,6 +5,7 @@ using eCommerce.Entities.DTOs;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 
 namespace eCommerce.BusinessLogic
@@ -12,15 +13,17 @@ namespace eCommerce.BusinessLogic
     public class DeliveryLocationService : BaseService
     {
         private readonly CurrentUserDto CurrentUserDto;
-       
+        private readonly UserService UserService;
         public DeliveryLocationService(UnitOfWork uow,
-                                       CurrentUserDto currentUserCartDto)
+                                       CurrentUserDto currentUserCartDto,
+                                       UserService userService)
             : base(uow)
         {
             CurrentUserDto = currentUserCartDto;
+            UserService = userService;
         }
 
-        public IEnumerable<DeliveryLocation> GetDeliveryLocations()
+        public IEnumerable<DeliveryLocation> GetDeliveryLocationsCurrentUser()
         {
             return UnitOfWork.DeliveryLocations.Get()
                 .Include(user => user.User)
@@ -32,18 +35,22 @@ namespace eCommerce.BusinessLogic
         {
             return UnitOfWork.DeliveryLocations.Get()
                 .Include(user => user.User)
-                .FirstOrDefault(cnd => cnd.DeliveryLocationId == deliveryLocation && cnd.UserId == Int32.Parse(CurrentUserDto.Id));
+                .FirstOrDefault(cnd => cnd.DeliveryLocationId == deliveryLocation && 
+                                       cnd.UserId == Int32.Parse(CurrentUserDto.Id));
         }
-
+        
         public DeliveryLocation InsertDeliveryLocation(DeliveryLocation deliveryLocation)
         {
-            if(deliveryLocation == null)
+            if (deliveryLocation == null)
             {
                 return deliveryLocation;
             }
 
-            return ExecuteInTransaction(uow => 
+            return ExecuteInTransaction(uow =>
             {
+                deliveryLocation.UserId = Int32.Parse(CurrentUserDto.Id);
+                deliveryLocation.User = UserService.GetCurrentUser();
+
                 uow.DeliveryLocations.Insert(deliveryLocation);
                 uow.SaveChanges();
 
@@ -51,19 +58,25 @@ namespace eCommerce.BusinessLogic
             });
         }
 
-        public DeliveryLocation UpdateDeliveryLocation(DeliveryLocation deliveryLocation)
+        public DeliveryLocation UpdateDeliveryLocation(DeliveryLocation oldDeliveryLocation, DeliveryLocation newDeliveryLocation)
         {
-            if(deliveryLocation == null)
+            if(oldDeliveryLocation == null)
             {
-                return deliveryLocation;
+                return newDeliveryLocation;
             }
 
             return ExecuteInTransaction(uow => {
 
-                uow.DeliveryLocations.Update(deliveryLocation);
+                oldDeliveryLocation.CountryName = newDeliveryLocation.CountryName;
+                oldDeliveryLocation.RegionName = newDeliveryLocation.RegionName;
+                oldDeliveryLocation.CityName = newDeliveryLocation.CityName;
+                oldDeliveryLocation.AddressDetail = newDeliveryLocation.AddressDetail;
+                oldDeliveryLocation.PostalCode = newDeliveryLocation.PostalCode;
+
+                uow.DeliveryLocations.Update(oldDeliveryLocation);
                 uow.SaveChanges();
 
-                return deliveryLocation;
+                return newDeliveryLocation;
             });
         }
 

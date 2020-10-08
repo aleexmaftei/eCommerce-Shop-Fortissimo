@@ -26,10 +26,12 @@ namespace eCommerce.DataAccess
         public virtual DbSet<UserInvoice> UserInvoice { get; set; }
         public virtual DbSet<UserRole> UserRole { get; set; }
         public virtual DbSet<UserT> UserT { get; set; }
+        public virtual DbSet<Salt> Salt { get; set; }
+        public virtual DbSet<Manufacturer> Manufacturer { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer("Server=(local); Initial Catalog=eCommerce; Integrated Security=SSPI; Application Name=eCommerce; MultipleActiveResultSets=true; Pooling=true; Max Pool Size=100;");
+            optionsBuilder.UseSqlServer("Server=ALEX\\SQLEXPRESS; Initial Catalog=eCommerce; Integrated Security=SSPI; Application Name=eCommerce; MultipleActiveResultSets=true; Pooling=true; Max Pool Size=100;");
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -37,6 +39,7 @@ namespace eCommerce.DataAccess
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.ApplyConfiguration(new ProductConfiguration());
+            modelBuilder.ApplyConfiguration(new ManufacturerConfiguration());
             modelBuilder.ApplyConfiguration(new PropertiesConfiguration());
             modelBuilder.ApplyConfiguration(new ProductCategoryConfiguration());
             modelBuilder.ApplyConfiguration(new ProductDetailConfiguration());
@@ -44,12 +47,12 @@ namespace eCommerce.DataAccess
 
             modelBuilder.ApplyConfiguration(new RoleConfiguration());
             modelBuilder.ApplyConfiguration(new UserConfiguration());
+            modelBuilder.ApplyConfiguration(new SaltConfiguration());
             modelBuilder.ApplyConfiguration(new UserInvoiceConfiguration());
             modelBuilder.ApplyConfiguration(new UserRoleConfiguration());
             modelBuilder.ApplyConfiguration(new DeliveryLocationConfiguration());
 
             modelBuilder.ApplyConfiguration(new CartConfiguration());
-            
             
             
         }

@@ -19,8 +19,10 @@ namespace eCommerce.Code.ExtentionMethods
             services.AddScoped<PropertyService>();
             services.AddScoped<CartService>();
             services.AddScoped<UserService>();
-            services.AddScoped<MyProfileService>();
             services.AddScoped<DeliveryLocationService>();
+            services.AddScoped<ProductCommentService>();
+            services.AddScoped<UserInvoiceService>();
+            services.AddScoped<PasswordManagerService>();
 
             return services;
         }
@@ -36,7 +38,9 @@ namespace eCommerce.Code.ExtentionMethods
                 {
                     IsAuthenticated = httpContext.User.Identity.IsAuthenticated,
                     Id = httpContext.User.Claims?.FirstOrDefault(c => c.Type == "Id")?.Value,
-                    Email = httpContext.User.Identity.Name,
+                    Email = httpContext.User.Claims?.FirstOrDefault(c => c.Type == "Email")?.Value,
+                    FirstName = httpContext.User.Claims?.FirstOrDefault(c => c.Type == "FirstName")?.Value,
+                    LastName = httpContext.User.Claims?.FirstOrDefault(c => c.Type == "LastName")?.Value,
                     IsAdmin = httpContext.User.IsInRole("Admin")
                 };
             });

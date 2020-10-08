@@ -10,6 +10,7 @@ namespace eCommerce.DataAccess
             Cart = new HashSet<Cart>();
             DeliveryLocation = new HashSet<DeliveryLocation>();
             UserRole = new HashSet<UserRole>();
+            Salt = new HashSet<Salt>();
         }
 
         public int UserId { get; set; }
@@ -21,5 +22,6 @@ namespace eCommerce.DataAccess
         public virtual ICollection<Cart> Cart { get; set; }
         public virtual ICollection<DeliveryLocation> DeliveryLocation { get; set; }
         public virtual ICollection<UserRole> UserRole { get; set; }
+        public virtual ICollection<Salt> Salt { get; set; }
     }
 }

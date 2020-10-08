@@ -145,7 +145,6 @@ tr-keyfeature-filter-box {
 
 input[type="hidden" i] {
     display: none;
-    appearance: initial;
     background-color: initial;
     cursor: default;
     padding: initial;
@@ -153,9 +152,7 @@ input[type="hidden" i] {
 }
 
 input {
-    -webkit-writing-mode: horizontal-tb !important;
     text-rendering: auto;
-    color: -internal-light-dark(black, white);
     letter-spacing: normal;
     word-spacing: normal;
     text-transform: none;
@@ -163,16 +160,12 @@ input {
     text-shadow: none;
     display: inline-block;
     text-align: start;
-    appearance: textfield;
-    background-color: -internal-light-dark(rgb(255, 255, 255), rgb(59, 59, 59));
-    -webkit-rtl-ordering: logical;
     cursor: text;
     margin: 0em;
     font: 400 13.3333px Arial;
     padding: 1px 2px;
     border-width: 2px;
     border-style: inset;
-    border-color: -internal-light-dark(rgb(118, 118, 118), rgb(195, 195, 195));
     border-image: initial;
 }
 
@@ -230,45 +223,24 @@ select {
     font-family: sans-serif;
 }
 
-select:-internal-list-box {
-    appearance: listbox;
-    align-items: flex-start;
-    overflow-x: hidden;
-    overflow-y: scroll;
-    vertical-align: text-bottom;
-    white-space: nowrap;
-    background-color: -internal-light-dark(rgb(255, 255, 255), rgb(59, 59, 59));
-    border-width: 1px;
-    border-style: solid;
-    border-color: -internal-light-dark(rgb(118, 118, 118), rgb(195, 195, 195));
-    border-image: initial;
-    border-radius: 2px;
-}
 
 select {
-    -webkit-writing-mode: horizontal-tb !important;
     text-rendering: auto;
-    color: -internal-light-dark(black, white);
     letter-spacing: normal;
     word-spacing: normal;
     text-transform: none;
     text-indent: 0px;
     text-shadow: none;
     display: inline-block;
-    text-align: start;
-    appearance: menulist;
     box-sizing: border-box;
     align-items: center;
     white-space: pre;
-    -webkit-rtl-ordering: logical;
-    background-color: -internal-light-dark(rgb(255, 255, 255), rgb(59, 59, 59));
     cursor: default;
     margin: 0em;
     font: 400 13.3333px Arial;
     border-radius: 0px;
     border-width: 1px;
     border-style: solid;
-    border-color: -internal-light-dark(rgb(118, 118, 118), rgb(195, 195, 195));
     border-image: initial;
 }
 
@@ -276,9 +248,6 @@ select {
     cursor: pointer;
 }
 
-select:-internal-list-box option {
-    line-height: initial !important;
-}
 
 option {
     font-weight: normal;
@@ -392,16 +361,13 @@ input.rs-input {
 input[type="checkbox" i] {
     background-color: initial;
     cursor: default;
-    appearance: checkbox;
     box-sizing: border-box;
     margin: 3px 3px 3px 4px;
     padding: initial;
     border: initial;
 }
 input {
-    -webkit-writing-mode: horizontal-tb !important;
     text-rendering: auto;
-    color: -internal-light-dark(black, white);
     letter-spacing: normal;
     word-spacing: normal;
     text-transform: none;
@@ -409,16 +375,12 @@ input {
     text-shadow: none;
     display: inline-block;
     text-align: start;
-    appearance: textfield;
-    background-color: -internal-light-dark(rgb(255, 255, 255), rgb(59, 59, 59));
-    -webkit-rtl-ordering: logical;
     cursor: text;
     margin: 0em;
     font: 400 13.3333px Arial;
     padding: 1px 2px;
     border-width: 2px;
     border-style: inset;
-    border-color: -internal-light-dark(rgb(118, 118, 118), rgb(195, 195, 195));
     border-image: initial;
 }
 
@@ -685,3 +647,85 @@ rs-input.checkbox {
 .tr-text-center {
     text-align: center;
 }
+
+
+
+
+
+
+
+
+
+/*---------------------------*/
+
+
+.form-check-input[type="checkbox"] + label, label.btn input[type="checkbox"] + label {
+    position: relative;
+    display: inline-block;
+    height: 1.5625rem;
+    padding-left: 35px;
+    line-height: 1.5625rem;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.form-check-input[type="checkbox"].filled-in:not(:checked) + label:before {
+    top: 10px;
+    left: 6px;
+    width: 0;
+    height: 0;
+    border: 3px solid transparent;
+    -webkit-transform: rotateZ(37deg);
+    transform: rotateZ(37deg);
+    -webkit-transform-origin: 100% 100%;
+    transform-origin: 100% 100%;
+}
+
+.form-check-input[type="checkbox"].filled-in + label:before {
+    position: absolute;
+    z-index: 1;
+    content: "";
+    -webkit-transition: border .25s,background-color .25s,width .2s .1s,height .2s .1s,top .2s .1s,left .2s .1s;
+    transition: border .25s,background-color .25s,width .2s .1s,height .2s .1s,top .2s .1s,left .2s .1s;
+}
+
+.form-check-input[type="checkbox"].filled-in:not(:checked) + label:after {
+    border: 1px solid #ccc;
+}
+
+.form-check-input[type="checkbox"].filled-in + label:after {
+    border-radius: .25rem !important;
+}
+
+.form-check-input[type="checkbox"].filled-in:not(:checked) + label:after {
+    top: 0;
+    z-index: 0;
+    width: 20px;
+    height: 20px;
+    background-color: transparent;
+    border: 2px solid #5a5a5a;
+}
+
+
+form-check-input[type="checkbox"].filled-in + label:after {
+    border-radius: .125rem;
+}
+    
+.form-check-input[type="checkbox"].filled-in + label {
+    height: 1.2rem !important;
+    line-height: 1.2rem !important;
+}
+
+.card-link-secondary {
+    color: #6c757d;
+    -webkit-transition: all .2s ease-in-out;
+    transition: all .2s ease-in-out;
+}
+
+hr {
+    border-top: 1px solid rgba(0,0,0,.3);
+}
+

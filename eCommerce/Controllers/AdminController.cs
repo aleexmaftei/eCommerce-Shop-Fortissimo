@@ -6,9 +6,12 @@ using eCommerce.Entities.DTOs.AdminDtos;
 using eCommerce.Entities.Entities.ProductAdmin;
 using eCommerce.Models.AdminVM;
 using eCommerce.Models.ProductVM;
+using eCommerce.Models.ProductVM.ProductsWithValues;
 using eCommerce.Models.UserAccountVM;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json.Serialization;
+using System.Data.Entity.Infrastructure;
 using System.Linq;
 
 namespace eCommerce.Controllers
@@ -21,6 +24,7 @@ namespace eCommerce.Controllers
         private readonly ProductCategoryService ProductCategoryService;
         private readonly ProductService ProductService;
         private readonly ProductDetailsService ProductDetailsService;
+        private readonly ProductCommentService ProductCommentService;
 
         private readonly IMapper Mapper;
         public AdminController(AdminService adminService, 
@@ -28,6 +32,7 @@ namespace eCommerce.Controllers
                                ProductCategoryService productCategoryPrintService,
                                ProductService productService,
                                ProductDetailsService productDetailsService,
+                               ProductCommentService productCommentService,
                                IMapper mapper)
         {
             AdminService = adminService;
@@ -35,20 +40,21 @@ namespace eCommerce.Controllers
             ProductCategoryService = productCategoryPrintService;
             ProductService = productService;
             ProductDetailsService = productDetailsService;
+            ProductCommentService = productCommentService;
             Mapper = mapper;
         }
 
         [HttpGet]
-        public IActionResult Index()
+        public IActionResult AdminProfile()
         {
-            return View();
+            var model = new MostWantedProductsVM()
+            {
+                MostWanted = ProductService.GetMostWantedProducts(3)
+            };
+
+            return View("AdminProfile", model);
         }
 
-        [HttpGet]
-        public IActionResult AdminActionPick()
-        {
-            return View("AdminActionPick");
-        }
 
         [HttpGet]
         public IActionResult AdminAddCategoryPick()
@@ -153,7 +159,7 @@ namespace eCommerce.Controllers
                 return NotFound();
             }
 
-            var productDetails = ProductDetailsService.GetAllProductsByProductId(productId);
+            var productDetails = ProductDetailsService.GetAllProductDetailsByProductId(productId);
             if (productDetails == null)
             {
                 return NotFound();
@@ -249,27 +255,29 @@ namespace eCommerce.Controllers
             });
         }
 
-        [HttpGet]
-        public IActionResult RegisterAdmin()
-        {
-            var model = new RegisterVM();
-            return View("../UserAccount/Register", model);
-        }
-
         [HttpPost]
-        public IActionResult RegisterAdmin(RegisterVM model)
+        public IActionResult DeleteProductComment(int productCommentId)
         {
-            if (!ModelState.IsValid)
+            var productComment = ProductCommentService.GetProductCommentById(productCommentId);
+            if(productComment == null)
             {
-                return View(model);
+                return Json(new {
+                    flag = false
+                });
             }
 
-            var admin = Mapper.Map<UserT>(model);
+            if(ProductCommentService.DeleteProductComment(productComment) == true)
+            {
+                return Json(new {
+                    flag = true
+                });
+            }
 
-            AdminService.RegisterNewAdmin(admin);
-
-            return RedirectToAction("Index", "Home");
+            return Json(new {
+                flag = false
+            });
         }
-
+        
+       
     }
 }

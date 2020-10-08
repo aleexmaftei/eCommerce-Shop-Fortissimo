@@ -10,7 +10,7 @@ namespace eCommerce.DataAccess.EntityFramework
             modelBuilder.ToTable("Product");
 
             modelBuilder.HasIndex(e => e.ProductName)
-                    .HasName("UQ__Product__DD5A978AFD9C91CB")
+                    .HasName("UQ__Product__DD5A978AA86160BB")
                     .IsUnique();
 
             modelBuilder.Property(e => e.ProductImage).IsRequired();
@@ -20,6 +20,11 @@ namespace eCommerce.DataAccess.EntityFramework
                 .HasMaxLength(100);
 
             modelBuilder.Property(e => e.Quantity).HasDefaultValueSql("((1))");
+
+            modelBuilder.HasOne(d => d.Manufacturer)
+                    .WithMany(p => p.Product)
+                    .HasForeignKey(d => d.ManufacturerId)
+                    .HasConstraintName("FK__Product__Manufac__44952D46");
         }
     }
 }

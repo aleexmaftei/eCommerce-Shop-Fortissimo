@@ -1,23 +1,36 @@
 ﻿$(document).ready(function () {
 
+    var deleteDeliveryLocation = function (event) {
+        var btn = event.target;
 
-    var displayModifyDeliveryTab = function () {
-        $("#changePassword").css("display", "none");
-        $("#addDelivery").css("display", "none");
-        $("#deleteAccount").css("display", "none");
+        var deliveryLocationId = $(btn).data('delivery-location-id');
+        var deleteDeliveryLocationUrl = $('#deleteDeliveryLocationUrl').data('delete-delivery-location-url');
 
-        $("#modifyDelivery").css("display", "block");
-        $("#modifyDeliveryBtn").css("background-color", "red");
-    };
+        $(btn).removeAttr('enabled');
+        $(btn).attr('disabled', 'disabled');
 
+        $.ajax({
+            type: 'POST',
+            url: deleteDeliveryLocationUrl,
+            data: {
+                deliveryLocationId: deliveryLocationId
+            },
+            success: function (response) {
+                if (response && response.flag) {
+                    location.reload(true);
+                }
+                else {
+                    alert("Error at deleting");
+                }
 
-    var modifyDelivery = function () {
-
-    };
-
-
+                $(btn).removeAttr('disabled');
+                $(btn).attr('enabled', 'enabled');
+            },
+            error: function (error) {
+            }
+        });
+    }
 
     // main
-    $("#modifyDeliveryBtn").on("click", displayModifyDeliveryTab);
-    $("")
+    $('.deleteDeliveryLocationBtn').on('click', deleteDeliveryLocation);
 });

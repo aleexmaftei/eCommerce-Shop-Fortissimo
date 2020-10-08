@@ -1,69 +1,132 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Linq;
+using AutoMapper;
 using eCommerce.BusinessLogic;
 using eCommerce.BusinessLogic.ProductServices;
 using eCommerce.DataAccess;
 using eCommerce.Models.MyProfileVM;
+using eCommerce.Models.MyProfileVM.DeliveryLocation;
+using eCommerce.Models.MyProfileVM.Invoice;
 using Microsoft.AspNetCore.Mvc;
 
 namespace eCommerce.Controllers
 {
     public class MyProfileController : Controller
     {
-        private readonly MyProfileService MyProfileService;
         private readonly ProductService ProductService;
         private readonly DeliveryLocationService DeliveryLocationService;
-        
+        private readonly UserInvoiceService UserInvoiceService;
+        private readonly IMapper Mapper;
 
-        public MyProfileController(MyProfileService myProfileService,
-                                   ProductService productService,
-                                   DeliveryLocationService deliveryLocationService)
+        public MyProfileController(ProductService productService,
+                                   DeliveryLocationService deliveryLocationService,
+                                   UserInvoiceService userInvoiceService,
+                                   IMapper mapper)
         {
-            MyProfileService = myProfileService;
             ProductService = productService;
             DeliveryLocationService = deliveryLocationService;
+            UserInvoiceService = userInvoiceService;
+            Mapper = mapper;
         }
+
 
         [HttpGet]
         public IActionResult Index()
         {
-            var userInvoices = MyProfileService.GetInvoices();
-            if(userInvoices == null)
+            var model = new MyProfileVm();
+
+            var lastInvoice = UserInvoiceService.LastInvoiceEmmitedForCurrentUser();
+            if(lastInvoice != null)
+            {
+                var userInvoiceModel = new UserInvoiceVm()
+                {
+                    ProductId = lastInvoice.ProductId,
+                    DateBuy = lastInvoice.DateBuy,
+                    QuantityBuy = lastInvoice.QuantityBuy,
+                    AdressDetail = lastInvoice.DeliveryLocation.AddressDetail,
+                    CityName = lastInvoice.DeliveryLocation.CityName,
+                    RegionName = lastInvoice.DeliveryLocation.RegionName
+                };
+
+                model.LastInvoice = userInvoiceModel;
+            }
+
+            var deliveryLocations = DeliveryLocationService.GetDeliveryLocationsCurrentUser();
+            if(deliveryLocations != null)
+            {
+                model.DeliveryLocations = deliveryLocations.Select(c => Mapper.Map<DeliveryLocation, DeliveryLocationVm>(c)).ToList();
+            }
+            return View("MyProfile", model);
+        }
+
+        [HttpGet]
+        public IActionResult Invoices()
+        {
+            var allInvoices = UserInvoiceService.GetInvoices();
+            if(allInvoices == null)
             {
                 // nu not found, altceva
                 return NotFound();
             }
 
-            var invoicesList = new List<InvoiceVM>();
-            foreach(var invoice in userInvoices)
+            var allInvoicesModel = new AllInvoicesVM();
+            foreach(var oneInvoice in allInvoices)
             {
-                var currentProduct = ProductService.GetProductById(invoice.ProductId);
-
-                var invoiceModel = new InvoiceVM()
+                var invoiceList = new InvoiceListVM();
+                
+                var invoicesById = UserInvoiceService.GetInvoicesById(oneInvoice.UserInvoiceId).ToList();
+                if(invoicesById == null)
                 {
-                    UserBuyHistoryId = invoice.UserInvoiceId,
-                    DateBuy = invoice.DateBuy,
-                    ProductName = currentProduct.ProductName,
-                    QuantityBuy = invoice.QuantityBuy
-                };
+                    return NotFound();
+                }
 
-                invoicesList.Add(invoiceModel);
+                // check if it is already there so it won't duplicate values
+                var isAlreadyOnInvoice = false;
+                foreach (var value in allInvoicesModel.AllInvoices)
+                {
+                    if (value.UserInvoiceId == oneInvoice.UserInvoiceId)
+                    {
+                        isAlreadyOnInvoice = true;
+                        break;
+                    }
+                }
+
+                // skip current item because it is already on an invoice
+                if(isAlreadyOnInvoice == true)
+                {
+                    continue;
+                }
+
+                foreach(var currentOrderInvoice in invoicesById)
+                {
+                    var currentProduct = ProductService.GetProductById(currentOrderInvoice.ProductId);
+                    if(currentProduct == null)
+                    {
+                        return NotFound();
+                    }
+
+                    var oneInvoiceModel = new OneInvoicePropertiesVM()
+                    {
+                        ProductName = currentProduct.ProductName,
+                        QuantityBuy = currentOrderInvoice.QuantityBuy
+                    };
+
+                    invoiceList.UserInvoiceId = currentOrderInvoice.UserInvoiceId;
+                    invoiceList.DateBuy = currentOrderInvoice.DateBuy;
+
+                    invoiceList.InvoiceList.Add(oneInvoiceModel);
+                }
+
+                allInvoicesModel.AllInvoices.Add(invoiceList);
             }
 
-            var model = new MyProfileVm()
-            {
-                UserInvoices = invoicesList
-            };
-
-            return View("MyProfile", model);
+            return View("Invoices", allInvoicesModel);
         }
+
         [HttpGet]
         public IActionResult InsertDeliveryLocation()
         {
-            var model = new MyProfileVm();
-            return View("MyProfile", model);
+            var model = new AddDeliveryLocationVM();
+            return View("../MyProfile/DeliveryLocation/AddDeliveryLocation", model);
         }
 
         [HttpPost]
@@ -71,49 +134,61 @@ namespace eCommerce.Controllers
         {
             if(!ModelState.IsValid)
             {
-                return Json(new{
+                return Json(new {
                     flag = false
                 });
             }
 
             DeliveryLocationService.InsertDeliveryLocation(deliveryLocation);
-            
-            return Json(new {
-                flag = true
-            });
+
+            return RedirectToAction("InsertDeliveryLocation", "MyProfile");
         }
 
         [HttpGet]
-        public IActionResult ModifyDeliveryLocation()
+        public IActionResult ViewDeliveryLocations()
         {
-            var model = new MyProfileVm();
-            return View(model);
+            var listDeliveryLocation = DeliveryLocationService.GetDeliveryLocationsCurrentUser().ToList();
+            if(listDeliveryLocation == null)
+            {
+                return NotFound();
+            }
+
+            var model = new ListDeliveryLocationVm();
+            foreach(var deliveryLocation in listDeliveryLocation)
+            {
+                var modelMapped = Mapper.Map <DeliveryLocationVm>(deliveryLocation);
+                model.DeliveryLocations.Add(modelMapped);
+            }
+
+            return View("DeliveryLocation/DeliveryLocations", model);
+        }
+        
+        [HttpGet]
+        public IActionResult ModifyOneDeliveryLocation(int deliveryLocationId)
+        {
+            var deliveryLocation = DeliveryLocationService.GetDeliveryLocationById(deliveryLocationId);
+            if(deliveryLocation == null)
+            {
+                return NotFound();
+            }
+            
+            var modelMapped = Mapper.Map<DeliveryLocationVm>(deliveryLocation);
+
+            return View("DeliveryLocation/ModifyOneDeliveryLocation", modelMapped);
         }
 
         [HttpPost]
-        public IActionResult ModifyDeliveryLocation(int deliveryLocationId, DeliveryLocation newDeliveryLocation)
+        public IActionResult ModifyOneDeliveryLocation(int deliveryLocationId, DeliveryLocation newDeliveryLocation)
         {
-
-            var deliveryAdressToUpdate = DeliveryLocationService.GetDeliveryLocationById(deliveryLocationId);
-
-            if(deliveryAdressToUpdate == null)
+            var oldDeliveryLocation = DeliveryLocationService.GetDeliveryLocationById(deliveryLocationId);
+            if(oldDeliveryLocation == null)
             {
-                return Json(new{
-                    flag = false
-                });
+                return NotFound();
             }
 
-            deliveryAdressToUpdate.CountryName = newDeliveryLocation.CountryName;
-            deliveryAdressToUpdate.RegionName = newDeliveryLocation.RegionName;
-            deliveryAdressToUpdate.CityName = newDeliveryLocation.CityName;
-            deliveryAdressToUpdate.AddressDetail = newDeliveryLocation.AddressDetail;
-            deliveryAdressToUpdate.PostalCode = newDeliveryLocation.PostalCode;
-
-            DeliveryLocationService.UpdateDeliveryLocation(deliveryAdressToUpdate);
-
-            return Json(new{
-                flag = true
-            });
+            DeliveryLocationService.UpdateDeliveryLocation(oldDeliveryLocation, newDeliveryLocation);
+         
+            return RedirectToAction("ViewDeliveryLocations", "MyProfile");
         }
 
         [HttpPost]
