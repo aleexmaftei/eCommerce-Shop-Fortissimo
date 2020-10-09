@@ -4,8 +4,8 @@
 
 <input type="hidden" id="removeFromCartUrl" data-remove-from-cart-url="@Url.Action("JsRemoveProductFromCart", "Cart")" />
 <input type="hidden" id="updateQuantityToBuy" data-update-quantity-to-buy-url="@Url.Action("UpdateQuantityToBuy", "Cart")" />
-<input type="hidden" id="checkout" data-checkout-url="@Url.Action("PlaceOrder", "Cart")" />
-<input type="hidden" id="finishCheckout" data-finish-checkout-url="@Url.Action("Index", "Home")" />
+<input type="hidden" id="checkout" data-checkout-url="@Url.Action("CheckoutPayment", "Payment")" />
+<input type="hidden" id="proceedToCheckoutView" data-proceed-to-checkout-view-url="@Url.Action("CheckoutPayment", "Payment")" />
 
 <div class="container">
     <h2 class="pt-4 d-flex justify-content-center">Your basket</h2>
@@ -83,7 +83,7 @@
                                     <td colspan="4">
                                         <div class="sum">
                                             <div class="primary">
-                                                <span class="title d-flex justify-content-end">total: @Model.TotalSum</span>
+                                                <div class="title d-flex justify-content-end">Total: @Model.TotalSum</div>
                                             </div>
                                         </div>
                                     </td>
@@ -131,13 +131,24 @@
                                 }
                             </ul>
 
-                            <input type="hidden" id="deliveryLocationIdInput" value="@Model.DeliveryLocations[0].DeliveryLocationId" min="0" />
+                            <input type="hidden" id="deliveryLocationIdInput" value="@Model.DeliveryLocations[0].DeliveryLocationId" min="1" />
 
-                            <div id="basket-submit" class="rs-checkout-additionals d-flex justify-content-center">
-                                <a id="checkoutButton" class="btn btn-primary btn-outline-info">
-                                    Checkout
-                                </a>
+                            <div>
+                                <div id="dropin-container"></div>
                             </div>
+                            <div id="dropin-wrapper">
+                                <div id="checkout-message"></div>
+                                <div id="dropin-container"></div>
+
+                                <div id="basket-submit" class="rs-checkout-additionals d-flex justify-content-center">
+                                    <a id="checkoutButton" class="btn btn-primary btn-outline-info"
+                                       asp-controller="Payment" asp-action="CheckoutPayment" 
+                                       asp-route-totalSum="@Model.TotalSum">
+                                        Proceed to Checkout
+                                    </a>
+                                </div>
+                            </div>
+
                         }
                         else
                         {
@@ -149,7 +160,7 @@
                 </div>
             </div>
         </div>
-     }
+    }
 </div>
 
 
@@ -162,6 +173,6 @@
         }
 
         $("#location-" + indexToAddClass).attr('class', 'active');
-};
+    };
 </script>
 

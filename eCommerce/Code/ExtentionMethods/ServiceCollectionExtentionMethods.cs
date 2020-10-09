@@ -23,6 +23,8 @@ namespace eCommerce.Code.ExtentionMethods
             services.AddScoped<ProductCommentService>();
             services.AddScoped<UserInvoiceService>();
             services.AddScoped<PasswordManagerService>();
+            services.AddScoped<ManufacturerService>();
+            services.AddScoped<PaymentService>();
 
             return services;
         }

@@ -14,16 +14,19 @@ namespace eCommerce.BusinessLogic
         private readonly ProductService ProductService;
         private readonly DeliveryLocationService DeliveryLocationService;
         private readonly PasswordManagerService PasswordManagerService;
+        private readonly ManufacturerService ManufacturerService;
 
         public AdminService(UnitOfWork uow, 
                             ProductService productService,
                             DeliveryLocationService deliveryLocationService,
-                            PasswordManagerService passwordManagerService)
+                            PasswordManagerService passwordManagerService,
+                            ManufacturerService manufacturerService)
             :base(uow)
         {
             ProductService = productService;
             DeliveryLocationService = deliveryLocationService;
             PasswordManagerService = passwordManagerService;
+            ManufacturerService = manufacturerService;
         }
 
         public UserT RegisterNewAdmin(UserT admin, DeliveryLocation deliveryLocation)
@@ -65,20 +68,28 @@ namespace eCommerce.BusinessLogic
         {
             return ExecuteInTransaction(uow => 
             {
+                var manufacturer = ManufacturerService.GetManufacturerById(productMappedToEntity.ManufacturerId);
+                if(manufacturer == null)
+                {
+                    return productMappedToEntity;
+                }
+
                 var product = new Product
                 {
                     ProductName = productMappedToEntity.ProductName,
-                    Quantity = productMappedToEntity.Quantity
+                    Quantity = productMappedToEntity.Quantity,
+                    ProductImage = productMappedToEntity.ProductImage,
+                    ProductPrice = productMappedToEntity.ProductPrice,
+                    Manufacturer = manufacturer
                 };
 
                 uow.Products.Insert(product);
-                uow.SaveChanges();
 
                 var products = new List<ProductDetail>();
                 foreach (var value in productMappedToEntity.ProductPropertiesWithValues)
                 {
                     var productDetail = new ProductDetail();
-                    productDetail.ProductId = product.ProductId;
+                    productDetail.Product = product;
                     productDetail.ProductCategoryId = productMappedToEntity.ProductCategoryId;
                     
                     productDetail.DetailValue = value.DetailValue;

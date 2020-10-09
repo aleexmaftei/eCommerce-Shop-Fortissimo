@@ -9,6 +9,7 @@ namespace eCommerce.Entities.DTOs.AdminDtos
         public int ProductCategoryId { get; set; }
         public double ProductPrice { get; set; }
         public string ProductImage { get; set; }
+        public int ManufacturerId { get; set; }
         public List<ProductPropertiesWithValuesDto> ProductPropertiesWithValues { get; set; }
 
         public ProductDto()

@@ -55,6 +55,7 @@ namespace eCommerce.Controllers
                     ProductId = product.ProductId,
                     ProductName = product.ProductName,
                     ProductPrice = product.ProductPrice,
+                    ProductImage = product.ProductImage,
                     ManufacturerLogo = product.Manufacturer.ManufacturerLogo,
                     ManufacturerName = product.Manufacturer.ManufacturerName
                 };

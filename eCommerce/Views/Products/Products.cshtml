@@ -129,8 +129,10 @@
                                         <!-- Product Image -->
                                         <div class="left">
                                             <div class="product-image image-block">
-                                                <a href="#" class="article-link link">
-                                                    <img class="image" src="https://thumbs.static-thomann.de/thumb/orig/pics/prod/449491.webp"
+                                                <a class="article-link link"
+                                                   asp-controller="ProductDetails" asp-action="ViewFullSpecsProduct"
+                                                   asp-route-productId="@product.ProductId">
+                                                    <img class="image" src="@product.ProductImage"
                                                          style="height:190px;width:auto;" />
                                                 </a>
                                             </div>

@@ -205,9 +205,10 @@
 
     };
 
+
     //main
     $('.cartBtn').on('click', openCartModal);
     $('.deleteFromCart').on('click', removeFromCart);
     $('#quantityToBuy').on('blur', changeQuantityToBuy);
-    $('#checkoutButton').on('click', checkout);
+    //$('#checkoutButton').on('click', checkout);
 });

@@ -1,5 +1,4 @@
-﻿@model eCommerce.Models.ProductVM.ProductCategoryVM
-
+﻿@model eCommerce.Models.ProductVM.ManufacturerListVM
 
 <link rel="stylesheet" href="~/css/myProfile.css" />
 
@@ -47,29 +46,24 @@
             </div>
         </div>
 
-        <!-- Choose category -->
-        <div class="col-10">
+        <!-- Choose manufacturer -->
+        <div class="col-10 mb-2">
             <div class="user-dashboard-slot">
                 <div class="panel panel-default user-account-panel min-height-panel">
                     <div class="panel-body">
-                        <p class="widget-title mb-3">Add product to @Model.TitleCategory</p>
+                        <p class="widget-title mb-3">Choose a manufacturer for your product</p>
 
                         <div class="container d-flex justify-content-center">
                             <div class="row w-100">
-                                @foreach (var productCategory in Model.ProductCategories)
+                                @foreach (var manufacturer in Model.ManufacturerList)
                                 {
                                     <div class="col-6 col-sm-6 col-md-4 col-lg-3 col-xl-3 d-flex justify-content-center mb-4 mt-2">
                                         <a class="category w-100"
-                                           asp-controller="Admin" asp-action="ManufacturerPick" asp-route-parentCategoryId="@productCategory.ParentProductCategoryId"
-                                           asp-route-categoryId="@productCategory.ProductCategoryId">
-                                            <div class="d-flex justify-content-center img-thumbnail w-100">
-                                                <div class="w-50">
-                                                    <img style="height:100px;width:auto;" class="img-fluid" alt="" src="@productCategory.ProductCategoryImage" />
-                                                </div>
-                                                <div class="align-self-center w-50">
-                                                    <div class="font-weight-normal">
-                                                        @productCategory.ProductCategoryName
-                                                    </div>
+                                           asp-controller="Admin" asp-action="AddProduct"
+                                           asp-route-parentCategoryId="@Model.ParentCategoryId" asp-route-categoryId="@Model.CategoryId" asp-route-manufacturerId="@manufacturer.ManufacturerId">
+                                            <div class="d-flex justify-content-center img-thumbnail">
+                                                <div>
+                                                    <img style="height:50px;width:auto;" class="img-fluid" alt="" src="@manufacturer.ManufacturerLogo" />
                                                 </div>
                                             </div>
                                         </a>

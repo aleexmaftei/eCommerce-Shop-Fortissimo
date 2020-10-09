@@ -8,10 +8,13 @@ namespace eCommerce.Controllers
     public class HomeController : Controller
     {
         private readonly ProductCategoryService ProductCategoryPrintService;
+        private readonly ManufacturerService ManufacturerService;
 
-        public HomeController(ProductCategoryService productCategoryPrintService)
+        public HomeController(ProductCategoryService productCategoryPrintService,
+                              ManufacturerService manufacturerService)
         {
             ProductCategoryPrintService = productCategoryPrintService;
+            ManufacturerService = manufacturerService;
         }
 
         [HttpGet]
@@ -23,13 +26,14 @@ namespace eCommerce.Controllers
                 return NotFound();
             }
 
+            var manufacturers = ManufacturerService.GetAllManufacturers();
             var productTypeViewModel = new ProductCategoryVM()
             {
                 TitleCategory = "Category",
-                ProductCategories = categories.ToList()
+                ProductCategories = categories.ToList(),
+                Manufacturers = manufacturers.ToList()
             };
 
-            // ++ selectie dupa brand
             return View(productTypeViewModel);
         }
 

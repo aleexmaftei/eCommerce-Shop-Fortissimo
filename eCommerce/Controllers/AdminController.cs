@@ -25,6 +25,7 @@ namespace eCommerce.Controllers
         private readonly ProductService ProductService;
         private readonly ProductDetailsService ProductDetailsService;
         private readonly ProductCommentService ProductCommentService;
+        private readonly ManufacturerService ManufacturerService;
 
         private readonly IMapper Mapper;
         public AdminController(AdminService adminService, 
@@ -33,6 +34,7 @@ namespace eCommerce.Controllers
                                ProductService productService,
                                ProductDetailsService productDetailsService,
                                ProductCommentService productCommentService,
+                               ManufacturerService manufacturerService,
                                IMapper mapper)
         {
             AdminService = adminService;
@@ -41,6 +43,7 @@ namespace eCommerce.Controllers
             ProductService = productService;
             ProductDetailsService = productDetailsService;
             ProductCommentService = productCommentService;
+            ManufacturerService = manufacturerService;
             Mapper = mapper;
         }
 
@@ -99,7 +102,26 @@ namespace eCommerce.Controllers
         }
 
         [HttpGet]
-        public IActionResult AddProduct(int parentCategoryId, int categoryId)
+        public IActionResult ManufacturerPick(int parentCategoryId, int categoryId)
+        {
+            var manufacturer = ManufacturerService.GetManufacturersByProductCategory(categoryId);
+            if(manufacturer == null)
+            {
+                return NotFound();
+            }
+            
+            var model = new ManufacturerListVM()
+            {
+                ParentCategoryId = parentCategoryId,
+                CategoryId = categoryId,
+                ManufacturerList = manufacturer.Select(c => Mapper.Map<Manufacturer, ManufacturerVM>(c)).ToList()
+            };
+
+            return View("AdminManufacturerPick", model);
+        }
+
+        [HttpGet]
+        public IActionResult AddProduct(int parentCategoryId, int categoryId, int manufacturerId)
         {
             var propertiesByProduct = PropertyService.GetPropertiesByCategory(parentCategoryId);
             if (propertiesByProduct == null)
@@ -109,7 +131,8 @@ namespace eCommerce.Controllers
 
             var model = new AdminAddVM()
             {
-                ProductCategoryId = categoryId
+                ProductCategoryId = categoryId,
+                ManufacturerId = manufacturerId
             };
 
             foreach (var property in propertiesByProduct)

@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Braintree;
 using eCommerce.BusinessLogic;
 using eCommerce.BusinessLogic.ProductServices;
 using eCommerce.DataAccess;
@@ -50,8 +51,7 @@ namespace eCommerce.Controllers
                 DeliveryLocations = deliveryLocations.Select(c => Mapper.Map<DeliveryLocation, DeliveryLocationVm>(c)).ToList()
             };
 
-            
-            
+
             return View("../Cart/Cart", model);
         }
 

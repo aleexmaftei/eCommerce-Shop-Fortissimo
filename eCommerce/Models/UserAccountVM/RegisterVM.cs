@@ -40,6 +40,7 @@ namespace eCommerce.Models.UserAccountVM
         public string AddressDetail { get; set; }
 
         [Required(ErrorMessage = "Cod Postal obligatoriu")]
+        [RegularExpression("([0-9]*)")]
         [DisplayName("Postal Code")]
         public string PostalCode { get; set; }
 
