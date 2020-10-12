@@ -2,10 +2,19 @@
 
 <link rel="stylesheet" href="~/css/cart.css" />
 
+<script src="https://js.braintreegateway.com/web/dropin/1.24.0/js/dropin.min.js"></script>
+
 <input type="hidden" id="removeFromCartUrl" data-remove-from-cart-url="@Url.Action("JsRemoveProductFromCart", "Cart")" />
 <input type="hidden" id="updateQuantityToBuy" data-update-quantity-to-buy-url="@Url.Action("UpdateQuantityToBuy", "Cart")" />
-<input type="hidden" id="checkout" data-checkout-url="@Url.Action("CheckoutPayment", "Payment")" />
-<input type="hidden" id="proceedToCheckoutView" data-proceed-to-checkout-view-url="@Url.Action("CheckoutPayment", "Payment")" />
+
+
+<input type="hidden" id="addInvoice" data-add-invoice-url="@Url.Action("PlaceOrder", "Cart")" />
+<input type="hidden" id="checkoutPayment" data-checkout-payment-url="@Url.Action("CheckoutPayment", "Payment")" />
+<input type="hidden" id="checkTransaction" data-check-transaction-url="@Url.Action("CheckTransactionStatus", "Payment")" />
+<input type="hidden" id="billingAddress" data-billing-address-url="@Url.Action("AddPaymentAddress", "Payment")" />
+<input type="hidden" id="refundTransaction" data-refund-transaction-url="@Url.Action("RefundTransaction", "Payment")" />
+
+<input type="hidden" id="proceed" data-proceed-url="@Url.Action("Index", "Home")" />
 
 <div class="container">
     <h2 class="pt-4 d-flex justify-content-center">Your basket</h2>
@@ -141,10 +150,8 @@
                                 <div id="dropin-container"></div>
 
                                 <div id="basket-submit" class="rs-checkout-additionals d-flex justify-content-center">
-                                    <a id="checkoutButton" class="btn btn-primary btn-outline-info"
-                                       asp-controller="Payment" asp-action="CheckoutPayment" 
-                                       asp-route-totalSum="@Model.TotalSum">
-                                        Proceed to Checkout
+                                    <a id="checkoutButton" class="btn btn-primary btn-outline-info">
+                                        Checkout
                                     </a>
                                 </div>
                             </div>
@@ -174,5 +181,108 @@
 
         $("#location-" + indexToAddClass).attr('class', 'active');
     };
+
+    function refundTransaction() {
+        var addInvoiceUrl = $('#addInvoice').data('add-invoice-url');
+    };
+
+
+    function addInvoice() {
+        var addInvoiceUrl = $('#addInvoice').data('add-invoice-url');
+
+        var deliveryLocationId = $('#deliveryLocationIdInput').val();
+
+        $.ajax({
+            type: 'POST',
+            url: addInvoiceUrl,
+            data: {
+                deliveryLocationId: deliveryLocationId
+            },
+            success: function (response) {
+                if (response && response.flag) {
+                    console.log("Invoice Added! Redirecting...");
+                    window.location.href = proceed;
+                }
+                else {
+                    alert("Error at adding invoice");
+                }
+
+            },
+            error: function (error) {
+            }
+        });
+
+    };
+
+    function checkTransactionStatus(transactionId) {
+
+        var checkTransactionUrl = $('#checkTransaction').data('check-transaction-url');
+        $.ajax({
+            type: "GET",
+            url: checkTransactionUrl,
+            data: {
+                transactionId: transactionId
+            },
+            success: function (response) {
+                if (response && response.flag == true) {
+                    alert("Status OK... Adding invoice!");
+                    addInvoice();
+                }
+                else {
+                    alert("Error at adding invoice!");
+                }
+            },
+            error: function (error) {
+
+            }
+
+        });
+    };
+
+    
+    var clientToken = "@ViewBag.ClientToken";
+    var totalSum = @ViewBag.TotalSum;
+
+    var button = document.querySelector('#checkoutButton');
+    var checkoutUrl = $('#checkoutPayment').data('checkout-payment-url');
+
+    var proceed = $('#proceed').data('proceed-url');
+
+    braintree.dropin.create({
+        authorization: clientToken,
+        container: '#dropin-container',
+    }, function (createErr, instance) {
+        button.addEventListener('click', function () {
+            instance.requestPaymentMethod(function (requestPaymentMethodErr, payload) {
+                $(button).removeAttr('enabled');
+                $(button).attr('disabled', 'disabled');
+                var deliveryLocationId = $('#deliveryLocationIdInput').val();
+
+                $.ajax({
+                    type: 'POST',
+                    url: checkoutUrl,
+                    data: {
+                        paymentMethodNonce: payload.nonce,
+                        totalSum: totalSum,
+                        deliveryLocationId: deliveryLocationId
+                    },
+                    success: function (response) {
+                        if (response && response.flag == true) {
+                            alert("Transaction Done! Checking transaction status...");
+                            checkTransactionStatus(response.transactionId);
+                        }
+                        else {
+                            alert("Error at authorization... Refreshing page...");
+                            // revert transaction
+                            location.reload(true);
+                        }
+                    },
+                    error: function (error) {
+
+                    }
+                })
+            });
+        });
+    });
 </script>
 

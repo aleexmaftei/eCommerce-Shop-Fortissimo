@@ -13,34 +13,14 @@ namespace eCommerce.Controllers
     {
         private readonly PaymentService PaymentService;
 
-        private static readonly TransactionStatus[] TransactionSuccessStatuses = 
-                                                    {
-                                                        TransactionStatus.AUTHORIZED,
-                                                        TransactionStatus.AUTHORIZING,
-                                                        TransactionStatus.SETTLED,
-                                                        TransactionStatus.SETTLING,
-                                                        TransactionStatus.SETTLEMENT_CONFIRMED,
-                                                        TransactionStatus.SETTLEMENT_PENDING,
-                                                        TransactionStatus.SUBMITTED_FOR_SETTLEMENT
-                                                    };
-
         public PaymentController(PaymentService paymentService)
         {
             PaymentService = paymentService;
         }
 
-        [HttpGet]
-        public IActionResult CheckoutPayment(double totalSum)
-        {
-            var clientToken = PaymentService.GenerateClientToken();
-            ViewBag.ClientToken = clientToken;
-            ViewBag.TotalSum = totalSum;
-
-            return View("../Cart/Checkout");
-        }
         
         [HttpPost]
-        public IActionResult CheckoutPayment(string paymentMethodNonce, double totalSum)
+        public IActionResult CheckoutPayment(string paymentMethodNonce, double totalSum, int deliveryLocationId)
         {
             string nonceFromTheClient = paymentMethodNonce;
             decimal amount;
@@ -51,20 +31,26 @@ namespace eCommerce.Controllers
             }
             catch (FormatException)
             {
-                TempData["Flash"] = "Error: 81503: Amount is an invalid format.";
-                return RedirectToAction("CheckoutPayment");
+                return Json(new { flag = false });
             }
 
-            var result = PaymentService.CreateTransaction(amount, nonceFromTheClient);
+            var result = PaymentService.CreateTransaction(amount, nonceFromTheClient, deliveryLocationId);
             
             if (result.IsSuccess())
             {
                 Transaction transaction = result.Target;
-                return RedirectToAction("Show", new { id = transaction.Id });
+                return Json(new { 
+                    flag = true,
+                    transactionId = transaction.Id
+                });
+
             }
             else if (result.Transaction != null)
             {
-                return RedirectToAction("Show", new { id = result.Transaction.Id });
+                return Json(new { 
+                    flag = true,
+                    transactionId = result.Transaction.Id
+                });
             }
             else
             {
@@ -73,17 +59,34 @@ namespace eCommerce.Controllers
                 {
                     errorMessages += "Error: " + (int)error.Code + " - " + error.Message + "\n";
                 }
-                return RedirectToAction("CheckoutPayment");
+                return Json(new { flag = false });
+
             }
         }
 
-        [HttpGet]
-        public IActionResult Show(string id)
+        [HttpPost]
+        public IActionResult AddPaymentAddress(int deliveryLocationId)
         {
-            var transaction = PaymentService.FindTransaction(id);
-            ViewBag.Transaction = transaction;
-            
-            return View("../Cart/Success");
+            var result = PaymentService.CreateAddress(deliveryLocationId);
+            if(result == null)
+            {
+                return Json(new { flag = false });
+            }
+
+            return Json(new { flag = true });
         }
+
+        [HttpGet]
+        public IActionResult CheckTransactionStatus(string transactionId)
+        {
+            var isAccepted = PaymentService.CheckTransactionStatus(transactionId);
+            if (isAccepted == true)
+            {
+                return Json(new { flag = true });
+            }
+            
+            return Json(new { flag = false });
+        }
+
     }
 }

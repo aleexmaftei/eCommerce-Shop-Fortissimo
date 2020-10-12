@@ -15,16 +15,19 @@ namespace eCommerce.Controllers
         private readonly CartService CartService;
         private readonly ProductService ProductService;
         private readonly DeliveryLocationService DeliveryLocationService;
+        private readonly PaymentService PaymentService;
 
         private readonly IMapper Mapper;
         public CartController(CartService cartService,
                               ProductService productService,
                               DeliveryLocationService deliveryLocationService,
+                              PaymentService paymentService,
                               IMapper mapper)
         {
             CartService = cartService;
             ProductService = productService;
             DeliveryLocationService = deliveryLocationService;
+            PaymentService = paymentService;
             Mapper = mapper;
         }
 
@@ -51,6 +54,10 @@ namespace eCommerce.Controllers
                 DeliveryLocations = deliveryLocations.Select(c => Mapper.Map<DeliveryLocation, DeliveryLocationVm>(c)).ToList()
             };
 
+            // payment service
+            var clientToken = PaymentService.GenerateClientToken();
+            ViewBag.ClientToken = clientToken;
+            ViewBag.TotalSum = totalSum;
 
             return View("../Cart/Cart", model);
         }
