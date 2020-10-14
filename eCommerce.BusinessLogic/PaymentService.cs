@@ -174,16 +174,16 @@ namespace eCommerce.BusinessLogic
             try
             {
                 Transaction transaction = Gateway.Transaction.Find(transactionId);
-                if (TransactionSuccessStatuses.Contains(transaction.Status))
+                if(TransactionSuccessStatuses.Contains(transaction.Status))
                 {
                     return true;
                 }
+                
             }
             catch
             {
                 return false;
             }
-
             return false;
         }
     }

@@ -540,10 +540,8 @@
 
 @media screen and (max-width: 842px) {
     .extensible-article.list-view .price-block > div {
-        display: inline-block;
-        width: auto;
-        padding-left: 0;
-        padding-right: 4px;
+        display: none;
+        
     }
 }
 

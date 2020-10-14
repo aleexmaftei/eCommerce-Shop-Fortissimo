@@ -29,7 +29,6 @@
                             location.reload(true);
                         }
                         else {
-                            // daca nu are cont sa fie informat ca sunt gresite credintealele
                             alert("Error at login");
                         }
 

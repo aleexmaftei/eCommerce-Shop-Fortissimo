@@ -43,6 +43,8 @@ namespace eCommerce.BusinessLogic
                 .Include(dl => dl.DeliveryLocation)
                     .ThenInclude(user => user.User)
                 .Where(cnd => cnd.DeliveryLocation.User.UserId == Int32.Parse(CurrentUserDto.Id))
+                .Take(10)
+                .OrderByDescending(cnd => cnd.UserInvoiceId)
                 .ToList();
         }
 
@@ -53,7 +55,11 @@ namespace eCommerce.BusinessLogic
                 .Include(dl => dl.DeliveryLocation)
                     .ThenInclude(user => user.User)
                 .Where(cnd => cnd.DeliveryLocation.User.UserId == Int32.Parse(CurrentUserDto.Id) &&
-                              cnd.UserInvoiceId == userInvoiceId);
+                              cnd.UserInvoiceId == userInvoiceId)
+                .Take(10)
+                .OrderByDescending(cnd => cnd.UserInvoiceId)
+                .ToList();
+                
         }
     }
 }

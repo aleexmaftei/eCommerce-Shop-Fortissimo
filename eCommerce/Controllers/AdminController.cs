@@ -58,7 +58,6 @@ namespace eCommerce.Controllers
             return View("AdminProfile", model);
         }
 
-
         [HttpGet]
         public IActionResult AdminAddCategoryPick()
         {
@@ -104,7 +103,7 @@ namespace eCommerce.Controllers
         [HttpGet]
         public IActionResult ManufacturerPick(int parentCategoryId, int categoryId)
         {
-            var manufacturer = ManufacturerService.GetManufacturersByProductCategory(categoryId);
+            var manufacturer = ManufacturerService.GetAllManufacturers();
             if(manufacturer == null)
             {
                 return NotFound();
@@ -170,7 +169,7 @@ namespace eCommerce.Controllers
             
             AdminService.AddProductDetail(productMappedToEntity);
 
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("AdminAddCategoryPick", "Admin");
         }
 
         [HttpGet]
@@ -301,6 +300,5 @@ namespace eCommerce.Controllers
             });
         }
         
-       
     }
 }

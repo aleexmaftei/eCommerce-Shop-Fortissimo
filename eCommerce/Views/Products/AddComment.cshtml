@@ -75,17 +75,22 @@
 
                 <!-- Buttons -->
                 <hr />
-                <button type="submit" class="btn btn-lg btn-primary"
-                        asp-controller="ProductComments" asp-action="AddComment"
-                        asp-route-productId="@Model.ProductId">
-                    Add the review
-                </button>
+                <div class="row">
+                    <div class="col-12 d-flex justify-content-center mb-5">
+                        <button type="submit" class="btn btn-lg btn-primary"
+                                asp-controller="ProductComments" asp-action="AddComment"
+                                asp-route-productId="@Model.ProductId">
+                            Add the review
+                        </button>
 
-                <a class="btn btn-lg btn-link"
-                   asp-controller="ProductDetails" asp-action="ViewFullSpecsProduct"
-                   asp-route-productId="@Model.ProductId">
-                    Cancel
-                </a>
+                        <a class="btn btn-lg btn-link"
+                           asp-controller="ProductDetails" asp-action="ViewFullSpecsProduct"
+                           asp-route-productId="@Model.ProductId">
+                            Cancel
+                        </a>
+                    </div>
+                </div>
+                
             </form>
             
         </div>

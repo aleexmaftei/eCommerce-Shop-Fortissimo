@@ -9,8 +9,10 @@
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/twitter-bootstrap/js/bootstrap.bundle.min.js"></script>
+    
     <script src="~/js/cart.js"></script>
     <script src="~/js/login.js"></script>
+    <script src="~/js/search.js"></script>
 
     <link rel="stylesheet" href="~/lib/font-awesome/css/all.min.css" />
     <link rel="stylesheet" href="~/lib/twitter-bootstrap/css/bootstrap.min.css" />
@@ -18,12 +20,14 @@
     <link rel="stylesheet" href="~/css/cart.css" />
     <link rel="stylesheet" href="~/css/site.css" />
 
+
 </head>
 
     <body class="lr-everything-centered responsive">
         <input type="hidden" id="cartUrl" data-cart-action-url="@Url.Action("JsCartModalView", "Cart")" />
         <input type="hidden" id="removeProductCartUrl" data-remove-action-url="@Url.Action("JsRemoveProductFromCart", "Cart")" />
         <input type="hidden" id="loginUrl" data-login-url="@Url.Action("Login", "UserAccount")" />
+        <input type="hidden" id="searchUrl" data-search-url="@Url.Action("Search", "ProductDetails")" />
         
         <header class="eCommerce-page page-content-wrapper">
             <nav class="rs-header">
@@ -31,30 +35,16 @@
 
                     <!-- search box-->
                     <div class="rs-searchbox">
-                        <form method="get">
-                            <div class="input-wrapper focus empty">
-                                <div class="rs-icon rs-icon-magnifier magnifier-icon">
-                                    <span class="fas fa-search"></span>
-                                </div>
-                                <input placeholder="Search" type="search" autocomplete="off" />
-                            </div>
-                        </form>
+                        <div class="input-wrapper focus empty">
+                            <input placeholder="Search" type="search" autocomplete="off" id="search" />
+                        </div>
                     </div>
 
                     <!-- buttons -->
                     <div class="rs-buttons">
                         <ul class="buttons-list list-unstyled">
-                            <li class="item-nav">
-                                <a class="" asp-controller="Home" asp-action="Index">Home</a>
-                            </li>
-
-                            <li class="item-nav">
-                                <a class="cartBtn"
-                                   data-toggle="modal" data-target="#modalCartRight">Cart</a>
-                            </li>
-
-                            <li class="item-nav">
-                                <a class="" asp-controller="UserAccount" asp-action="Logout">Log out</a>
+                            <li style="margin-top:14px;">
+                                <a class="" asp-controller="Home" asp-action="Index"><img class="" src="~/static/logo.png"/></a>
                             </li>
                         </ul>
                     </div>
@@ -65,6 +55,11 @@
                             <div class="list-entry">
                                 @if (CurrentUser.IsAuthenticated)
                                 {
+                                    <div class="float-left mr-4 shopping-button">
+                                        <a class="cartBtn"
+                                           data-toggle="modal" data-target="#modalCartRight"><span class="fas fa-shopping-cart fa-2x" style="margin-top:18px"></span></a>
+                                    </div>
+
                                     <div class="btn-group user-action-button">
                                         <a asp-controller="MyProfile" asp-action="Index"
                                                 type="button" class="btn btn-danger">@CurrentUser.FirstName @CurrentUser.LastName
@@ -76,14 +71,19 @@
                                         </button>
 
                                         <div class="dropdown-menu dropdown-menu-right">
-                                            <a class="dropdown-item" asp-controller="MyProfile" asp-action="Index">My profile
+                                            <a class="dropdown-item" asp-controller="MyProfile" asp-action="Index">
+                                                My profile
                                             </a>
                                             @if (CurrentUser.IsAdmin)
                                             {
                                                 <a class="dropdown-item" asp-controller="Admin" asp-action="AdminProfile">Admin Actions</a>
                                             }
+
+                                            <a asp-controller="Cart" asp-action="Index" class="dropdown-item">View Cart</a>
+                                            
                                             <div class="dropdown-divider"></div>
-                                            <a class="dropdown-item" asp-controller="UserAccount" asp-action="Logout">Log out</a>
+
+                                            <a class="dropdown-item" asp-controller="UserAccount" asp-action="Logout">Log Out</a>
                                         </div>
                                     </div>
                                 }
@@ -111,12 +111,30 @@
                     <div class="rs-spandex">
                         <ul class="list">
                             <div class="rail">
-                                <li class="item"><a>Chit/Bas</a></li>
-                                <li class="item"><a>Tobe</a></li>
-                                <li class="item"<a>Clav</a></li>
-                                <li class="item"><a>Studio</a></li>
-                                <li class="item"><a>Alamuri</a></li>
-                                <li class="item"><a>PA</a></li>
+                                <li class="item"><a asp-controller="Home" asp-action="Category"
+                                                   asp-route-id="1" class="button-nav">Guit/Bass</a></li>
+                                <li class="item"><a class="button-nav"
+                                                    asp-controller="Home" asp-action="Category"
+                                                   asp-route-id="2">Drums</a></li>
+                                
+                                <li class="item"><a class="button-nav"
+                                                    asp-controller="Home" asp-action="Category"
+                                                   asp-route-id="4">Studio</a></li>
+                                <li class="item"><a class="button-nav"
+                                                    asp-controller="Home" asp-action="Category"
+                                                   asp-route-id="5">Wind</a></li>
+                                <li class="item"><a class="button-nav"
+                                                    asp-controller="Home" asp-action="Category"
+                                                   asp-route-id="6">PA</a></li>
+                                <li class="item"><a class="button-nav"
+                                                    asp-controller="Home" asp-action="Category"
+                                                   asp-route-id="7">Dj</a></li>
+                                <li class="item"><a class="button-nav"
+                                                    asp-controller="Home" asp-action="Category"
+                                                   asp-route-categoryId="8">Trad</a></li>
+                                <li class="item"><a class="button-nav"
+                                                    asp-controller="Home" asp-action="Category"
+                                                   asp-route-id="9">Accessories</a></li>
                             </div>
                         </ul>
                     </div>

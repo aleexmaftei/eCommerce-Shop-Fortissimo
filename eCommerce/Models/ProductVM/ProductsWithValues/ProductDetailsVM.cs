@@ -9,8 +9,11 @@ namespace eCommerce.Models.ProductVM.ProductsWithValues
         public double ProductPrice { get; set; }
         public string ProductImage { get; set; }
         public int QuantityBuy { get; set; }
+        public int Quantity { get; set; }
         public string ManufacturerLogo { get; set; }
         public string ManufacturerName { get; set; }
+
+        public string CategoryId { get; set; }
 
         public List<PropertyWithValueVM> AllPropertiesWithValues;
         public ProductDetailsVM()

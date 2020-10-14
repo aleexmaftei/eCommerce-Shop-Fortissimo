@@ -25,12 +25,95 @@
                         <div>
                             <span style="width:95%">
                                 <span class="inner">
-                                    <!-- if-uri ca sa fie cat trebuie -->
-                                    <span class="fas fa-star rating-star" />
-                                    <span class="fas fa-star rating-star" />
-                                    <span class="fas fa-star rating-star" />
-                                    <span class="fas fa-star rating-star" />
-                                    <span class="fas fa-star rating-star" />
+                                    @if (Model.AvgStars == 5)
+                                    {
+                                        <span class="fas fa-star rating-star" />
+                                        <span class="fas fa-star rating-star" />
+                                        <span class="fas fa-star rating-star" />
+                                        <span class="fas fa-star rating-star" />
+                                        <span class="fas fa-star rating-star" />
+                                    }
+                                    else if (4.5 <= Model.AvgStars && Model.AvgStars < 5)
+                                    {
+                                        <span class="fas fa-star rating-star" />
+                                        <span class="fas fa-star rating-star" />
+                                        <span class="fas fa-star rating-star" />
+                                        <span class="fas fa-star rating-star" />
+                                        <span class="fas fa-star-half-alt rating-star" />
+                                    }
+                                    else if (4 <= Model.AvgStars && Model.AvgStars < 4.5)
+                                    {
+                                        <span class="fas fa-star rating-star" />
+                                        <span class="fas fa-star rating-star" />
+                                        <span class="fas fa-star rating-star" />
+                                        <span class="fas fa-star rating-star" />
+                                        <span class="far fa-star rating-star" />
+                                    }
+                                    else if (3.5 <= Model.AvgStars && Model.AvgStars < 4)
+                                    {
+                                        <span class="fas fa-star rating-star" />
+                                        <span class="fas fa-star rating-star" />
+                                        <span class="fas fa-star rating-star" />
+                                        <span class="fas fa-star-half-alt rating-star" />
+                                        <span class="far fa-star rating-star" />
+                                    }
+                                    else if (3 <= Model.AvgStars && Model.AvgStars < 3.5)
+                                    {
+                                        <span class="fas fa-star rating-star" />
+                                        <span class="fas fa-star rating-star" />
+                                        <span class="fas fa-star rating-star" />
+                                        <span class="far fa-star rating-star" />
+                                        <span class="far fa-star rating-star" />
+                                    }
+                                    else if (2.5 <= Model.AvgStars && Model.AvgStars < 3)
+                                    {
+                                        <span class="fas fa-star rating-star" />
+                                        <span class="fas fa-star rating-star" />
+                                        <span class="fas fa-star-half-alt rating-star" />
+                                        <span class="far fa-star rating-star" />
+                                        <span class="far fa-star rating-star" />
+                                    }
+                                    else if (2 <= Model.AvgStars && Model.AvgStars < 2.5)
+                                    {
+                                        <span class="fas fa-star rating-star" />
+                                        <span class="fas fa-star rating-star" />
+                                        <span class="far fa-star rating-star" />
+                                        <span class="far fa-star rating-star" />
+                                        <span class="far fa-star rating-star" />
+                                    }
+                                    else if (1.5 <= Model.AvgStars && Model.AvgStars < 2)
+                                    {
+                                        <span class="fas fa-star rating-star" />
+                                        <span class="fas fa-star-half-alt rating-star" />
+                                        <span class="far fa-star rating-star" />
+                                        <span class="far fa-star rating-star" />
+                                        <span class="far fa-star rating-star" />
+                                    }
+                                    else if (1 <= Model.AvgStars && Model.AvgStars < 1.5)
+                                    {
+                                        <span class="fas fa-star rating-star" />
+                                        <span class="far fa-star rating-star" />
+                                        <span class="far fa-star rating-star" />
+                                        <span class="far fa-star rating-star" />
+                                        <span class="far fa-star rating-star" />
+                                    }
+                                    else if (0.5 <= Model.AvgStars && Model.AvgStars < 1)
+                                    {
+                                        <span class="fas fa-star-half-alt rating-star" />
+                                        <span class="far fa-star rating-star" />
+                                        <span class="far fa-star rating-star" />
+                                        <span class="far fa-star rating-star" />
+                                        <span class="far fa-star rating-star" />
+                                    }
+                                    else if (0 <= Model.AvgStars && Model.AvgStars < 0.5)
+                                    {
+                                        <span class="far fa-star rating-star" />
+                                        <span class="far fa-star rating-star" />
+                                        <span class="far fa-star rating-star" />
+                                        <span class="far fa-star rating-star" />
+                                        <span class="far fa-star rating-star" />
+                                    }
+
                                 </span>
                             </span>
 
@@ -58,7 +141,7 @@
             <div class="prod-media-spot-container">
                 <div class="prod-media-spot d-flex justify-content-center">
                     <div>
-                        <img src="https://thumbs.static-thomann.de/thumb/orig/pics/prod/449491.jpg" />
+                        <img src="@Model.ProductDetails.ProductImage" />
                     </div>
                 </div>
             </div>
@@ -131,26 +214,48 @@
 
 
                 <!-- Add to cart button -->
-                <div class="col-12 add-action-wrapper">
-                    <form>
-                        <div class="add-to-basket clearfix">
-                            <!-- Quantity to buy -->
-                            <div class="rs-input input">
-                                <div class="input-container">
-                                    <div class="input">
-                                        <input class="field plain" id="quantityToBuy"
-                                               type="number" value="@Model.ProductDetails.QuantityBuy" min="1" max="100" autocomplete="off" />
+                @if (Model.Quantity != 0 && CurrentUser.IsAuthenticated)
+                {
+                    <div class="col-12 add-action-wrapper">
+                        <form>
+                            <div class="add-to-basket clearfix">
+                                <!-- Quantity to buy -->
+                                <div class="rs-input input">
+                                    <div class="input-container">
+                                        <div class="input">
+                                            <input class="field plain" id="quantityToBuy"
+                                                   type="number" value="@Model.ProductDetails.QuantityBuy" min="1" max="100" autocomplete="off" />
+                                        </div>
                                     </div>
                                 </div>
+                                <!-- Add Button -->
+                                <button type="submit" class="btn btn-primary add-button" id="addToCart"
+                                        data-product-id="@Model.ProductDetails.ProductId">
+                                    Add To Cart
+                                </button>
                             </div>
-                            <!-- Add Button -->
-                            <button type="submit" class="btn btn-primary add-button" id="addToCart"
-                                    data-product-id="@Model.ProductDetails.ProductId">
-                                Add To Cart
-                            </button>
-                        </div>
-                    </form>
-                </div>
+                        </form>
+                    </div>
+                }
+
+                @if (CurrentUser.IsAuthenticated == false)
+                {
+                    <div class="col-12">
+                        <ul class="btn-group list-unstyled d-flex justify-content-center">
+                            <li class="pl-2 mb-2 mb-md-0">
+                                <button type="button" data-toggle="modal" data-target="#modalLogin"
+                                        class="btn btn-outline-primary btn-md btn-rounded btn-navbar">
+                                    Sign in to add
+                                </button>
+                            </li>
+
+                            <li class="pl-2 mb-2 mb-md-0">
+                                <a asp-controller="UserAccount" asp-action="Register" type="button"
+                                   class="btn btn-outline-info btn-md btn-rounded btn-navbar">Register to add</a>
+                            </li>
+                        </ul>
+                    </div>
+                }
             </div>
         </div>
     </div>
@@ -166,14 +271,20 @@
             </div>
 
             <div class="col-2">
-                <form method="get">
-                    <a type="submit" class="btn btn-primary mr-2"
-                       asp-controller="ProductComments" asp-action="AddComment"
-                       asp-route-productId="@Model.ProductDetails.ProductId">
-                        Add a review
-                    </a>
-                </form>
-
+                @if(CurrentUser.IsAuthenticated == true)
+                {
+                    <form method="get">
+                        <a type="submit" class="btn btn-primary mr-2"
+                            asp-controller="ProductComments" asp-action="AddComment"
+                            asp-route-productId="@Model.ProductDetails.ProductId">
+                            Add a review
+                        </a>
+                    </form>
+                }
+                else
+                {
+                    <p>Login/register to comment!</p>
+                }
             </div>
         </div>
 
@@ -256,8 +367,9 @@
             }
             else
             {
+        
             <div class="col-12 mb-5">
-                <h2 class="text-danger">No reviews for this product! Be the first to evaluate it!</h2>
+                <h2 class="d-flex justify-content-center">No reviews for this product! Be the first to evaluate it!</h2>
             </div>
             }
         </div>

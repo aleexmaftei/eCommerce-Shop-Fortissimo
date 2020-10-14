@@ -6,10 +6,12 @@ using eCommerce.DataAccess;
 using eCommerce.Models.MyProfileVM;
 using eCommerce.Models.MyProfileVM.DeliveryLocation;
 using eCommerce.Models.MyProfileVM.Invoice;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace eCommerce.Controllers
 {
+    [Authorize(Roles = "Admin, User")]
     public class MyProfileController : Controller
     {
         private readonly ProductService ProductService;
@@ -64,7 +66,6 @@ namespace eCommerce.Controllers
             var allInvoices = UserInvoiceService.GetInvoices();
             if(allInvoices == null)
             {
-                // nu not found, altceva
                 return NotFound();
             }
 
@@ -79,7 +80,6 @@ namespace eCommerce.Controllers
                     return NotFound();
                 }
 
-                // check if it is already there so it won't duplicate values
                 var isAlreadyOnInvoice = false;
                 foreach (var value in allInvoicesModel.AllInvoices)
                 {
@@ -90,7 +90,6 @@ namespace eCommerce.Controllers
                     }
                 }
 
-                // skip current item because it is already on an invoice
                 if(isAlreadyOnInvoice == true)
                 {
                     continue;

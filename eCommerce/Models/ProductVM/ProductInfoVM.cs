@@ -11,6 +11,8 @@ namespace eCommerce.Models.ProductVM
         
         public int Quantity { get; set; }
 
+        public double AvgStars { get; set; }
+
         public ProductDetailsVM ProductDetails { get; set; }
 
         public List<ProductCommentVM> ProductComments { get; set; }

@@ -40,10 +40,10 @@
                                         <!-- Product Image -->
                                         <td class="image">
                                             <div class="stackimage-wrapper stackimage-noStack stackimage-singleImage stackimage-default">
-                                                <div class="stackimage stackimage-noStack stackimage-singleImage stackimage-noStack-singleImage">
+                                                <div class="stackimage stackimage-noStack stackimage-singleImage stackimage-noStack-singleImage d-flex justify-content-center">
                                                     <a asp-controller="ProductDetails" asp-action="ViewFullSpecsProduct"
                                                        asp-route-productId="@Model.CartList[index].ProductId">
-                                                        <img class="card-img" alt="" src="@Model.CartList[index].ProductImage" />
+                                                        <img class="card-img" alt="" src="@Model.CartList[index].ProductImage" style="height:55px; width:auto;"/>
                                                     </a>
                                                 </div>
 
@@ -65,7 +65,7 @@
 
                                         <!-- Quantity -->
                                         <td class="amount">
-                                            <input type="number" id="quantityToBuy" name="quantityBuy"
+                                            <input type="number" id="quantityToBuy" name="quantityBuy" style="background-color:floralwhite;"
                                                    value="@Model.CartList[index].QuantityBuy" step="1" min="1" max="200"
                                                    data-product-id="@Model.CartList[index].ProductId" />
                                         </td>
@@ -128,7 +128,7 @@
 
                         @if (Model.DeliveryLocations.Count != 0)
                         {
-                            <p class="adresses-text">Choose a delivery location</p>
+                            <p class="adresses-text">Choose a billing address</p>
                             <ul class="group order-existing-addresses">
                                 @for (int index = 0; index < Model.DeliveryLocations.Count; index++)
                                 {
@@ -142,10 +142,7 @@
 
                             <input type="hidden" id="deliveryLocationIdInput" value="@Model.DeliveryLocations[0].DeliveryLocationId" min="1" />
 
-                            <div>
-                                <div id="dropin-container"></div>
-                            </div>
-                            <div id="dropin-wrapper">
+                            <div id="dropin-wrapper" class="mt-5">
                                 <div id="checkout-message"></div>
                                 <div id="dropin-container"></div>
 
@@ -182,16 +179,13 @@
         $("#location-" + indexToAddClass).attr('class', 'active');
     };
 
-    function refundTransaction() {
-        var addInvoiceUrl = $('#addInvoice').data('add-invoice-url');
-    };
 
 
     function addInvoice() {
         var addInvoiceUrl = $('#addInvoice').data('add-invoice-url');
 
         var deliveryLocationId = $('#deliveryLocationIdInput').val();
-
+        
         $.ajax({
             type: 'POST',
             url: addInvoiceUrl,
@@ -229,7 +223,8 @@
                     addInvoice();
                 }
                 else {
-                    alert("Error at adding invoice!");
+                    alert("Error at accepting transaction!");
+                    
                 }
             },
             error: function (error) {
@@ -273,7 +268,6 @@
                         }
                         else {
                             alert("Error at authorization... Refreshing page...");
-                            // revert transaction
                             location.reload(true);
                         }
                     },

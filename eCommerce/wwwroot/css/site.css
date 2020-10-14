@@ -164,15 +164,15 @@ form {
     font-family: 'Open Sans', Verdana, Tahoma, Arial, Helvetica, sans-serif;
     box-sizing: border-box;
     font-size: 17px;
-    width: calc(100% - 39px);
+    width: calc(100% - 20px);
     color: #f4f4f4;
     background: transparent;
     border: 1px solid transparent;
     position: relative;
     vertical-align: middle;
     height: 36px;
-    padding: 3px 34px 3px 0;
-    margin-left: 39px;
+    padding: 3px 0px 3px 0;
+    margin-left: 13px;
     font-weight: 400;
 }
 
@@ -311,19 +311,19 @@ body *, body ::before, body ::after {
 /* right button nav */
 @media screen and (max-width: 958px) {
     .rs-navigation > .rs-user-navigation {
-        padding-right: 20px;
+        padding-right: 10px;
     }
 }
 
 @media screen and (max-width: 1296px) {
     .rs-navigation > .rs-user-navigation {
-        padding-right: 25px;
+        padding-right: 15px;
     }
 }
 
 .rs-navigation > .rs-user-navigation {
     position: absolute;
-    right: 25px;
+    right: 15px;
     top: 0;
 }
 
@@ -437,4 +437,14 @@ body {
 
 body.responsive {
     background: #3b3b3b;
+}
+
+
+.button-nav {
+    text-decoration:none;
+    color:black;
+}
+
+.button-nav:hover {
+    color:darkcyan;
 }

@@ -29,41 +29,6 @@ namespace eCommerce.BusinessLogic
             ManufacturerService = manufacturerService;
         }
 
-        public UserT RegisterNewAdmin(UserT admin, DeliveryLocation deliveryLocation)
-        {
-            return ExecuteInTransaction(uow =>
-            {
-                string result = string.Empty;
-                var salt = PasswordManagerService.HashPassword(admin.PasswordHash, ref result);
-
-                admin.PasswordHash = result;
-
-                admin.UserRole = new List<UserRole>
-                {
-                    new UserRole
-                    {
-                        RoleId = (int)RoleTypes.Admin
-                    }
-                };
-
-                uow.Users.Insert(admin);
-                
-                var userSalt = new Salt()
-                {
-                    User = admin,
-                    SaltPass = Convert.ToBase64String(salt)
-                };
-
-                uow.Salts.Insert(userSalt);
-
-                deliveryLocation.User = admin;
-                uow.DeliveryLocations.Insert(deliveryLocation);
-
-                uow.SaveChanges();
-                return admin;
-            });
-        }
-
         public AdminAdd AddProductDetail(AdminAdd productMappedToEntity)
         {
             return ExecuteInTransaction(uow => 
@@ -112,7 +77,7 @@ namespace eCommerce.BusinessLogic
                 product.Quantity = 0;
                 product.IsDeleted = true;
                 uow.Products.Update(product);
-                //uow.SaveChanges();
+                uow.SaveChanges();
 
                 return product;
             }); 

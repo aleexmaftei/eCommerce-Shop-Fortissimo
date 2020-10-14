@@ -2,10 +2,12 @@
 using eCommerce.BusinessLogic.ProductServices;
 using eCommerce.DataAccess;
 using eCommerce.Models.ProductVM;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace eCommerce.Controllers
 {
+    [Authorize(Roles = "Admin, User")]
     public class ProductCommentsController : Controller
     {
         private readonly ProductCommentService ProductCommentService;

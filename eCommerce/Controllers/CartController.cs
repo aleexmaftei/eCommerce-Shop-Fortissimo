@@ -5,6 +5,8 @@ using eCommerce.BusinessLogic.ProductServices;
 using eCommerce.DataAccess;
 using eCommerce.Models.CartVM;
 using eCommerce.Models.MyProfileVM.DeliveryLocation;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authorization.Infrastructure;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 
@@ -54,7 +56,6 @@ namespace eCommerce.Controllers
                 DeliveryLocations = deliveryLocations.Select(c => Mapper.Map<DeliveryLocation, DeliveryLocationVm>(c)).ToList()
             };
 
-            // payment service
             var clientToken = PaymentService.GenerateClientToken();
             ViewBag.ClientToken = clientToken;
             ViewBag.TotalSum = totalSum;
@@ -204,7 +205,6 @@ namespace eCommerce.Controllers
             {
                 return NotFound();
             }
-            // trebuie sa o las aici altfel am eroare de prea multe redirects ( intra in bucla cumva)
             CartService.DeleteProductFromCart(cartToDelete);
 
             return Json(new{

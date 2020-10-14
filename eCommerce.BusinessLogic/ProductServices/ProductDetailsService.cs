@@ -40,7 +40,8 @@ namespace eCommerce.BusinessLogic.ProductServices
             return UnitOfWork.ProductDetails.Get()
                    .Include(pt => pt.ProductCategory)
                    .Include(pr => pr.Property)
-                   .Where(a => a.ProductId == productId)
+                   .Where(a => a.ProductId == productId &&
+                               a.Product.IsDeleted == false)
                    .ToList();
         }
     }

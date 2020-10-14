@@ -221,7 +221,6 @@ input::-webkit-inner-spin-button {
 }
 
 #quantityToBuy {
-    background-color: floralwhite;
     border-radius: 3px;
     border-width: 1px;
     border-color: lightgray;
@@ -280,4 +279,11 @@ input::-webkit-inner-spin-button {
 
 .order-existing-addresses li:first-child {
     margin-top: 0;
+}
+
+
+@media screen and (max-width: 882px) {
+    .shopping-button {
+        display: none;
+    }
 }

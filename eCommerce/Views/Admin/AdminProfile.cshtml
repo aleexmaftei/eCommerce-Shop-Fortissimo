@@ -72,10 +72,10 @@
                                                         <!-- Product Image -->
                                                         <td class="image">
                                                             <div class="stackimage-wrapper stackimage-noStack stackimage-singleImage stackimage-default">
-                                                                <div class="stackimage stackimage-noStack stackimage-singleImage stackimage-noStack-singleImage">
+                                                                <div class="stackimage stackimage-noStack stackimage-singleImage stackimage-noStack-singleImage d-flex justify-content-center">
                                                                     <a asp-controller="ProductDetails" asp-action="ViewFullSpecsProduct"
                                                                        asp-route-productId="@Model.MostWanted[index].ProductId">
-                                                                        <img class="card-img" alt="" src="@Model.MostWanted[index].ProductImage" />
+                                                                        <img class="card-img" alt="" src="@Model.MostWanted[index].ProductImage" style="height:60px;width:auto;"/>
                                                                     </a>
                                                                 </div>
 

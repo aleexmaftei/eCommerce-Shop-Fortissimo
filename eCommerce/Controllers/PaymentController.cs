@@ -4,11 +4,13 @@ using System.Linq;
 using System.Threading.Tasks;
 using Braintree;
 using eCommerce.BusinessLogic;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace eCommerce.Controllers
 {
+    [Authorize(Roles = "Admin, User")]
     public class PaymentController : Controller
     {
         private readonly PaymentService PaymentService;

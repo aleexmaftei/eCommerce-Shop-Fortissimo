@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using eCommerce.BusinessLogic;
 using eCommerce.Models.ProductVM;
+using eCommerce.Models.ProductVM.ProductsWithValues;
 
 namespace eCommerce.Controllers
 {
@@ -60,5 +61,6 @@ namespace eCommerce.Controllers
 
             return View(productTypeViewModel);
         }
+
     }
 }

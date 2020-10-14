@@ -26,11 +26,6 @@ namespace eCommerce.Controllers
             Mapper = mapper;
         }
 
-        [HttpGet]
-        public IActionResult Index()
-        {
-            return View();
-        }
 
         [HttpGet]
         public IActionResult Register()
