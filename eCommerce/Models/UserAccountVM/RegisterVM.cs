@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using eCommerce.Code.CustomAttributes;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
 namespace eCommerce.Models.UserAccountVM
@@ -40,7 +41,8 @@ namespace eCommerce.Models.UserAccountVM
         public string AddressDetail { get; set; }
 
         [Required(ErrorMessage = "Cod Postal obligatoriu")]
-        [RegularExpression("([0-9]*)")]
+        //[RegularExpression("([0-9]*)")]
+        [PositiveNumber(ErrorMessage = "Only digits!")]
         [DisplayName("Postal Code")]
         public string PostalCode { get; set; }
 
